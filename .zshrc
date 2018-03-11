@@ -16,8 +16,3 @@ compinit
 autoload -Uz promptinit
 promptinit
 
-XKB_DEFAULT_LAYOUT=se
-#XKB_DEFAULT_VARIANT=,nodeadkeys
-XKB_DEFAULT_OPTIONS=compose:ralt,caps:nocaps
-
-GTK_THEME=Adapta
