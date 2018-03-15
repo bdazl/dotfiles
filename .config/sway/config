@@ -43,6 +43,13 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 
+   input "2:5:ImPS/2_Logitech_Wheel_Mouse" {
+	dwt enabled
+	tap enabled
+	natural_scroll enabled
+	middle_emulation enabled
+   }
+
 ### Key bindings
 #
 # Basics:
