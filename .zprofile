@@ -3,10 +3,13 @@ path=(/home/jacob/.local/bin $path[@])
 
 export XKB_DEFAULT_LAYOUT=se
 #export XKB_DEFAULT_VARIANT=,nodeadkeys
-export XKB_DEFAULT_MODEL=dell
+#export XKB_DEFAULT_MODEL=dell
 export XKB_DEFAULT_OPTIONS=compose:ralt
 
-#export GTK_THEME=Adapta
+export GTK_THEME=Adapta
+
+export WLC_REPEAT_DELAY=300
+export WLC_REPEAT_RATE=20
 
 # GTK+ (3.0+)
 #export GDK_BACKEND=wayland
