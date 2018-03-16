@@ -17,3 +17,9 @@ autoload -Uz promptinit
 promptinit
 
 prompt walters
+
+# If running trom tty1 start sway
+if [[ $(tty) == "/dev/tty1" ]]; then
+	sway
+	#exit 0
+fi
