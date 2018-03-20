@@ -1,0 +1,60 @@
+general {
+        output_format = "i3bar"
+        colors = true
+        color_good = "#00FF00"
+        color_bad = "#FF0000"
+        color_degraded = "#FFFF00"
+        interval = 5
+}
+
+#order += "ipv6"
+order += "disk /home/jacob"
+order += "volume master"
+order += "path_exists TUN"
+order += "path_exists TAP"
+order += "ethernet eno1"
+order += "cpu_usage"
+order += "load"
+order += "tztime stockholm"
+
+ethernet eno1 {
+        # if you use %speed, i3status requires the cap_net_admin capability
+        format_up = "E: %ip"
+        format_down = "E: down"
+}
+
+path_exists TUN {
+        # path exists when a VPN tunnel launched by nmcli/nm-applet is active
+        path = "/proc/sys/net/ipv4/conf/tun0"
+}
+
+path_exists TAP {
+        # path exists when a VPN tunnel launched by nmcli/nm-applet is active
+        path = "/proc/sys/net/ipv4/conf/tap0"
+}
+
+
+tztime stockholm {
+        format = "%Y-%m-%d ~ %H:%M:%S"
+        timezone = "Europe/Stockholm"
+}
+
+load {
+        format = "%5min"
+}
+
+cpu_usage {
+        format = "CPU: %usage"
+}
+
+disk "/home/jacob" {
+        format = "%free"
+}
+
+volume master {
+        format = "♪: %volume"
+        format_muted = "♪: muted (%volume)"
+        device = "default"
+        mixer = "Master"
+        mixer_idx = 0
+}
