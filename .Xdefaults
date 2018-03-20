@@ -23,11 +23,11 @@ URxvt.lineSpace:            0
 ! Fonts
 URxvt.allow_bold:           false
 /* URxvt.font:                 -*-terminus-medium-r-normal-*-12-120-72-72-c-60-iso8859-1 */
-URxvt.font: xft:Noto Sans
-URxvt.boldFont: xft:Noto Sans Bold
+URxvt.font: xft:DejaVu Sans Mono
+URxvt.boldFont: xft:DejaVu Sans Bold
 
 ! Fix font space
-URxvt.letterSpace: -2
+#URxvt.letterSpace: -1
 
 ! Scrollbar
 URxvt.scrollStyle:          rxvt
