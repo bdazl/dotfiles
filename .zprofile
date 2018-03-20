@@ -3,8 +3,8 @@ path=(/home/jacob/.local/bin $path[@])
 
 export XKB_DEFAULT_LAYOUT=se
 #export XKB_DEFAULT_VARIANT=,nodeadkeys
-#export XKB_DEFAULT_MODEL=dell
-export XKB_DEFAULT_OPTIONS=compose:ralt
+export XKB_DEFAULT_MODEL=pc105
+#export XKB_DEFAULT_OPTIONS=caps:none,compose:ralt
 
 export GTK_THEME=Adapta
 
