@@ -13,6 +13,11 @@ set $left h
 set $down j
 set $up k
 set $right l
+
+set $splithoriz b
+set $splitvert v
+set $focusparent a
+
 # Your preferred terminal emulator
 set $term urxvt
 # Your preferred application launcher
@@ -22,6 +27,7 @@ set $menu rofi -show run
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+
 #
 # Example configuration:
 #
@@ -89,6 +95,9 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     bindsym $mod+Up focus up
     bindsym $mod+Right focus right
 
+    # move focus to the parent container
+    bindsym $mod+a focus parent
+
     # _move_ the focused window with the same, but add Shift
     bindsym $mod+Shift+$left move left
     bindsym $mod+Shift+$down move down
@@ -103,9 +112,9 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # Workspaces:
 #
     # switch to workspace
-    bindsym $mod+1 workspace 1
-    bindsym $mod+2 workspace 2
-    bindsym $mod+3 workspace 3
+    bindsym $mod+1 workspace "1 Firefox"
+    bindsym $mod+2 workspace "2 Code"
+    bindsym $mod+3 workspace "3 Telegram"
     bindsym $mod+4 workspace 4
     bindsym $mod+5 workspace 5
     bindsym $mod+6 workspace 6
@@ -114,9 +123,9 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     bindsym $mod+9 workspace 9
     bindsym $mod+0 workspace 10
     # move focused container to workspace
-    bindsym $mod+Shift+1 move container to workspace 1
-    bindsym $mod+Shift+2 move container to workspace 2
-    bindsym $mod+Shift+3 move container to workspace 3
+    bindsym $mod+Shift+1 move container to workspace "1 Firefox"
+    bindsym $mod+Shift+2 move container to workspace "2 Code"
+    bindsym $mod+Shift+3 move container to workspace "3 Telegram"
     bindsym $mod+Shift+4 move container to workspace 4
     bindsym $mod+Shift+5 move container to workspace 5
     bindsym $mod+Shift+6 move container to workspace 6
@@ -132,8 +141,8 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    bindsym $mod+$splithoriz splith
+    bindsym $mod+$splitvert splitv
 
     # Switch the current container between different layout styles
     bindsym $mod+s layout stacking
@@ -149,8 +158,6 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     # Swap focus between the tiling area and the floating area
     bindsym $mod+space focus mode_toggle
 
-    # move focus to the parent container
-    bindsym $mod+a focus parent
 #
 # Scratchpad:
 #
@@ -194,6 +201,7 @@ bindsym $mod+r mode "resize"
 # Read `man 5 sway-bar` for more information about this section.
 bar {
     position top
+    status_command i3status
     colors {
         statusline #ffffff
         background #323232
@@ -202,3 +210,4 @@ bar {
 }
 
 include /etc/sway/config.d/*
+include ~/etc/.config/sway/config.d/*
