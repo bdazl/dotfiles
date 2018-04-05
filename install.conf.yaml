@@ -1,0 +1,16 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.dotfiles: ''
+    ~/.config/i3status: i3status
+    ~/.config/sway: sway
+    ~/.Xdefaults: xorg/Xdefaults
+    ~/.zshrc: zsh/zshrc
+    ~/.zprofile: zsh/zprofile
+
+- shell:
+  - [git submodule update --init --recursive, Installing submodules]
