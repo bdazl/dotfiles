@@ -6,6 +6,13 @@ setopt extendedglob
 bindkey -e
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
+zstyle ':completion:*' completer _complete _ignored _correct _approximate
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]} m:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'l:|=* r:|=*' 'r:|[._-]=** r:|=**'
+zstyle ':completion:*' max-errors 3 numeric
+zstyle ':completion:*' prompt 'Error: %e'
+zstyle ':completion:*' verbose true
 zstyle :compinstall filename '/home/jacob/.zshrc'
 
 autoload -Uz compinit
@@ -17,6 +24,8 @@ autoload -Uz promptinit
 promptinit
 
 prompt walters
+
+
 
 # If running trom tty1 start sway
 if [[ $(tty) == "/dev/tty1" ]]; then
