@@ -1,34 +1,51 @@
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+
+function config_keybindings_emacs() {
+    bindkey -e
+}
+
+function config_keybindings_vim() {
+
+}
+
+function config_completion(){
+    zstyle ':completion:*' completer _complete _ignored _correct _approximate
+    zstyle ':completion:*' format 'Completing %d'
+    zstyle ':completion:*' group-name ''
+    zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]} m:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'l:|=* r:|=*' 'r:|[._-]=** r:|=**'
+    zstyle ':completion:*' max-errors 3 numeric
+    zstyle ':completion:*' prompt 'Error: %e'
+    zstyle ':completion:*' verbose true
+    zstyle :compinstall filename '/home/jacob/.zshrc'
+
+    autoload -Uz compinit
+    compinit
+}
+
+function config_prompt() {
+    autoload -Uz promptinit
+    promptinit
+
+    prompt walters
+}
+
+function config_history() {
+    setopt inc_append_history       # immediately append history to history file
+    setopt hist_ignore_dups         # ignore duplicate commands
+    setopt hist_ignore_space        # ignore commands with leading space
+}
+
 setopt extendedglob
-bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle ':completion:*' completer _complete _ignored _correct _approximate
-zstyle ':completion:*' format 'Completing %d'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]} m:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'l:|=* r:|=*' 'r:|[._-]=** r:|=**'
-zstyle ':completion:*' max-errors 3 numeric
-zstyle ':completion:*' prompt 'Error: %e'
-zstyle ':completion:*' verbose true
-zstyle :compinstall filename '/home/jacob/.zshrc'
 
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
+ensure_directories
 
-# Jacob Edits
-autoload -Uz promptinit
-promptinit
+config_keybindings_emacs
+config_completion
+config_prompt
+config_history
 
-prompt walters
-
-
-
+## TODO: Move me to systemd
 # If running trom tty1 start sway
 if [[ $(tty) == "/dev/tty1" ]]; then
-	sway
-	#exit 0
+    sway
+    #exit 0
 fi

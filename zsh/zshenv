@@ -1,0 +1,82 @@
+
+function freedesktop_env() {
+    # Ensure freedesktop basic variables
+
+    [[ "$XDG_CONFIG_HOME" ]] || export XDG_CONFIG_HOME="$HOME/.config"
+    [[ "$XDG_DATA_HOME" ]] || export XDG_DATA_HOME="$HOME/.local/share"
+    [[ "$XDG_CACHE_HOME" ]] || export XDG_CACHE_HOME="$HOME/.cache"
+}
+
+function path_env() {
+    # Setup path
+
+    typeset -U path
+    path=($HOME/.local/bin $path[@])
+}
+
+function keyboard_env() {
+    # Keyboard environment (layout, repeat rate, etc...)
+    export XKB_DEFAULT_LAYOUT=se
+    export XKB_DEFAULT_MODEL=pc105
+    #export XKB_DEFAULT_OPTIONS=caps:none,compose:ralt
+    #export XKB_DEFAULT_VARIANT=,nodeadkeys
+
+    export WLC_REPEAT_DELAY=300
+    export WLC_REPEAT_RATE=20
+}
+
+function history_env() {
+    export HISTFILE="$XDG_DATA_HOME/zsh/zhistory"
+    export HISTSIZE=1000000         # maximum history size in terminal's memory
+    export SAVEHIST=1000000         # maximum size of history file
+}
+
+function misc_env() {
+    export LANG=en_US.UTF-8
+    export EDITOR=vim
+    export PAGER=less
+
+    export BROWSER=firefox
+    #export BROWSER=vimb
+}
+
+function ensure_env() {
+    # Glue all environment parts together
+
+    freedesktop_env
+    path_env
+    keyboard_env
+    history_env
+}
+
+# TODO: do this by using Dotbot instead
+function ensure_directories() {
+    # zsh log directory:
+    [[ -d "$XDG_DATA_HOME/zsh" ]] || mkdir -p "$XDG_DATA_HOME/zsh"
+}
+
+# Actual start of script
+ensure_env
+ensure_directories
+
+
+export GTK_THEME=Adapta
+
+# GTK+ (3.0+)
+#export GDK_BACKEND=wayland
+#export CLUTTER_BACKEND=wayland
+
+# QT5
+#export QT_QPA_PLATFORM=wayland-egl
+#export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+
+# Elementary/EFL
+#export ECORE_EVAS_ENGINE=wayland_egl	# wayland_shm for sw render
+#export ELM_ENGINE=wayland_egl 		# wayland_shm for sw render
+
+# SDL
+#export SDL_VIDEODRIVER=wayland
+
+# Java (Wayland fix)
+#export _JAVA_AWT_WM_NONREPARENTING=1
+

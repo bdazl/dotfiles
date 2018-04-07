@@ -10,7 +10,7 @@
     ~/.config/sway: sway
     ~/.Xdefaults: xorg/Xdefaults
     ~/.zshrc: zsh/zshrc
-    ~/.zprofile: zsh/zprofile
+    ~/.zshenv: zsh/zshenv
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
