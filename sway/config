@@ -9,14 +9,18 @@
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
 # Home row direction keys, like vim
-set $left h
-set $down j
-set $up k
+set $left  h
+set $down  j
+set $up    k
 set $right l
 
-set $splithoriz b
-set $splitvert v
+set $splithoriz  b
+set $splitvert   v
 set $focusparent a
+
+set $stacked s
+set $tabbed  w
+set $split   e
 
 # Your preferred terminal emulator
 set $term urxvt
@@ -145,9 +149,9 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     bindsym $mod+$splitvert splitv
 
     # Switch the current container between different layout styles
-    bindsym $mod+s layout stacking
-    bindsym $mod+w layout tabbed
-    bindsym $mod+e layout toggle split
+    bindsym $mod+$stacked layout stacking
+    bindsym $mod+$tabbed layout tabbed
+    bindsym $mod+$split layout toggle split
 
     # Make the current focus fullscreen
     bindsym $mod+f fullscreen
