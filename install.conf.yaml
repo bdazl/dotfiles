@@ -9,6 +9,7 @@
     ~/.config/i3status: i3status
     ~/.config/sway: sway
     ~/.Xdefaults: xorg/Xdefaults
+    ~/.vimrc: vim/vimrc
     ~/.zshrc: zsh/zshrc
     ~/.zshenv: zsh/zshenv
 
