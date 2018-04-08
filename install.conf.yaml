@@ -6,6 +6,8 @@
 
 - link:
     ~/.dotfiles: ''
+    ~/.config/Code/User/settings.json: code/settings.json
+    ~/.config/Code/User/keybindings.json: code/settings.json 
     ~/.config/i3status: i3status
     ~/.config/sway: sway
     ~/.Xdefaults: xorg/Xdefaults
