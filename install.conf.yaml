@@ -6,14 +6,14 @@
 
 - link:
     ~/.dotfiles: ''
-    ~/.config/Code/User/settings.json: code/settings.json
-    ~/.config/Code/User/keybindings.json: code/settings.json 
-    ~/.config/i3status: i3status
-    ~/.config/sway: sway
-    ~/.Xdefaults: xorg/Xdefaults
-    ~/.vimrc: vim/vimrc
-    ~/.zshrc: zsh/zshrc
-    ~/.zshenv: zsh/zshenv
+    ~/.config/Code/User/settings.json: etc/code/settings.json
+    ~/.config/Code/User/keybindings.json: etc/code/settings.json 
+    ~/.config/i3status: etc/i3status
+    ~/.config/sway: etc/sway
+    ~/.Xdefaults: etc/xorg/Xdefaults
+    ~/.vimrc: etc/vim/vimrc
+    ~/.zshrc: etc/zsh/zshrc
+    ~/.zshenv: etc/zsh/zshenv
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
