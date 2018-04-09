@@ -47,6 +47,7 @@ function ensure_env() {
     path_env
     keyboard_env
     history_env
+    misc_env
 }
 
 # TODO: do this by using Dotbot instead
