@@ -42,6 +42,9 @@ function config_history()
 
 function config_aliases() 
 {
+    alias -g ...='../..'
+    alias -g ....='../../..'
+    alias -g .....='../../../..'
     alias gc='git commit --verbose'
 }
 
