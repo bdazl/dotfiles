@@ -38,6 +38,8 @@ function misc_env() {
 
     export BROWSER=firefox
     #export BROWSER=vimb
+
+    export GITHUB_USER=HexHacks
 }
 
 function ensure_env() {
