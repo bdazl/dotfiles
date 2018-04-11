@@ -55,7 +55,7 @@ URxvt.keysym.M-Escape:      perl:keyboard-select:activate
 URxvt.keysym.M-s:           perl:keyboard-select:search
 
 
-*background:  [95]#2D2C28
+*background:  [90]#2D2C28
 *foreground:  #A4A6AB
 
 
