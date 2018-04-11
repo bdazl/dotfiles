@@ -16,4 +16,6 @@
     ~/.zshenv: etc/zsh/zshenv
 
 - shell:
-  - [git submodule update --init --recursive, Installing submodules]
+  - [git submodule update --init --recursive, Updating submodules]
+  - mkdir -p ~/.config/zsh
+  - mkdir -p ~/.config/Code/User
