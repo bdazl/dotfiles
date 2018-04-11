@@ -34,6 +34,10 @@ function config_history() {
     setopt hist_ignore_space        # ignore commands with leading space
 }
 
+function config_aliases() {
+    alias gc='git commit --verbose'
+}
+
 setopt extendedglob
 
 ensure_directories
@@ -42,6 +46,7 @@ config_keybindings_emacs
 config_completion
 config_prompt
 config_history
+config_aliases
 
 ## TODO: Move me to systemd
 # If running trom tty1 start sway
