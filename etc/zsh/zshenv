@@ -1,5 +1,6 @@
 
-function freedesktop_env() {
+function freedesktop_env()
+{
     # Ensure freedesktop basic variables
 
     [[ "$XDG_CONFIG_HOME" ]] || export XDG_CONFIG_HOME="$HOME/.config"
@@ -7,14 +8,16 @@ function freedesktop_env() {
     [[ "$XDG_CACHE_HOME" ]] || export XDG_CACHE_HOME="$HOME/.cache"
 }
 
-function path_env() {
+function path_env() 
+{
     # Setup path
 
     typeset -U path
     path=($HOME/.local/bin $path[@])
 }
 
-function keyboard_env() {
+function keyboard_env() 
+{
     # Keyboard environment (layout, repeat rate, etc...)
     export XKB_DEFAULT_LAYOUT=se
     export XKB_DEFAULT_MODEL=pc105
@@ -25,13 +28,15 @@ function keyboard_env() {
     export WLC_REPEAT_RATE=20
 }
 
-function history_env() {
+function history_env() 
+{
     export HISTFILE="$XDG_DATA_HOME/zsh/zhistory"
     export HISTSIZE=1000000         # maximum history size in terminal's memory
     export SAVEHIST=1000000         # maximum size of history file
 }
 
-function misc_env() {
+function misc_env() 
+{
     export LANG=en_US.UTF-8
     export EDITOR=vim
     export PAGER=less
@@ -42,7 +47,8 @@ function misc_env() {
     export GITHUB_USER=HexHacks
 }
 
-function ensure_env() {
+function ensure_env() 
+{
     # Glue all environment parts together
 
     freedesktop_env
@@ -52,16 +58,8 @@ function ensure_env() {
     misc_env
 }
 
-# TODO: do this by using Dotbot instead
-function ensure_directories() {
-    # zsh log directory:
-    [[ -d "$XDG_DATA_HOME/zsh" ]] || mkdir -p "$XDG_DATA_HOME/zsh"
-}
-
 # Actual start of script
 ensure_env
-ensure_directories
-
 
 export GTK_THEME=Adapta
 
