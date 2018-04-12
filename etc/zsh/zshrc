@@ -45,6 +45,8 @@ function config_aliases()
     alias -g ...='../..'
     alias -g ....='../../..'
     alias -g .....='../../../..'
+
+    alias ls='ls --color=auto'
     alias gc='git commit --verbose'
 }
 
