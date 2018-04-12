@@ -10,6 +10,7 @@
     ~/.config/Code/User/keybindings.json: etc/code/settings.json 
     ~/.config/i3status: etc/i3status
     ~/.config/sway: etc/sway
+    ~/.config/ranger: etc/ranger
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
     ~/.zshrc: etc/zsh/zshrc
