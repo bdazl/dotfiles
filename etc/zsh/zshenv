@@ -45,6 +45,7 @@ function misc_env()
     #export BROWSER=vimb
 
     export GITHUB_USER=HexHacks
+    export RANGER_LOAD_DEFAULT_RC=FALSE
 }
 
 function ensure_env() 
