@@ -47,6 +47,12 @@ function config_aliases()
     alias -g .....='../../../..'
 
     alias ls='ls --color=auto'
+
+    alias ga='git add'
+    alias gs='git status'
+    alias gl='git log'
+    alias gd='git diff'
+    alias glp='git log --pretty=\"format:%ad %h (%an): %s\" --date=short'
     alias gc='git commit --verbose'
 }
 
