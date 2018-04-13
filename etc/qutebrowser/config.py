@@ -325,6 +325,7 @@ c.auto_save.session = True
 ## Background color of unselected even tabs.
 ## Type: QtColor
 # c.colors.tabs.even.bg = 'darkgrey'
+c.colors.tabs.even.bg = 'black'
 
 ## Foreground color of unselected even tabs.
 ## Type: QtColor
@@ -354,6 +355,7 @@ c.auto_save.session = True
 ## Background color of unselected odd tabs.
 ## Type: QtColor
 # c.colors.tabs.odd.bg = 'grey'
+c.colors.tabs.odd.bg = 'black'
 
 ## Foreground color of unselected odd tabs.
 ## Type: QtColor
@@ -362,6 +364,7 @@ c.auto_save.session = True
 ## Background color of selected even tabs.
 ## Type: QtColor
 # c.colors.tabs.selected.even.bg = 'black'
+c.colors.tabs.selected.even.bg = '#285577'
 
 ## Foreground color of selected even tabs.
 ## Type: QtColor
@@ -370,6 +373,7 @@ c.auto_save.session = True
 ## Background color of selected odd tabs.
 ## Type: QtColor
 # c.colors.tabs.selected.odd.bg = 'black'
+c.colors.tabs.selected.odd.bg = '#285577'
 
 ## Foreground color of selected odd tabs.
 ## Type: QtColor
