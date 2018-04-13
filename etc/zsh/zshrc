@@ -51,8 +51,7 @@ function config_aliases()
     alias ga='git add'
     alias gs='git status'
     alias gd='git diff'
-    alias gl='git log'
-    alias glo='git log --oneline'
+    alias gl='git log --oneline'
     alias glp='git log --pretty="format:%h (%an, %ad): %s" --date=short'
     alias gc='git commit --verbose'
 }
