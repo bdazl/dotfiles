@@ -1033,6 +1033,7 @@ c.colors.tabs.selected.odd.bg = '#285577'
 ## QtWebEngine to work with Nouveau drivers.
 ## Type: Bool
 # c.qt.force_software_rendering = False
+c.qt.force_software_rendering = True
 
 ## Turn on Qt HighDPI scaling. This is equivalent to setting
 ## QT_AUTO_SCREEN_SCALE_FACTOR=1 in the environment. It's off by default
