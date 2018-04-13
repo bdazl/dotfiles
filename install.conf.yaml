@@ -11,6 +11,7 @@
     ~/.config/i3status: etc/i3status
     ~/.config/sway: etc/sway
     ~/.config/ranger: etc/ranger
+    ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
     ~/.zshrc: etc/zsh/zshrc
