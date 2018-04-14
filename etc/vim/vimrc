@@ -186,6 +186,10 @@ set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
 
+" Set left margin to show both the current line number
+" and the relative numbers
+set number
+set relativenumber
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -199,6 +203,10 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Moving around, tabs, windows and buffers
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Most important rebinds for the swedish keyboard!!
+map ö ^
+map ä $
+
 " Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
 map <space> /
 map <c-space> ?
