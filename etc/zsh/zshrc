@@ -11,7 +11,7 @@ function config_keybindings_vim()
 
 function config_completion()
 {
-    zstyle ':completion:*' completer _complete _ignored _correct _approximate
+    zstyle ':completion:*' completer _correct _complete _ignored _approximate
     zstyle ':completion:*' format 'Completing %d'
     zstyle ':completion:*' group-name ''
     zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]} m:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'l:|=* r:|=*' 'r:|[._-]=** r:|=**'
