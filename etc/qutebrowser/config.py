@@ -490,6 +490,7 @@ c.colors.tabs.selected.odd.bg = '#285577'
 ## describing an encoding such as _utf-8_, _iso-8859-1_, etc.
 ## Type: String
 # c.content.default_encoding = 'iso-8859-1'
+c.content.default_encoding = 'utf-8'
 
 ## Enable extra tools for Web developers. This needs to be enabled for
 ## `:inspector` to work and also adds an _Inspect_ entry to the context
@@ -514,6 +515,7 @@ c.colors.tabs.selected.odd.bg = '#285577'
 ##   - false
 ##   - ask
 # c.content.geolocation = 'ask'
+c.content.geolocation = False
 
 ## Value to send in the `Accept-Language` header.
 ## Type: String
@@ -559,6 +561,7 @@ c.colors.tabs.selected.odd.bg = '#285577'
 ## always exempt from hostblocking.
 ## Type: List of String
 # c.content.host_blocking.whitelist = ['piwik.org']
+c.content.host_blocking.whitelist = ['matomo.org']
 
 ## Enable hyperlink auditing (`<a ping>`).
 ## Type: Bool
@@ -700,6 +703,14 @@ c.colors.tabs.selected.odd.bg = '#285577'
 ## default is used.
 ## Type: Directory
 # c.downloads.location.directory = None
+import os
+HOME = 'HOME'
+DL_DIR = 'DOWNLOADS'
+if os.name == 'posix':
+    std_dl_dir = os.environ[HOME] + '/Downloads'
+    dl_dir = DL_DIR if DL_DIR in os.environ else std_dl_dir
+
+    c.downloads.location.directory = dl_dir
 
 ## Prompt the user for the download location. If set to false,
 ## `downloads.location.directory` will be used.
@@ -1045,6 +1056,7 @@ c.qt.force_software_rendering = True
 ## Show a scrollbar.
 ## Type: Bool
 # c.scrolling.bar = False
+c.scrolling.bar = True
 
 ## Enable smooth scrolling for web pages. Note smooth scrolling does not
 ## work with the `:scroll-px` command.
@@ -1318,6 +1330,7 @@ c.qt.force_software_rendering = True
 ## for a blank page.
 ## Type: FuzzyUrl
 # c.url.default_page = 'https://start.duckduckgo.com/'
+c.url.default_page = 'https://www.archlinux.org/'
 
 ## URL segments where `:navigate increment/decrement` will search for a
 ## number.
@@ -1340,6 +1353,14 @@ c.qt.force_software_rendering = True
 ## `:open google qutebrowser`.
 ## Type: Dict
 # c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}'}
+c.url.searchengines = {
+    'DEFAULT': 'https://duckduckgo.com/?q={}',
+    'ddg': 'https://duckduckgo.com/?q={}',
+    'ggl': 'https://www.google.com/search?oq={}',
+    'yt': 'https://www.youtube.com/?q={}',
+    'arch': 'https://wiki.archlinux.org/index.php?search={}',
+    'wiki': 'https://en.wikipedia.org/w/index.php?search={}'
+}
 
 ## Page(s) to open at the start.
 ## Type: List of FuzzyUrl, or FuzzyUrl
@@ -1444,6 +1465,10 @@ c.qt.force_software_rendering = True
 # config.bind('J', 'tab-next')
 # config.bind('K', 'tab-prev')
 # config.bind('L', 'forward')
+config.bind('H', 'tab-prev')
+config.bind('J', 'back')
+config.bind('K', 'forward')
+config.bind('L', 'tab-next')
 # config.bind('M', 'bookmark-add')
 # config.bind('N', 'search-prev')
 # config.bind('O', 'set-cmd-text -s :open -t')
@@ -1536,6 +1561,7 @@ c.qt.force_software_rendering = True
 # config.bind('yp', 'yank pretty-url')
 # config.bind('yt', 'yank title')
 # config.bind('yy', 'yank')
+config.bind('ys', 'yank selection')
 # config.bind('{{', 'navigate prev -t')
 # config.bind('}}', 'navigate next -t')
 
