@@ -1039,6 +1039,7 @@ if os.name == 'posix':
 ## running QtWebEngine on Wayland.
 ## Type: String
 # c.qt.force_platform = None
+c.qt.force_platform = 'xcb'
 
 ## Force software rendering for QtWebEngine. This is needed for
 ## QtWebEngine to work with Nouveau drivers.
