@@ -1357,8 +1357,8 @@ c.url.default_page = 'https://www.archlinux.org/'
 c.url.searchengines = {
     'DEFAULT': 'https://duckduckgo.com/?q={}',
     'ddg': 'https://duckduckgo.com/?q={}',
-    'ggl': 'https://www.google.com/search?oq={}',
-    'yt': 'https://www.youtube.com/?q={}',
+    'ggl': 'https://www.google.com/search?q={}',
+    'yt': 'https://www.youtube.com/results?search_query={}',
     'arch': 'https://wiki.archlinux.org/index.php?search={}',
     'wiki': 'https://en.wikipedia.org/w/index.php?search={}'
 }
