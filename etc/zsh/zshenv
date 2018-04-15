@@ -61,6 +61,12 @@ function theme_env()
     export GTK_THEME=Adapta
 }
 
+function directory_env()
+{
+    export DOWNLOADS=$HOME+'/Downloads'
+    export DOTFILES=$HOME+'.dotfiles'
+}
+
 function misc_env() 
 {
     export LANG=en_US.UTF-8
@@ -83,6 +89,7 @@ function ensure_env()
     keyboard_env
     history_env
     wayland_env
+    directory_env
     misc_env
 }
 
