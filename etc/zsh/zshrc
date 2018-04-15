@@ -30,7 +30,16 @@ function config_prompt()
     autoload -Uz colors
     promptinit
 
-    prompt walters
+    # Left prompt
+    PS1='%B%(?..%F{red}[%F{white}%?%F{red}] )' # status code: %?
+    PS1+='%F{fg_default_code}%b%n' # username
+    PS1+='%F{magenta}@' # separator
+    PS1+='%F{cyan}%m%u' # hostname
+    PS1+='%F{red}# %F{fg_default_code}'
+    export PS1
+
+    # Right prompt
+    export RPS1='%F{green}%~%f' 
 }
 
 function config_history()
@@ -46,7 +55,9 @@ function config_aliases()
     alias -g ....='../../..'
     alias -g .....='../../../..'
 
+    # I want colors for my standard operations.
     alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
 
     alias ga='git add'
     alias gs='git status'
