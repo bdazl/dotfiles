@@ -6,6 +6,7 @@
 
 - shell:
   - [git submodule update --init --recursive, Updating submodules]
+  - mkdir -p ~/.cache
   - mkdir -p ~/.config/zsh
   - mkdir -p ~/.config/Code/User
   - mkdir -p ~/.config/qutebrowser
