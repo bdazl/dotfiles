@@ -4,6 +4,12 @@
 
 - clean: ['~']
 
+- shell:
+  - [git submodule update --init --recursive, Updating submodules]
+  - mkdir -p ~/.config/zsh
+  - mkdir -p ~/.config/Code/User
+  - mkdir -p ~/.config/qutebrowser
+
 - link:
     ~/.dotfiles: ''
     ~/.config/Code/User/settings.json: etc/code/settings.json
@@ -18,7 +24,3 @@
     ~/.zshrc: etc/zsh/zshrc
     ~/.zshenv: etc/zsh/zshenv
 
-- shell:
-  - [git submodule update --init --recursive, Updating submodules]
-  - mkdir -p ~/.config/zsh
-  - mkdir -p ~/.config/Code/User
