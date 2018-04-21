@@ -26,4 +26,5 @@
     ~/.vimrc: etc/vim/vimrc
     ~/.zshrc: etc/zsh/zshrc
     ~/.zshenv: etc/zsh/zshenv
+    ~/.gitconfig: etc/git/gitconfig
 
