@@ -35,11 +35,17 @@ set $workspace-name-8 "8. "
 set $workspace-name-9 "9. " 
 set $workspace-name-0 "10. System" 
 
-# Your preferred terminal emulator
+# terminal emulator
+#
 set $term urxvt
-# Your preferred application launcher
+
+# application launcher
+#
 #set $menu rofi -show run
 set $menu dmenu_run
+
+# browser
+set $browser qutebrowser
 
 ### Output configuration
 #
@@ -86,6 +92,8 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 
     # start your launcher
     bindsym $mod+d exec $menu
+
+    bindsym $mod+o exec $browser
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
