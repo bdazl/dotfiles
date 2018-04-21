@@ -22,6 +22,8 @@
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" Bootstrap Vundle plug-in manager
+source ~/.dotfiles/etc/vim/vundle-bootstrap.vim
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
