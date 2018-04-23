@@ -66,6 +66,7 @@ function config_aliases()
 
     # I want colors for my standard operations.
     alias ls='ls --color=auto'
+    alias lsl='ls -l'
     alias grep='grep --color=auto'
 
     alias ga='git add'
