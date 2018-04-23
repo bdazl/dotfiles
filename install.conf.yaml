@@ -25,6 +25,7 @@
     ~/.config/redshift.conf: etc/redshift/redshift.conf
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
+    ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
     ~/.zshrc: etc/zsh/zshrc
     ~/.zshenv: etc/zsh/zshenv
     ~/.gitconfig: etc/git/gitconfig
