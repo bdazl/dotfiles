@@ -5,7 +5,6 @@
 # Author: Jacob Peyron
 #
 
-
 function config_keybindings_emacs()
 {
     bindkey -e
