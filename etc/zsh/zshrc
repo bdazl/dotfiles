@@ -1,14 +1,4 @@
 
-function config_keybindings_emacs()
-{
-    bindkey -e
-}
-
-function config_keybindings_vim()
-{
-    bindkey -v
-}
-
 function config_completion()
 {
 # The following lines were added by compinstall
@@ -30,6 +20,8 @@ function config_completion()
     autoload -Uz compinit
     compinit
 # End of lines added by compinstall
+#
+    setopt extendedglob
 }
 
 function config_prompt()
@@ -90,13 +82,27 @@ function post_shell_exec()
     exec_sway
 }
 
-setopt extendedglob
+function exec_config_dir()
+{
+    zsh_dir=$XDG_CONFIG_HOME/zsh
 
-config_keybindings_emacs
-#config_keybindings_vim
+    if [[ -d "$zsh_dir" ]] then
+        scripts=($zsh_dir/*.zsh)
+        foreach s in $scripts
+            test -r "$s" && . "$s";
+        end
+    else
+        echo Found no zsh script directory.
+        echo Functionality of this shell is reduced.
+   fi
+
+}
+
+
 config_completion
 config_prompt
 config_history
 config_aliases
 
+exec_config_dir
 post_shell_exec
