@@ -10,7 +10,7 @@ bindings, but it might change. The overall goal is to:
 
 ## TODO
 
-* Move current functionality to separate units
+* ~~Move current functionality to separate units~~
 * Add special keys like HOME, END, ARROWS (long overdue)
 * Source the zshenv into Dotbot and use variables to determine where to put stuff.
 

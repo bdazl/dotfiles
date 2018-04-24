@@ -1,18 +1,13 @@
+#!/bin/zsh
 
-
-function exec_sway()
-{
-    # If running trom tty1 start sway
-    if [[ $(tty) == "/dev/tty1" ]]; then
-        sway
-        #exit 0
-    fi
-}
-
-function post_shell_exec()
-{
-    exec_sway
-}
+# The infamous .zshrc
+# This is to be kept as clean as possible.
+# All configurations are put in separate
+# units inside of ~/.config/zsh 
+# (or whatever your XDG_CONFIG_HOME is).
+#
+# Author: Jacob Peyron
+#
 
 function exec_config_dir()
 {
@@ -31,4 +26,3 @@ function exec_config_dir()
 }
 
 exec_config_dir
-post_shell_exec
