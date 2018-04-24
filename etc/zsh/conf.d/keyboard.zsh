@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 # Keyboard / ZLE configuration for ZSH
 #
 # Author: Jacob Peyron
