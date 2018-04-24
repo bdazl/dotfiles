@@ -73,7 +73,8 @@ function misc_env()
     export EDITOR=vim
     export PAGER=less
 
-    export BROWSER=firefox
+    export BROWSER=qutebrowser
+    #export BROWSER=firefox
     #export BROWSER=vimb
 
     export GITHUB_USER=HexHacks
