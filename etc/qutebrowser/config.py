@@ -708,7 +708,9 @@ HOME = 'HOME'
 DL_DIR = 'DOWNLOADS'
 if os.name == 'posix':
     std_dl_dir = os.environ[HOME] + '/Downloads'
-    dl_dir = DL_DIR if DL_DIR in os.environ else std_dl_dir
+    dl_dir = std_dl_dir
+    if DL_DIR in os.environ:
+        dl_dir = os.environ[DL_DIR]
 
     c.downloads.location.directory = dl_dir
 

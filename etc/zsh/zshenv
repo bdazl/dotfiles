@@ -63,8 +63,8 @@ function theme_env()
 
 function directory_env()
 {
-    export DOWNLOADS=$HOME+'/Downloads'
-    export DOTFILES=$HOME+'.dotfiles'
+    export DOWNLOADS="$HOME/Downloads"
+    export DOTFILES="$HOME/.dotfiles"
 }
 
 function misc_env() 
