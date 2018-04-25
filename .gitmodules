@@ -2,5 +2,8 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 [submodule "etc/vim/Vundle.vim"]
-	path = etc/vim/Vundle.vim
+	path = etc/vim/plugins/Vundle.vim
 	url = https://github.com/VundleVim/Vundle.vim.git
+[submodule "etc/vim/python-mode"]
+	path = etc/vim/plugins/python-mode
+	url = https://github.com/python-mode/python-mode.git
