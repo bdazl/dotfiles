@@ -9,7 +9,6 @@
   - mkdir -p ~/.cache
   - mkdir -p ~/.config/Code/User
   - mkdir -p ~/.config/qutebrowser
-  - mkdir -p ~/.config/ranger
   - mkdir -p ~/.local/share/zsh
   - mkdir -p ~/.local/share/qutebrowser
 
