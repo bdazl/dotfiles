@@ -5,16 +5,38 @@
 # Author: Jacob Peyron
 #
 
+# OS identifier
+UNAME="$(uname 2> /dev/null)"
+
+
 function config_aliases() 
 {
     alias -g ...='../..'
     alias -g ....='../../..'
     alias -g .....='../../../..'
 
-    # I want colors for my standard operations.
-    alias ls='ls --color=auto'
-    alias lsl='ls -l'
-    alias grep='grep --color=auto'
+    
+    LS="ls"
+    GREP="grep"
+    case $UNAME in
+        Darwin)
+
+            # OSX specific config
+            # Use GNU coreutils instead of BSD tools
+            LS="gls"
+            GREP="ggrep"
+
+            ;;
+   #     Linux)
+   #         ;;
+   #     FreeBSD)
+   #         ;;
+    esac
+
+
+    alias ls='$LS --color=auto'
+    alias lsl='$LS -l --color=auto'
+    alias grep='$GREP --color=auto'
 
     alias ga='git add'
     alias gs='git status'
