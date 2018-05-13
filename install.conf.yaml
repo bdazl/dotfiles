@@ -30,6 +30,7 @@
     ~/.zshrc: etc/zsh/zshrc
     ~/.zshenv: etc/zsh/zshenv
     ~/.zlogin: etc/zsh/zlogin
+    ~/.zprofile: etc/zsh/zprofile
     ~/.config/zsh: etc/zsh/conf.d
     ~/.gitconfig: etc/git/gitconfig
 

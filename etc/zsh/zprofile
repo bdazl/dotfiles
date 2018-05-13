@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+function path_env() 
+{
+    # Setup path
+
+    #typeset -U path
+    #path=($HOME/bin $path[@])
+    export PATH=$HOME/bin:$PATH
+}
+
+path_env

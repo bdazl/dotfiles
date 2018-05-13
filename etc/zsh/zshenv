@@ -1,3 +1,4 @@
+#!/bin/zsh
 
 function freedesktop_env()
 {
@@ -6,14 +7,6 @@ function freedesktop_env()
     [[ "$XDG_CONFIG_HOME" ]] || export XDG_CONFIG_HOME="$HOME/.config"
     [[ "$XDG_DATA_HOME" ]] || export XDG_DATA_HOME="$HOME/.local/share"
     [[ "$XDG_CACHE_HOME" ]] || export XDG_CACHE_HOME="$HOME/.cache"
-}
-
-function path_env() 
-{
-    # Setup path
-
-    typeset -U path
-    path=($HOME/.local/bin $path[@])
 }
 
 function keyboard_env() 
@@ -86,7 +79,6 @@ function ensure_env()
     # Glue all environment parts together
 
     freedesktop_env
-    path_env
     keyboard_env
     history_env
     #wayland_env
