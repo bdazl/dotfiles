@@ -21,7 +21,7 @@ function exec_config_dir()
     else
         echo Found no zsh script directory.
         echo Functionality of this shell is reduced.
-   fi
+    fi
 
 }
 
