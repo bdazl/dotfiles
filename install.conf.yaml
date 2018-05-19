@@ -5,7 +5,6 @@
 - clean: ['~']
 
 - shell:
-  - [git submodule update --init --recursive, Updating submodules]
   - mkdir -p ~/.cache
   - mkdir -p ~/.conan
   - mkdir -p ~/.config/Code/User
