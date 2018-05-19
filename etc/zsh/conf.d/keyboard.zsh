@@ -36,10 +36,12 @@ function bindkeys_special()
     key[PageUp]="$terminfo[kpp]"
     key[PageDown]="$terminfo[knp]"
 
-    # setup key accordingly
+    # Setup keys accordingly
+    #
+    # I don't really like the insert key, so I skip that one here
+    #[[ -n "$key[Insert]"    ]] && bindkey -- "$key[Insert]"    overwrite-mode
     [[ -n "$key[Home]"      ]] && bindkey -- "$key[Home]"      beginning-of-line
     [[ -n "$key[End]"       ]] && bindkey -- "$key[End]"       end-of-line
-    [[ -n "$key[Insert]"    ]] && bindkey -- "$key[Insert]"    overwrite-mode
     [[ -n "$key[Backspace]" ]] && bindkey -- "$key[Backspace]" backward-delete-char
     [[ -n "$key[Delete]"    ]] && bindkey -- "$key[Delete]"    delete-char
     [[ -n "$key[Up]"        ]] && bindkey -- "$key[Up]"        up-line-or-history
