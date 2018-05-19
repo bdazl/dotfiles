@@ -13,6 +13,9 @@ function config_keybindings_emacs()
 function config_keybindings_vim()
 {
     bindkey -v
+    
+    # Remove ESC-key lag
+    export KEYTIMEOUT=1
 }
 
 function bindkeys_special()
@@ -52,18 +55,28 @@ function bindkeys_special()
     # Finally, make sure the terminal is in application mode, when zle is
     # active. Only then are the values from $terminfo valid.
     if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-        function zle-line-init () {
+        zle-line-init()
+        {
+            typeset -g __prompt_status="$?"
             echoti smkx
         }
-        function zle-line-finish () {
+        zle-line-finish()
+        {
             echoti rmkx
         }
         zle -N zle-line-init
         zle -N zle-line-finish
+        
+    else
+        zle-line-init()
+        {
+            typeset -g __prompt_status="$?"
+        }
+        zle -N zle-line-init
     fi
 }
 
-config_keybindings_emacs
-#config_keybindings_vim
+#config_keybindings_emacs
+config_keybindings_vim
 
 bindkeys_special

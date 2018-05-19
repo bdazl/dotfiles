@@ -5,23 +5,49 @@
 # Author: Jacob Peyron
 #
 
+function echo-left-prompt()
+{
+    l='%B%(?..%F{red}[%F{white}%?%F{red}] )' # status code: %?
+    l+='%(!.%F{red}.%F{fg_default_code})' # Color selector for if super user
+    l+='%b%n'                             # username
+    l+='%F{magenta}@'                     # @
+    l+='%F{cyan}%m%u'                     # hostname
+    l+='%F{red}# %F{fg_default_code}'     # #
+
+    echo "$l"
+}
+
+function echo-right-prompt()
+{
+    r=""
+
+    # If in vi-command mode
+    if [[ $KEYMAP = vicmd ]] then
+       r+="%F{white}[%F{red}CMD%F{white}]"
+    fi
+    r+="%F{green}%~%f"
+
+    echo "$r"
+}
+
 function config_prompt()
 {
     autoload -Uz promptinit
     autoload -Uz colors
     promptinit
 
-    # Left prompt
-    PS1='%B%(?..%F{red}[%F{white}%?%F{red}] )' # status code: %?
-    PS1+='%(!.%F{red}.%F{fg_default_code})' # Color selector for if super user
-    PS1+='%b%n'                             # username
-    PS1+='%F{magenta}@'                     # @
-    PS1+='%F{cyan}%m%u'                     # hostname
-    PS1+='%F{red}# %F{fg_default_code}'     # #
-    export PS1
+    export PROMPT="$(echo-left-prompt)"
+    export RPROMPT="$(echo-right-prompt)"
 
-    # Right prompt
-    export RPS1='%F{green}%~%f' 
+    # Pressing ESC in VI-mode triggers this
+    zle-keymap-select() {
+        PROMPT="$(echo-left-prompt)"
+        RPROMPT="$(echo-right-prompt)"
+
+        () { return $__prompt_status }
+        zle reset-prompt
+    }
+    zle -N zle-keymap-select
 }
 
 config_prompt
