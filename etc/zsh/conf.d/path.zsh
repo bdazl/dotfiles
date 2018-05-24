@@ -21,10 +21,9 @@ function echo-path-base()
 function echo-path-osx()
 {
     # I crave GNU over BSD stuff
-    gnucore="$(brew --prefix coreutils)/libexec/gnubin"
-    gnugrep="$(brew --prefix grep)/bin"
-    gnufind="$(brew --prefix findutils)"
-
+    gnucore="/usr/local/opt/coreutils/libexec/gnubin"
+    gnugrep="/usr/local/opt/grep/bin"
+    gnufind="/usr/local/opt/findutils/bin"
     
     pth=($gnucore $gnugrep $gnufind)
     echo "${(j.:.)pth}"
