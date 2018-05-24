@@ -1,0 +1,52 @@
+#!/bin/zsh
+#
+# Author: Jacob Peyron <jacob.peyron@gmail.com>
+#
+# Setup path for different system.
+
+
+function echo-path-base() 
+{
+    # Setup path
+    # set array-output to path typeset
+    
+    # Simply echo:ing this array will yield a path
+    # $HOME/bin like:this:where:this:is:$PATH
+    pth=("$HOME/bin" ${PATH})
+
+    # Join spaces with :
+    echo "${(j.:.)pth}"
+}
+
+function echo-path-osx()
+{
+    # I crave GNU over BSD stuff
+    gnucore="$(brew --prefix coreutils)/libexec/gnubin"
+    gnugrep="$(brew --prefix grep)/bin"
+    gnufind="$(brew --prefix findutils)"
+
+    
+    pth=($gnucore $gnugrep $gnufind)
+    echo "${(j.:.)pth}"
+}
+    
+function echo-my-path()
+{
+    pth="$(echo-path-base)"
+
+    case $(uname 2> /dev/null) in
+        Darwin)
+
+            pth=($(echo-path-osx) $pth)
+            ;;
+    esac
+
+    echo "${(j.:.)pth}"
+}
+
+function export-my-path()
+{
+    export PATH="$(echo-my-path)"
+}
+
+# export-my-path

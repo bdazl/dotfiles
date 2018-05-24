@@ -1,12 +1,9 @@
 #!/bin/zsh
+#
+# Author: Jacob Peyron <jacob.peyron@gmail.com>
+#
+# Setup path for different systems
 
-function path_env() 
-{
-    # Setup path
+source $XDG_CONFIG_HOME/zsh/path.zsh
 
-    #typeset -U path
-    #path=($HOME/bin $path[@])
-    export PATH=$HOME/bin:$PATH
-}
-
-path_env
+export-my-path
