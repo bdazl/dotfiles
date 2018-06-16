@@ -3,11 +3,6 @@
 "   Jacob Peyron <jacob.peyron@gmail.com>
 "
 " Sections:
-"    -> General
-"    -> VIM user interface
-"    -> Colors and Fonts
-"    -> Files and backups
-"    -> Text, tab and indent related
 "    -> Visual mode related
 "    -> Moving around, tabs and buffers
 "    -> Status line
@@ -25,20 +20,10 @@
 " Bootstrap: Vundle plug-in manager
 source ~/.dotfiles/etc/vim/plugins/this_self/vundle-bootstrap.vim
 
-" Options: Very general settings
-source ~/.dotfiles/etc/vim/plugins/this_self/general.vim
-
-" Options: UI behaviour
-source ~/.dotfiles/etc/vim/plugins/this_self/user-interface.vim
-
-" Options: colors and fonts
-source ~/.dotfiles/etc/vim/plugins/this_self/colors-and-fonts.vim
-
-" Options: files, backup and undo
-source ~/.dotfiles/etc/vim/plugins/this_self/files-backup-undo.vim
-
-" Options: text, tab and indent
-source ~/.dotfiles/etc/vim/plugins/this_self/text-tab-indent.vim
+" Source all files from my home-made directory
+for f in split(glob('~/.dotfiles/etc/vim/plugins/this_self/*.vim'), '\n')
+    exe 'source' f
+endfor
 
 
 " TODO """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
