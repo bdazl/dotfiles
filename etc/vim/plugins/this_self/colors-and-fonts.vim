@@ -5,13 +5,11 @@
 " Enable syntax highlighting
 syntax enable 
 
-" Enable 256 colors palette in Gnome Terminal
-if $COLORTERM == 'gnome-terminal'
-    set t_Co=256
-endif
+" Enable 256 colors palette 
+set t_Co=256
 
 try
-    colorscheme desert
+    colorscheme elflord
 catch
 endtry
 
@@ -21,7 +19,6 @@ set background=dark
 if has("gui_running")
     set guioptions-=T
     set guioptions-=e
-    set t_Co=256
     set guitablabel=%M\ %t
 endif
 
