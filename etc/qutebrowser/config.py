@@ -1046,8 +1046,10 @@ c.qt.force_platform = 'xcb'
 ## Force software rendering for QtWebEngine. This is needed for
 ## QtWebEngine to work with Nouveau drivers.
 ## Type: Bool
-# c.qt.force_software_rendering = False
-c.qt.force_software_rendering = True
+# c.qt.force_software_rendering = 'qt-quick'
+# c.qt.force_software_rendering = 'chromium'
+# c.qt.force_software_rendering = 'none'
+c.qt.force_software_rendering = 'software-opengl'
 
 ## Turn on Qt HighDPI scaling. This is equivalent to setting
 ## QT_AUTO_SCREEN_SCALE_FACTOR=1 in the environment. It's off by default
