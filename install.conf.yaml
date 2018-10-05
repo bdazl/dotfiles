@@ -34,4 +34,5 @@
     ~/.zprofile: etc/zsh/zprofile
     ~/.config/zsh: etc/zsh/conf.d
     ~/.gitconfig: etc/git/gitconfig
+    ~/.tmux.conf: etc/tmux/tmux.conf
 
