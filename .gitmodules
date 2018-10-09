@@ -7,3 +7,6 @@
 [submodule "etc/vim/python-mode"]
 	path = etc/vim/plugins/python-mode
 	url = https://github.com/python-mode/python-mode.git
+[submodule "etc/xorg/plugins/urxvt-resize-font"]
+	path = etc/xorg/plugins/urxvt-resize-font
+	url = https://github.com/simmel/urxvt-resize-font

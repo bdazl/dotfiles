@@ -3,11 +3,7 @@
 !-------------------------------------------------------------------------------
 
 Xft.dpi:                    96
-Xft.antialias:              true
 Xft.rgba:                   rgb
-Xft.hinting:                true
-Xft.hintstyle:              hintslight
-Xft.pixelsize               11
 
 URxvt.depth:                32
 URxvt.geometry:             90x30
@@ -21,10 +17,8 @@ URxvt.internalBorder:       3
 URxvt.lineSpace:            0
 
 ! Fonts
-URxvt.allow_bold:           false
-/* URxvt.font:                 -*-terminus-medium-r-normal-*-12-120-72-72-c-60-iso8859-1 */
-URxvt.font: xft:DejaVu Sans Mono
-URxvt.boldFont: xft:DejaVu Sans Bold
+URxvt.allow_bold:           true
+URxvt.font: xft:Inconsolata:size=11:antialias=true
 
 ! Fix font space
 #URxvt.letterSpace: -1
@@ -32,11 +26,6 @@ URxvt.boldFont: xft:DejaVu Sans Bold
 ! Scrollbar
 URxvt.scrollStyle:          rxvt
 URxvt.scrollBar:            false
-
-! Perl extensions
-URxvt.perl-ext-common:      default,matcher
-URxvt.matcher.button:       1
-URxvt.urlLauncher:          firefox
 
 ! Cursor
 URxvt.cursorBlink:          true
@@ -47,9 +36,15 @@ URxvt.cursorUnderline:      false
 URxvt.pointerBlank:         true
 
 ! Copy-paste
-URxvt.perl-ext-common:	    default,clipboard,url-select,keyboard-select
-URxvt.url-select.launcher:  chromium
+URxvt.perl-ext-common:	    default,clipboard,url-select,keyboard-select,matcher,resize-font
+
+URxvt.resize-font.step:     1
+
+URxvt.matcher.button:       1
+
+URxvt.url-select.launcher:  qutebrowser
 URxvt.url-select.underline: true
+
 URxvt.keysym.M-u:           perl:url-select:select_next
 URxvt.keysym.M-Escape:      perl:keyboard-select:activate
 URxvt.keysym.M-s:           perl:keyboard-select:search
