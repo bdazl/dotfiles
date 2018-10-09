@@ -13,6 +13,8 @@ Plugin 'Valloric/YouCompleteMe'
 
 Plugin 'fatih/vim-go'
 
+Plugin 'francoiscabrol/ranger.vim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
