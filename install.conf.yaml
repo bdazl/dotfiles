@@ -12,6 +12,7 @@
   - mkdir -p ~/.config/qutebrowser
   - mkdir -p ~/.local/share/zsh
   - mkdir -p ~/.local/share/qutebrowser
+  - mkdir -p ~/.urxvt/ext
 
 - link:
     ~/.dotfiles: ''
@@ -35,4 +36,5 @@
     ~/.config/zsh: etc/zsh/conf.d
     ~/.gitconfig: etc/git/gitconfig
     ~/.tmux.conf: etc/tmux/tmux.conf
+    ~/.urxvt/ext/resize-font: etc/xorg/plugins/urxvt-resize-font/resize-font
 
