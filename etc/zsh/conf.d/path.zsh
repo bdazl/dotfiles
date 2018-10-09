@@ -12,7 +12,7 @@ function echo-path-base()
     
     # Simply echo:ing this array will yield a path
     # $HOME/bin like:this:where:this:is:$PATH
-    pth=("$HOME/bin" ${PATH})
+    pth=("$HOME/.local/bin" "$HOME/bin" ${PATH})
 
     # Join spaces with :
     echo "${(j.:.)pth}"
