@@ -16,6 +16,7 @@ Plugin 'fatih/vim-go'
 Plugin 'francoiscabrol/ranger.vim'
 
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'majutsushi/tagbar'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
