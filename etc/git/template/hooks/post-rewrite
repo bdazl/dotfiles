@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Triggered after git commit and git rebase
+# Since I already have a git commit hook, disregard that here
+case "$1" in
+  rebase) exec .git/hooks/post-merge ;;
+esac
+
