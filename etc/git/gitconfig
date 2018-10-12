@@ -4,4 +4,4 @@
 [init]
 	templatedir = ~/.git_template
 [alias]
-	ctags = !.git/hooks/ctags
+	ctags = !~/.git_template/hooks/ctags
