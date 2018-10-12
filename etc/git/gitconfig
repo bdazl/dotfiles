@@ -1,3 +1,7 @@
 [user]
 	name = Jacob Peyron
 	email = jacob.peyron@gmail.com
+[init]
+	templatedir = ~/.git_template
+[alias]
+	ctags = !.git/hooks/ctags
