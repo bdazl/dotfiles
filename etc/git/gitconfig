@@ -1,3 +1,7 @@
 [user]
 	name = Jacob Peyron
 	email = jacob.peyron@evolvetechnology.se
+[init]
+	templatedir = ~/.git_template
+[alias]
+	ctags = !~/.git_template/hooks/ctags
