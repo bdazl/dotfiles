@@ -24,4 +24,4 @@ nmap <leader>w :w!<cr>
 command W w !sudo tee % > /dev/null
 
 nmap <TAB> :tabnext<cr>
-
+nmap <S-TAB> :tabprev<cr>
