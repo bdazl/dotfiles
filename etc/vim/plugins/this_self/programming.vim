@@ -14,6 +14,3 @@ map <F10> :exec '!python' shellescape(@%, 1) 'args'
 nmap <leader>gr :w <bar> :GoRun<cr>
 nmap <leader>gb :w <bar> :GoBuild<cr>
  
-"""" CTAGS 
-nmap <leader>cp :CtrlP<cr>
-nmap <leader>b :TagbarToggle<cr>
