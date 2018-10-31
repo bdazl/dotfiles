@@ -33,3 +33,9 @@ nmap <S-TAB> :tabprev<cr>
 
 " Search and Replace from current line to last
 nmap <leader>sr :.,$s///gi<left><left><left><left>
+
+" In visual mode, pressing a results in yanking 
+" current selection and letting the user decide
+" what to replace that text with.
+" Replaces all occurrences in the file.
+vmap a y<esc>:%s/<c-r>"//gi<left><left><left> 
