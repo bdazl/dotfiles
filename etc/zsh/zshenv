@@ -1,91 +1,19 @@
 #!/bin/zsh
 
-function freedesktop_env()
+function setup_environment()
 {
-    # Ensure freedesktop basic variables
+    zsh_dir=~/.config/zsh/env
 
-    [[ "$XDG_CONFIG_HOME" ]] || export XDG_CONFIG_HOME="$HOME/.config"
-    [[ "$XDG_DATA_HOME" ]] || export XDG_DATA_HOME="$HOME/.local/share"
-    [[ "$XDG_CACHE_HOME" ]] || export XDG_CACHE_HOME="$HOME/.cache"
+    if [[ -d "$zsh_dir" ]] then
+        scripts=($zsh_dir/*.zsh)
+        foreach s in $scripts
+            test -r "$s" && . "$s";
+        end
+    else
+        echo Found no zsh environment directory: $zsh_dir
+        echo Functionality of this shell is reduced.
+    fi
+
 }
 
-function keyboard_env() 
-{
-    # Keyboard environment (layout, repeat rate, etc...)
-    export XKB_DEFAULT_LAYOUT=se
-    export XKB_DEFAULT_MODEL=pc105
-    #export XKB_DEFAULT_OPTIONS=caps:none,compose:ralt
-    #export XKB_DEFAULT_VARIANT=,nodeadkeys
-
-    export WLC_REPEAT_DELAY=300
-    export WLC_REPEAT_RATE=20
-}
-
-function history_env() 
-{
-    export HISTFILE="$XDG_DATA_HOME/zsh/zhistory"
-    export HISTSIZE=1000000         # maximum history size in terminal's memory
-    export SAVEHIST=1000000         # maximum size of history file
-}
-
-function wayland_env()
-{
-    # GTK+ (3.0+)
-    export GDK_BACKEND=wayland
-    export CLUTTER_BACKEND=wayland
-
-    # QT5
-    export QT_QPA_PLATFORM=wayland-egl
-    export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-
-    # Elementary/EFL
-    export ECORE_EVAS_ENGINE=wayland_egl	# wayland_shm for sw render
-    export ELM_ENGINE=wayland_egl 		# wayland_shm for sw render
-
-    # SDL
-    export SDL_VIDEODRIVER=wayland
-
-    # Java (Wayland fix)
-    export _JAVA_AWT_WM_NONREPARENTING=1
-}
-
-function theme_env()
-{
-    export GTK_THEME=Adapta
-}
-
-function directory_env()
-{
-    export DOWNLOADS="$HOME/Downloads"
-    export DOTFILES="$HOME/.dotfiles"
-}
-
-function misc_env() 
-{
-    export LANG=en_US.UTF-8
-    export EDITOR=vim
-    export PAGER=less
-
-    export BROWSER=qutebrowser
-    #export BROWSER=firefox
-    #export BROWSER=vimb
-
-    export GITHUB_USER=HexHacks
-    export RANGER_LOAD_DEFAULT_RC=FALSE
-}
-
-function ensure_env() 
-{
-    # Glue all environment parts together
-
-    freedesktop_env
-    keyboard_env
-    history_env
-    #wayland_env
-    directory_env
-    misc_env
-}
-
-# Actual start of script
-ensure_env
-
+setup_environment
