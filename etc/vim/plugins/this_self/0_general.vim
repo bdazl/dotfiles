@@ -31,3 +31,5 @@ command W w !sudo tee % > /dev/null
 nmap <TAB> :tabnext<cr>
 nmap <S-TAB> :tabprev<cr>
 
+" Search and Replace from current line to last
+nmap <leader>sr :.,$s///gi<left><left><left><left>
