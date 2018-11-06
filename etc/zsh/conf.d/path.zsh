@@ -5,30 +5,47 @@
 # Setup path for different system.
 
 
+function echo-path-base() 
+{
+    # Setup path
+    # set array-output to path typeset
+    
+    # Simply echo:ing this array will yield a path
+    # $HOME/bin like:this:where:this:is:$PATH
+    pth=("$HOME/.local/bin" "$HOME/bin" ${PATH})
 
-retval=()
-function ret-path-osx()
+    # Join spaces with :
+    echo "${(j.:.)pth}"
+}
+
+function echo-path-osx()
 {
     # I crave GNU over BSD stuff
     gnucore="/usr/local/opt/coreutils/libexec/gnubin"
     gnugrep="/usr/local/opt/grep/bin"
     gnufind="/usr/local/opt/findutils/bin"
     
-    retval=($gnucore $gnugrep $gnufind)
+    pth=($gnucore $gnugrep $gnufind)
+    echo "${(j.:.)pth}"
 }
     
-function export-my-path()
+function echo-my-path()
 {
-    typeset -aU path
-    path+=("$HOME/.local/bin" "$HOME/bin")
+    pth="$(echo-path-base)"
 
     case $(uname 2> /dev/null) in
         Darwin)
 
-            ret-path-osx 
-            path+=$retval
+            pth=($(echo-path-osx) $pth)
             ;;
     esac
+
+    echo "${(j.:.)pth}"
+}
+
+function export-my-path()
+{
+    export PATH="$(echo-my-path)"
 }
 
 # export-my-path
