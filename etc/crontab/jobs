@@ -1,0 +1,1 @@
+15,45   *   *   *   *   notify-send "Please Stand Up" >/dev/null 2>&1
