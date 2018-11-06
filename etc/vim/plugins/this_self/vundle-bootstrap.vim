@@ -17,6 +17,7 @@ Plugin 'francoiscabrol/ranger.vim'
 
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'majutsushi/tagbar'
+Plugin 'aserebryakov/vim-todo-lists'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -35,3 +36,4 @@ filetype plugin indent on    " required
 "
 " let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+let g:VimTodoListsMoveItems = 0
