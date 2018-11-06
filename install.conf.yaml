@@ -13,6 +13,7 @@
   - mkdir -p ~/.local/share/zsh
   - mkdir -p ~/.local/share/qutebrowser
   - mkdir -p ~/.urxvt/ext
+  - crontab etc/crontab/jobs
 
 - link:
     ~/.dotfiles: ''
