@@ -11,6 +11,10 @@ Plugin 'VundleVim/Vundle.vim'
 " Auto-complete / Intellisense for many languages
 Plugin 'Valloric/YouCompleteMe'
 
+" Status bar
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
 Plugin 'fatih/vim-go'
 
 Plugin 'francoiscabrol/ranger.vim'
@@ -36,4 +40,12 @@ filetype plugin indent on    " required
 "
 " let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+
+" Airline status bar
+"let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme = 'solarized'
+let g:airline_solarized_bg = 'dark'
+" let g:airline_powerline_fonts = 1
+
+" Vim TODO lists
 let g:VimTodoListsMoveItems = 0
