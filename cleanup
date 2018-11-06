@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd etc/vim/plugins/vim-todo-lists/
+git clean -fd
