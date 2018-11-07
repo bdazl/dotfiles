@@ -33,11 +33,10 @@ function echo-my-path()
 {
     pth="$(echo-path-base)"
 
-    case $(uname 2> /dev/null) in
-        Darwin)
-
-            pth=($(echo-path-osx) $pth)
-            ;;
+    u_name="$(/usr/bin/uname)"
+    case $u_name in Darwin):
+        pth=("$(echo-path-osx)" $pth)
+        ;;
     esac
 
     echo "${(j.:.)pth}"
