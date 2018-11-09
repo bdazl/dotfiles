@@ -4,15 +4,41 @@
 #
 # Setup path for different system.
 
+function echo-if-dir-exists()
+{
+    if [[ -d "${1}" ]] then
+        echo ${1}
+    fi
+}
+
+function remove-non-existing()
+{
+    local out=""
+    for arg do
+        e="$(echo-if-dir-exists $arg)"
+
+        # if length of string is non-zero
+        if [[ -n "$e" ]] then
+            out+="$e "
+        fi
+    done
+    echo $out
+}
 
 function echo-path-base() 
 {
     # Setup path
     # set array-output to path typeset
-    
+
     # Simply echo:ing this array will yield a path
     # $HOME/bin like:this:where:this:is:$PATH
-    pth=("$HOME/.local/bin" "$HOME/bin" ${PATH})
+    pth=( \
+        $(remove-non-existing \
+            "$HOME/.local/bin" \
+            "$HOME/bin" \
+        ) \
+        ${PATH} \
+    )
 
     # Join spaces with :
     echo "${(j.:.)pth}"
@@ -25,7 +51,7 @@ function echo-path-osx()
     gnugrep="/usr/local/opt/grep/bin"
     gnufind="/usr/local/opt/findutils/bin"
     
-    pth=($gnucore $gnugrep $gnufind)
+    pth=$(remove-non-existing $gnucore $gnugrep $gnufind)
     echo "${(j.:.)pth}"
 }
     
