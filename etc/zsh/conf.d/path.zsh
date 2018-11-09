@@ -36,6 +36,7 @@ function echo-path-base()
         $(remove-non-existing \
             "$HOME/.local/bin" \
             "$HOME/bin" \
+            "$HOME/go/bin" \
         ) \
         ${PATH} \
     )
