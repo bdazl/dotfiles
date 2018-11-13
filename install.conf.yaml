@@ -10,6 +10,7 @@
   - mkdir -p ~/.vim
   - mkdir -p ~/.config/Code/User
   - mkdir -p ~/.config/qutebrowser
+  - mkdir -p ~/.local/bin
   - mkdir -p ~/.local/share/zsh
   - mkdir -p ~/.local/share/qutebrowser
   - mkdir -p ~/.urxvt/ext
@@ -27,6 +28,7 @@
     ~/.config/ranger: etc/ranger
     ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
     ~/.config/redshift.conf: etc/redshift/redshift.conf
+    ~/.local/bin/notify.sh: etc/crontab/notify.sh
     ~/.git_template: etc/git/template
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
