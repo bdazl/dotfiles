@@ -18,7 +18,12 @@ function config_aliases()
     alias ga='git add'
     alias gs='git status'
     alias gd='git diff'
-    alias gl='git log --oneline --all --graph --decorate'
+
+    # ShortSHA Date Author Decorate/Branch etc
+    # Commit message
+    alias gl='git log --graph --date=short --pretty=format:"%C(yellow)%h %C(blue)%ad %C(green)%an %C(auto)%d %n %s"'
+    alias gls='git log --oneline --all --graph --decorate'
+
     alias gc='git commit --verbose'
 
     alias docker-killall='docker kill $(docker ps -q)'
