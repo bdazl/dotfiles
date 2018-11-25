@@ -7,10 +7,6 @@
 
 function config_aliases() 
 {
-    alias -g ...='../..'
-    alias -g ....='../../..'
-    alias -g .....='../../../..'
-
     alias ls='ls --color=auto'
     alias lsl='ls -l --color=auto'
     alias grep='grep --color=auto'
