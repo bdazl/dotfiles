@@ -7,9 +7,15 @@
 
 function config_aliases() 
 {
-    alias ls='ls --color=auto'
-    alias lsl='ls -l --color=auto'
-    alias grep='grep --color=auto'
+    if [ "$(uname)" = "Darwin" ]; then
+        alias ls='ls -G'
+        alias lsl='ls -G -l'
+        alias grep='grep --color=auto'
+    else
+        alias ls='ls --color=auto'
+        alias lsl='ls -l --color=auto'
+        alias grep='grep --color=auto'
+    fi
 
     alias ga='git add'
     alias gs='git status'
