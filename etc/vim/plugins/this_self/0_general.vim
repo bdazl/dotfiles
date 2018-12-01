@@ -26,6 +26,8 @@ nmap <leader>w :w!<cr>
 
 " Undo tree
 nmap U :MundoToggle<cr>
+let g:mundo_width = 25
+let g:mundo_preview_bottom = 1
 
 " :W sudo saves the file 
 " (useful for handling the permission-denied error)
