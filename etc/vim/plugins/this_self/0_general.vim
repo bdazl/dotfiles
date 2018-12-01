@@ -24,6 +24,9 @@ let mapleader = ","
 " Fast saving
 nmap <leader>w :w!<cr>
 
+" Undo tree
+nmap U :MundoToggle<cr>
+
 " :W sudo saves the file 
 " (useful for handling the permission-denied error)
 command W w !sudo tee % > /dev/null
@@ -39,3 +42,4 @@ nmap <leader>sr :.,$s///gi<left><left><left><left>
 " what to replace that text with.
 " Replaces all occurrences in the file.
 vmap a y<esc>:%s/<c-r>"//gi<left><left><left> 
+

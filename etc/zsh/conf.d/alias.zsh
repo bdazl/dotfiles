@@ -27,6 +27,7 @@ function config_aliases()
     alias gls='git log --oneline --all --graph --decorate'
 
     alias gc='git commit --verbose'
+    alias gb='git branch'
 
     alias docker-killall='docker kill $(docker ps -q)'
     # Delete all stopped containers.
