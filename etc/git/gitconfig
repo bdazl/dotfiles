@@ -5,3 +5,8 @@
 	templatedir = ~/.git_template
 [alias]
 	ctags = !~/.git_template/hooks/ctags
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+[mergetool]
+	prompt = false
