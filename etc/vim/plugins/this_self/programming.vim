@@ -11,8 +11,10 @@ map <F10> :exec '!python' shellescape(@%, 1) 'args'
 """" GOLANG
 " Go Run ( ,gr )
 " Go Build ( ,gb )
+" Go Test ( ,gg )
 nmap <leader>gr :w <bar> :GoRun<cr>
 nmap <leader>gb :w <bar> :GoBuild<cr>
+nmap <leader>gg :w <bar> :GoTest<cr>
 nmap <leader>gd :GoDoc<cr>
 nmap <leader>go :GoDocBrowser<cr>
  
