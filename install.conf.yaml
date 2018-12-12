@@ -7,7 +7,7 @@
 - shell:
   - mkdir -p ~/.cache
   - mkdir -p ~/.conan
-  - mkdir -p ~/.vim
+  - mkdir -p ~/.vim/bundle
   - mkdir -p ~/.config/Code/User
   - mkdir -p ~/.config/qutebrowser
   - mkdir -p ~/.local/bin
