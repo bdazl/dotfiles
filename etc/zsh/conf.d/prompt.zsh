@@ -8,11 +8,11 @@
 function echo-left-prompt()
 {
     l='%B%(?..%F{red}[%F{white}%?%F{red}] )' # status code: %?
-    l+='%(!.%F{red}.%F{fg_default_code})' # Color selector for if super user
-    l+='%b%n'                             # username
-    l+='%F{magenta}@'                     # @
-    l+='%F{cyan}%m%u'                     # hostname
-    l+='%F{red}# %F{fg_default_code}'     # #
+    l+='%(!.%F{red}.%F{fg})' # Color selector for if super user
+    l+='%b%n'                # username
+    l+='%F{magenta}@'        # @
+    l+='%F{cyan}%m%u'        # hostname
+    l+='%F{red}# %F{fg}'     # #
 
     echo "$l"
 }
