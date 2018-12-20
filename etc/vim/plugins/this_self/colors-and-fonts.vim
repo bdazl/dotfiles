@@ -8,9 +8,26 @@ syntax enable
 " Enable 256 colors palette 
 set t_Co=256
 
+function! AdaptColorscheme()
+    highlight clear CursorLine
+    highlight Normal ctermbg=none
+    highlight LineNr ctermbg=none
+    highlight Folded ctermbg=none
+    highlight NonText ctermbg=none
+    highlight SpecialKey ctermbg=none
+    highlight VertSplit ctermbg=none
+    highlight SignColumn ctermbg=none
+endfunction
+autocmd ColorScheme * call AdaptColorscheme()
+
 try
-    colorscheme elflord
+    let g:molokai_original = 1
+    colorscheme molokai
 catch
+    try
+        colorscheme elflord
+    catch
+    endtry
 endtry
 
 set background=dark
