@@ -21,8 +21,7 @@ endfunction
 autocmd ColorScheme * call AdaptColorscheme()
 
 try
-    let g:molokai_original = 1
-    colorscheme molokai
+    colorscheme monokai
 catch
     try
         colorscheme elflord

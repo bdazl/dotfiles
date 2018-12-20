@@ -25,7 +25,6 @@ Plugin 'aserebryakov/vim-todo-lists'
 Plugin 'simnalamburt/vim-mundo.git'
 
 Plugin 'crusoexia/vim-monokai'
-Plugin 'tomasr/molokai'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
