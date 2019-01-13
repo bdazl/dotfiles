@@ -13,6 +13,9 @@ function config_keybindings_emacs()
 function config_keybindings_vim()
 {
     bindkey -v
+
+    bindkey -M vicmd "ö" beginning-of-line
+    bindkey -M vicmd "ä" end-of-line
     
     # Remove ESC-key lag
     export KEYTIMEOUT=1
