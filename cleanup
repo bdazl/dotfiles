@@ -1,4 +1,8 @@
 #!/bin/bash
 
-cd etc/vim/plugins/vim-todo-lists/
+WDIR=$( realpath $( pwd ) )
+cd $WDIR/etc/vim/plugins/vim-todo-lists
+git clean -fd
+
+cd $WDIR/etc/zsh/conf.d/antigen
 git clean -fd
