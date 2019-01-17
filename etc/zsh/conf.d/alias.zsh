@@ -9,11 +9,11 @@ function config_aliases()
 {
     if [ "$(uname)" = "Darwin" ]; then
         alias ls='ls -G'
-        alias lsl='ls -G -l'
+        alias ll='ls -G -l'
         alias grep='grep --color=auto'
     else
-        alias ls='ls --color=auto'
-        alias lsl='ls -l --color=auto'
+        alias ls='ls --color=auto --group-directories-first'
+        alias ll='ls -l --color=auto --group-directories-first'
         alias grep='grep --color=auto'
     fi
 
