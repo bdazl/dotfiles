@@ -5,7 +5,7 @@
 # Author: Jacob Peyron
 #
 
-ANTIGEN_LOG=/home/jacob/tmp/antigen.log
+#ANTIGEN_LOG=/home/jacob/tmp/antigen.log
 source $HOME/.dotfiles/etc/zsh/conf.d/antigen/antigen.zsh
 
 # Load oh-my-zsh lib
