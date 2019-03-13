@@ -87,7 +87,15 @@ nmap <leader>sr :.,$s///gi<left><left><left><left>
 " current selection and letting the user decide
 " what to replace that text with.
 " Replaces all occurrences in the file.
-vmap a y<esc>:%s/<c-r>"//gi<left><left><left>
+vmap a y<esc>:<c-r>=GetSearchFromYanked()<cr><left><left><left>
+
+function! EscapeYanked()
+    return escape(@", "\\/.*'$^~[]:")
+endfunction
+
+function! GetSearchFromYanked()
+    return "%s:" . EscapeYanked() . "::gi"
+endfunction
 
 function! CmdLine(str)
     call feedkeys(":" . a:str)
