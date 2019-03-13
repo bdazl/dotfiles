@@ -42,6 +42,9 @@ map <C-l> <C-W>l
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
+" Remove Q mapping
+nnoremap Q <nop>
+
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
 let mapleader = ","
@@ -84,7 +87,7 @@ nmap <leader>sr :.,$s///gi<left><left><left><left>
 " current selection and letting the user decide
 " what to replace that text with.
 " Replaces all occurrences in the file.
-vmap a y<esc>:%s/<c-r>"//gi<left><left><left> 
+vmap a y<esc>:%s/<c-r>"//gi<left><left><left>
 
 function! CmdLine(str)
     call feedkeys(":" . a:str)
