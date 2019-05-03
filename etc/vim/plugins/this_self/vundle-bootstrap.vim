@@ -26,6 +26,8 @@ Plugin 'simnalamburt/vim-mundo.git'
 
 Plugin 'crusoexia/vim-monokai'
 
+Plugin 'iamcco/markdown-preview.nvim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -52,3 +54,13 @@ let g:airline_solarized_bg = 'dark'
 
 " Vim TODO lists
 let g:VimTodoListsMoveItems = 0
+
+" Markdown preview
+let g:mkdp_browser = '/usr/bin/firefox'
+let g:mkdp_auto_start = 0
+let g:mkdp_preview_options = {
+    \ 'mkit': {},
+    \ 'katex': {},
+    \ 'uml': {},
+    \ 'sync_scroll_type': 'middle'
+    \ }
