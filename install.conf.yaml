@@ -29,6 +29,7 @@
     ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
     ~/.config/redshift.conf: etc/redshift/redshift.conf
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
+    ~/.local/bin/dropbox_upload.sh: bin/dropbox/dropbox_uploader.sh
     ~/.git_template: etc/git/template
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
