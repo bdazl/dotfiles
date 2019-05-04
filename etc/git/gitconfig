@@ -10,3 +10,7 @@
 	conflictstyle = diff3
 [mergetool]
 	prompt = false
+[pull]
+	rebase = true
+[url "git@gitlab.com:"]
+	insteadOf = https://gitlab.com/
