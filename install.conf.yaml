@@ -28,8 +28,10 @@
     ~/.config/ranger: etc/ranger
     ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
     ~/.config/redshift.conf: etc/redshift/redshift.conf
+    ~/.config/zsh: etc/zsh/conf.d
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
     ~/.local/bin/dropbox_upload.sh: bin/dropbox/dropbox_uploader.sh
+    ~/.urxvt/ext/resize-font: etc/xorg/plugins/urxvt-resize-font/resize-font
     ~/.git_template: etc/git/template
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
@@ -39,8 +41,7 @@
     ~/.zshenv: etc/zsh/zshenv
     ~/.zlogin: etc/zsh/zlogin
     ~/.zprofile: etc/zsh/zprofile
-    ~/.config/zsh: etc/zsh/conf.d
     ~/.gitconfig: etc/git/gitconfig
     ~/.tmux.conf: etc/tmux/tmux.conf
-    ~/.urxvt/ext/resize-font: etc/xorg/plugins/urxvt-resize-font/resize-font
+    ~/.ctags: etc/ctags/ctags
 
