@@ -16,6 +16,9 @@ function config_keybindings_vim()
 
     bindkey -M vicmd "ö" beginning-of-line
     bindkey -M vicmd "ä" end-of-line
+
+    # ctrl+r is search backward
+    bindkey '^r' history-incremental-search-backward
     
     # Remove ESC-key lag
     export KEYTIMEOUT=1
