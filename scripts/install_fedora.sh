@@ -10,7 +10,8 @@ sudo dnf install \
 	rxvt-unicode \
 	vim \
     git \
-	python
+	python \
+    golang
 
 sudo dnf update
 
