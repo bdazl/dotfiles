@@ -28,14 +28,5 @@ echo Dont forget to generate SSH key
 
 echo Changing shell:
 sudo chsh -s $(which zsh) $(whoami)
-echo Please change default shell. Why does not chsh exist on fedora30?
-#if [ -n "$(which lshch)" ]; then
-#sudo lchsh << EOF
-#$(which zsh)
-#EOF
-#else 
-    #echo Could not install zsh as default shell
-    #echo Trying chsh
-#fi
 
 
