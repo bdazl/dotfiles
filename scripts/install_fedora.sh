@@ -16,7 +16,8 @@ sudo dnf install \
     golang \
     make \
     gcc-c++ \
-    cmake
+    cmake \
+    ranger
 
 sudo dnf update
 
