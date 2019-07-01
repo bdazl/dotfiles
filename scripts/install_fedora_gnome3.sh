@@ -6,6 +6,10 @@ sudo dnf install \
 
 # set caps -> esc
 dconf write /org/gnome/desktop/input-sources/xkb-options "['caps:escape']"
+
+# No alert sound
+dconf write /org/gnome/desktop/sound/event-sounds "false"
+
 echo caps mapped to esc
 
 echo Please set keyboard shortcuts from
