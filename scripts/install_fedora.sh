@@ -17,7 +17,8 @@ sudo dnf install \
     make \
     gcc-c++ \
     cmake \
-    ranger
+    ranger \
+    cscope
 
 sudo dnf update
 

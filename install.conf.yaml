@@ -11,6 +11,7 @@
   - mkdir -p ~/.config/Code/User
   - mkdir -p ~/.config/qutebrowser
   - mkdir -p ~/.local/bin
+  - mkdir -p ~/.local/share/cscope
   - mkdir -p ~/.local/share/zsh
   - mkdir -p ~/.local/share/qutebrowser
   - mkdir -p ~/.urxvt/ext
