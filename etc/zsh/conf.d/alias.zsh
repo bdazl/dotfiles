@@ -17,6 +17,9 @@ function config_aliases()
         alias grep='grep --color=auto'
     fi
 
+    # ask before delete
+    alias rm='rm -i'
+
     alias ga='git add'
     alias gs='git status'
     alias gd='git diff'
