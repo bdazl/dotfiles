@@ -7,6 +7,9 @@ frepl [OPTIONS] <dir/file> <sed-pattern>
 
     --dry-run: dont update values, just print
 
+Examples:
+    frepl ./hej.txt "s/Detta/BlirDetta/g"
+
 EOF
     exit 0
 fi
@@ -15,7 +18,7 @@ OPTS=$1
 DIR=$2
 PATTERN=$3
 
-SEDARGS="--in-place=\".bak\""
+SEDARGS="--in-place=.bak"
 
 if [ "$OPTS" = "--dry-run" ]; then
     SEDARGS=""
