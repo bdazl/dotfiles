@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    cat << EOF
+
+frepl [OPTIONS] <dir/file> <sed-pattern>
+
+    --dry-run: dont update values, just print
+
+EOF
+    exit 0
+fi
+
+OPTS=$1
+DIR=$2
+PATTERN=$3
+
+SEDARGS="--in-place=\".bak\""
+
+if [ "$OPTS" = "--dry-run" ]; then
+    SEDARGS=""
+else
+    DIR=$1
+    PATTERN=$2
+fi
+
+find "$DIR" -type f -exec sed $SEDARGS "$PATTERN"  {} \;
