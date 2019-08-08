@@ -31,6 +31,7 @@
     ~/.config/zsh: etc/zsh/conf.d
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
     ~/.local/bin/dropbox_upload.sh: bin/dropbox/dropbox_uploader.sh
+    ~/.local/bin/frepl: bin/frepl
     ~/.urxvt/ext/resize-font: etc/xorg/plugins/urxvt-resize-font/resize-font
     ~/.git_template: etc/git/template
     ~/.Xdefaults: etc/xorg/Xdefaults
