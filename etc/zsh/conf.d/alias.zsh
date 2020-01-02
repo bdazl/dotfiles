@@ -15,6 +15,7 @@ function config_aliases()
         alias ls='ls --color=auto --group-directories-first'
         alias ll='ls -l'
         alias grep='grep --color=auto'
+        alias tl='tree -C | less -R'
     fi
 
     # ask before delete
