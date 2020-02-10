@@ -21,7 +21,6 @@ Plugin 'francoiscabrol/ranger.vim'
 
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'majutsushi/tagbar'
-Plugin 'aserebryakov/vim-todo-lists'
 Plugin 'simnalamburt/vim-mundo.git'
 
 Plugin 'crusoexia/vim-monokai'
