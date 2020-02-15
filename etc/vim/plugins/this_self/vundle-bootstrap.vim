@@ -19,6 +19,8 @@ Plugin 'fatih/vim-go'
 
 Plugin 'francoiscabrol/ranger.vim'
 
+Plugin 'christoomey/vim-conflicted'
+
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'simnalamburt/vim-mundo.git'

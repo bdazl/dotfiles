@@ -6,6 +6,7 @@
 [alias]
 	ctags = !~/.git_template/hooks/ctags
 	dropbox = !git-dropbox-manage
+	conflicted = !vim +Conflicted
 [merge]
 	tool = vimdiff
 	conflictstyle = diff3
