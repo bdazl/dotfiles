@@ -21,10 +21,13 @@ Plugin 'francoiscabrol/ranger.vim'
 
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'majutsushi/tagbar'
-Plugin 'aserebryakov/vim-todo-lists'
 Plugin 'simnalamburt/vim-mundo.git'
 
 Plugin 'crusoexia/vim-monokai'
+
+Plugin 'iamcco/markdown-preview.nvim'
+
+Plugin 'tpope/vim-fugitive'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

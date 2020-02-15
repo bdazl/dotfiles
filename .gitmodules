@@ -10,9 +10,6 @@
 [submodule "etc/xorg/plugins/urxvt-resize-font"]
 	path = etc/xorg/plugins/urxvt-resize-font
 	url = https://github.com/simmel/urxvt-resize-font
-[submodule "etc/vim/plugins/vim-todo-lists"]
-	path = etc/vim/plugins/vim-todo-lists
-	url = https://github.com/aserebryakov/vim-todo-lists.git
 [submodule "etc/zsh/conf.d/antigen"]
 	path = etc/zsh/conf.d/antigen
 	url = https://github.com/zsh-users/antigen.git
