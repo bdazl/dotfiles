@@ -33,6 +33,8 @@ function config_aliases()
     alias gc='git commit --verbose'
     alias gb='git branch'
 
+    alias gpp='git pull --prune'
+
     alias docker-killall='docker kill $(docker ps -q)'
     # Delete all stopped containers.
     alias docker-rmall='docker rm $(docker ps -a -q)'
