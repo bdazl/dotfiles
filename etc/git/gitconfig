@@ -6,6 +6,7 @@
 [alias]
 	ctags = !~/.git_template/hooks/ctags
 	dropbox = !git-dropbox-manage
+	conflicted = !vim +Conflicted
 [merge]
 	tool = vimdiff
 	conflictstyle = diff3
@@ -15,3 +16,5 @@
 	rebase = true
 [url "git@gitlab.com:"]
 	insteadOf = https://gitlab.com/
+[url "git@github.com:"]
+	insteadOf = https://github.com/
