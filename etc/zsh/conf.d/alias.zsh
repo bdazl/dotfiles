@@ -28,7 +28,7 @@ function config_aliases()
     # ShortSHA Date Author Decorate/Branch etc
     # Commit message
     alias gl='git log --graph --date=short --pretty=format:"%C(yellow)%h %C(blue)%ad %C(green)%an %C(auto)%d %n %s"'
-    alias gls='git log --oneline --all --graph --decorate'
+    alias gla='git log --oneline --all --graph --decorate'
 
     alias gc='git commit --verbose'
     alias gb='git branch'
