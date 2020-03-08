@@ -1,4 +1,4 @@
 #!/bin/bash
 
 sudo apt-get upgrade
-sudo apt-get install git zsh vim vim-nox cmake
+sudo apt-get install -y git zsh vim vim-nox cmake python3-dev golang
