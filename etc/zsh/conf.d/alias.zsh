@@ -11,11 +11,13 @@ function config_aliases()
         alias ls='ls -G'
         alias ll='ls -G -l'
         alias grep='grep --color=auto'
+        alias lsmnt='sudo diskutil list'
     else
         alias ls='ls --color=auto --group-directories-first'
         alias ll='ls -l'
         alias grep='grep --color=auto'
         alias tl='tree -C | less -R'
+        alias lsmnt='sudo fdisk -l'
     fi
 
     # ask before delete
@@ -28,7 +30,7 @@ function config_aliases()
     # ShortSHA Date Author Decorate/Branch etc
     # Commit message
     alias gl='git log --graph --date=short --pretty=format:"%C(yellow)%h %C(blue)%ad %C(green)%an %C(auto)%d %n %s"'
-    alias gls='git log --oneline --all --graph --decorate'
+    alias gla='git log --oneline --all --graph --decorate'
 
     alias gc='git commit --verbose'
     alias gb='git branch'
