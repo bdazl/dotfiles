@@ -1,4 +1,4 @@
 #!/bin/bash
 
 sudo apt-get upgrade
-sudo apt-get install git zsh vim
+sudo apt-get install git zsh vim vim-nox cmake
