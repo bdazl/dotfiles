@@ -37,7 +37,6 @@
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
     ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
-    ~/.vim/bundle/vim-todo-lists: etc/vim/plugins/vim-todo-lists
     ~/.zshrc: etc/zsh/zshrc
     ~/.zshenv: etc/zsh/zshenv
     ~/.zlogin: etc/zsh/zlogin
