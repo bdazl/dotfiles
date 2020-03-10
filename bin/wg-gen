@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+if [[ -z "$1" ]]; then
+	echo "wg-genkey name"
+	exit 1
+fi
+
+cd /etc/wireguard
+
+wg genkey | tee $1_privatekey | wg pubkey > $1_publickey

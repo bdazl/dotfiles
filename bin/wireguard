@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run with sudo"
+  exit
+fi
+
+case $1 in
+
+install-server)
+    cd /etc/wireguard
+
+    umask 077
+    wg-gen peer1
+    wg-gen server
+    ;;
+
+list-pubkeys)
+    cat /etc/wireguard/*_publickey
+    ;;
+*)
+    echo "wireguard [install-server|]"
+    ;;
