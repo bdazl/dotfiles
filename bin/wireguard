@@ -1,13 +1,13 @@
 #!/bin/bash
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run with sudo"
-  exit
-fi
-
 case $1 in
 
 install-server)
+    if [ "$EUID" -ne 0 ]
+        then echo "Please run with sudo"
+        exit
+    fi
+
     cd /etc/wireguard
 
     umask 077
@@ -16,8 +16,13 @@ install-server)
     ;;
 
 list-pubkeys)
-    cat /etc/wireguard/*_publickey
+    echo Server:
+    sudo cat /etc/wireguard/server_publickey
+    echo
+    echo Peer1:
+    sudo cat /etc/wireguard/peer1_publickey
     ;;
 *)
-    echo "wireguard [install-server|]"
+    echo "wireguard [install-server|list-pubkeys]"
     ;;
+esac
