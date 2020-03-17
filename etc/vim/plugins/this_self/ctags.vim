@@ -3,6 +3,8 @@
 " set tags=tags;~;
 set tags^=./.git/tags;
 
+nnoremap <leader>d <C-]>
+
 " Open definition in new tab
 map <C-G> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 

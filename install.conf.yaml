@@ -31,12 +31,13 @@
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
     ~/.local/bin/dropbox_upload.sh: bin/dropbox/dropbox_uploader.sh
     ~/.local/bin/frepl: bin/frepl
+    ~/.local/bin/wg-gen: bin/wg-gen
+    ~/.local/bin/wireguard: bin/wireguard
     ~/.urxvt/ext/resize-font: etc/xorg/plugins/urxvt-resize-font/resize-font
     ~/.git_template: etc/git/template
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
     ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
-    ~/.vim/bundle/vim-todo-lists: etc/vim/plugins/vim-todo-lists
     ~/.zshrc: etc/zsh/zshrc
     ~/.zshenv: etc/zsh/zshenv
     ~/.zlogin: etc/zsh/zlogin
