@@ -10,6 +10,9 @@ export PAGER=less
 
 #export BROWSER=qutebrowser
 export BROWSER=firefox
+if [ "$(uname)" = "Darwin" ]; then
+    export BROWSER=/Applications/Firefox.app/Contents/MacOS/firefox
+fi
 #export BROWSER=vimb
 
 export GITHUB_USER=HexHacks

@@ -60,7 +60,7 @@ function echo-my-path()
 {
     pth="$(echo-path-base)"
 
-    u_name="$(/usr/bin/uname)"
+    u_name="$(uname)"
     case $u_name in Darwin):
         pth=("$(echo-path-osx)" $pth)
         ;;

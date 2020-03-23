@@ -11,11 +11,13 @@ function config_aliases()
         alias ls='ls -G'
         alias ll='ls -G -l'
         alias grep='grep --color=auto'
+        alias lsmnt='sudo diskutil list'
     else
         alias ls='ls --color=auto --group-directories-first'
         alias ll='ls -l'
         alias grep='grep --color=auto'
         alias tl='tree -C | less -R'
+        alias lsmnt='sudo fdisk -l'
     fi
 
     # ask before delete
