@@ -36,12 +36,6 @@ function config_aliases()
     alias gb='git branch'
 
     alias gpp='git pull --prune'
-
-    alias docker-killall='docker kill $(docker ps -q)'
-    # Delete all stopped containers.
-    alias docker-rmall='docker rm $(docker ps -a -q)'
-    # Delete all untagged images.
-    alias docker-rmiall='docker rmi $(docker images -q -f dangling=true)'
 }
 
 config_aliases
