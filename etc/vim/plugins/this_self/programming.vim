@@ -18,4 +18,5 @@ autocmd FileType go nmap <leader>gb :w <bar> :GoBuild<cr>
 autocmd FileType go nmap <leader>gg :w <bar> :GoTest<cr>
 autocmd FileType go nmap <leader>gd :GoDoc<cr>
 autocmd FileType go nmap <leader>go :GoDocBrowser<cr>
+autocmd FileType go nmap <leader>gf :GoReferrers<cr>
  
