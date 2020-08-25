@@ -80,23 +80,6 @@ command W w !sudo tee % > /dev/null
 nmap <TAB> :tabnext<cr>
 nmap <S-TAB> :tabprev<cr>
 
-" Search and Replace from current line to last
-nmap <leader>sr :.,$s///gi<left><left><left><left>
-
-" In visual mode, pressing a results in yanking 
-" current selection and letting the user decide
-" what to replace that text with.
-" Replaces all occurrences in the file.
-vmap a y<esc>:<c-r>=GetSearchFromYanked()<cr><left><left><left>
-
-function! EscapeYanked()
-    return escape(@", "\\/.*'$^~[]:")
-endfunction
-
-function! GetSearchFromYanked()
-    return "%s:" . EscapeYanked() . "::gi"
-endfunction
-
 function! CmdLine(str)
     call feedkeys(":" . a:str)
 endfunction
