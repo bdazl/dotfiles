@@ -16,5 +16,7 @@
 	rebase = true
 [url "git@gitlab.com:"]
 	insteadOf = https://gitlab.com/
+[url "git@gitlab.evolveapp.se:"]
+	insteadOf = https://gitlab.evolveapp.se/
 [url "git@github.com:"]
 	insteadOf = https://github.com/
