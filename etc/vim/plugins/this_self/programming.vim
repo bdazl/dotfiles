@@ -17,7 +17,7 @@ autocmd FileType python nmap <leader>gr :w <bar> exec '!python3' shellescape(@%,
 autocmd FileType go nmap <leader>gr :w <bar> :GoRun<cr>
 autocmd FileType go nmap <leader>gb :w <bar> :GoBuild<cr>
 autocmd FileType go nmap <leader>gg :w <bar> :GoTest<cr>
-autocmd FileType go nmap <leader>gd :GoDoc<cr>
+autocmd FileType go nmap <leader>gd :GoDef<cr>
 autocmd FileType go nmap <leader>go :GoDocBrowser<cr>
 autocmd FileType go nmap <leader>gf :GoReferrers<cr>
  
