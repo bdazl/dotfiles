@@ -6,6 +6,10 @@ autocmd FileType python map <buffer> <F9> :exec '!python3' shellescape(@%, 1)<cr
 autocmd FileType python map <F10> :exec '!python3' shellescape(@%, 1) 'args'
 autocmd FileType python nmap <leader>gr :w <bar> exec '!python3' shellescape(@%, 1) 'args'
 
+" Go to definition
+autocmd FileType python nmap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<cr>
+autocmd FileType python nmap <leader>gf :YcmCompleter GoToReferences<cr>
+
 " TODO: New tab with output of python command
 "map <F8> :tabnew<Bar>read '!python' shellescape(@%, 1)<cr>
 
