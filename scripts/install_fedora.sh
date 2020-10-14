@@ -13,6 +13,7 @@ sudo dnf install \
     git \
 	python \
     python3-devel \
+    python3-flake8 \
     golang \
     make \
     gcc-c++ \

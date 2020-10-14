@@ -29,6 +29,9 @@ Plugin 'crusoexia/vim-monokai'
 
 Plugin 'iamcco/markdown-preview.nvim'
 
+" Realtime linting (python and others)
+Plugin 'dense-analysis/ale'
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
