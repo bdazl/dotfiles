@@ -13,6 +13,9 @@ sudo dnf install \
     git \
 	python \
     python3-devel \
+    python3-flake8 \
+    python3-virtualenv \
+    pipenv \
     golang \
     make \
     gcc-c++ \

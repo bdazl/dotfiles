@@ -27,10 +27,6 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 map ö ^
 map ä $
 
-" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
-map <space> /
-map <c-space> ?
-
 " Smart way to move between windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
@@ -61,6 +57,10 @@ map <leader>t<leader> :tabnext
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 map <leader>te :tabedit <c-r>=expand("%:p:h") . "/"<cr>
+
+" Split tab vertically and horizontally
+map <leader>so :vs <c-r>=expand("%:p:h") . "/"<cr>
+map <leader>sO :sp <c-r>=expand("%:p:h") . "/"<cr>
 
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>

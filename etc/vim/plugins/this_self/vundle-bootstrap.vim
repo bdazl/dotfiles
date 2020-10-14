@@ -29,6 +29,11 @@ Plugin 'crusoexia/vim-monokai'
 
 Plugin 'iamcco/markdown-preview.nvim'
 
+" Realtime linting (python and others)
+Plugin 'dense-analysis/ale'
+
+Plugin 'jmcantrell/vim-virtualenv'
+Plugin 'PieterjanMontens/vim-pipenv'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -53,6 +58,8 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
 let g:airline_theme = 'solarized'
 let g:airline_solarized_bg = 'dark'
 " let g:airline_powerline_fonts = 1
+"
+let g:virtualenv_directory = '~/.local/share/virtualenvs'
 
 " Vim TODO lists
 let g:VimTodoListsMoveItems = 0

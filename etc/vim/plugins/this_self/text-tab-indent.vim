@@ -24,3 +24,14 @@ set wrap "Wrap lines
 " and the relative numbers
 set number
 set relativenumber
+
+" Ensure PEP8 indentation
+autocmd FileType python
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
+
