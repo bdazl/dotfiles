@@ -27,10 +27,6 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 map ö ^
 map ä $
 
-" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
-map <space> /
-map <c-space> ?
-
 " Smart way to move between windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
