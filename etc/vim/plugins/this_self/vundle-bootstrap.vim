@@ -10,7 +10,6 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Auto-complete / Intellisense for many languages
 Plugin 'Valloric/YouCompleteMe'
-
 " Status bar
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -73,3 +72,5 @@ let g:mkdp_preview_options = {
     \ 'uml': {},
     \ 'sync_scroll_type': 'middle'
     \ }
+
+let b:ale_fixers = ['autopep8', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
