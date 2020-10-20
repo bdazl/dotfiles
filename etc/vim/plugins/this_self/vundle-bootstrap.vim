@@ -10,7 +10,6 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Auto-complete / Intellisense for many languages
 Plugin 'Valloric/YouCompleteMe'
-
 " Status bar
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -60,3 +59,5 @@ let g:airline_solarized_bg = 'dark'
 " let g:airline_powerline_fonts = 1
 
 let g:virtualenv_directory = '~/.local/share/virtualenvs'
+
+let b:ale_fixers = ['autopep8', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
