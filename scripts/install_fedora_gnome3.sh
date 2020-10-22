@@ -2,7 +2,8 @@
 
 # Gui related programs end up here
 sudo dnf install \
-    xsel
+    xsel \
+    gnome-tweaks
 
 # set caps -> esc
 dconf write /org/gnome/desktop/input-sources/xkb-options "['caps:escape']"
