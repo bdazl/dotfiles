@@ -22,8 +22,10 @@ sudo dnf install \
     cmake \
     podman \
     podman-compose \
-    ffmpeg \
     ranger
+
+# Must be done after rpmfusion is installed
+sudo dnf install ffmpeg
 
 sudo dnf update
 
