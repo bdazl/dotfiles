@@ -37,6 +37,7 @@
     ~/.urxvt/ext/resize-font: etc/xorg/plugins/urxvt-resize-font/resize-font
     ~/.git_template: etc/git/template
     ~/.Xdefaults: etc/xorg/Xdefaults
+    ~/.Xresources: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
     ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
     ~/.zshrc: etc/zsh/zshrc
