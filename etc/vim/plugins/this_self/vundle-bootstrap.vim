@@ -73,4 +73,4 @@ let g:mkdp_preview_options = {
     \ 'sync_scroll_type': 'middle'
     \ }
 
-let b:ale_fixers = ['autopep8', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
+let b:ale_fixers = ['autopep8', 'mypy', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
