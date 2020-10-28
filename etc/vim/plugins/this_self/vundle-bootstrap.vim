@@ -60,4 +60,4 @@ let g:airline_solarized_bg = 'dark'
 
 let g:virtualenv_directory = '~/.local/share/virtualenvs'
 
-let b:ale_fixers = ['autopep8', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
+let b:ale_fixers = ['autopep8', 'mypy', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
