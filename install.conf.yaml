@@ -39,6 +39,7 @@
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.Xresources: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
+    ~/.ideavimrc: etc/vim/vimrc
     ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
     ~/.zshrc: etc/zsh/zshrc
     ~/.zshenv: etc/zsh/zshenv
