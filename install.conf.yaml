@@ -23,6 +23,7 @@
     ~/.config/Code/User/settings.json: etc/code/settings.json
     ~/.config/Code/User/keybindings.json: etc/code/settings.json 
     ~/.config/i3status: etc/i3status
+    #~/.config/pip: etc/pip
     ~/.config/sway: etc/sway
     ~/.config/ranger: etc/ranger
     ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
@@ -38,6 +39,7 @@
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.Xresources: etc/xorg/Xdefaults
     ~/.vimrc: etc/vim/vimrc
+    ~/.ideavimrc: etc/vim/vimrc
     ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
     ~/.zshrc: etc/zsh/zshrc
     ~/.zshenv: etc/zsh/zshenv
