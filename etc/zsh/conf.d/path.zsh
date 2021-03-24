@@ -47,12 +47,14 @@ function echo-path-base()
 
 function echo-path-osx()
 {
-    # I crave GNU over BSD stuff
-    gnucore="/usr/local/opt/coreutils/libexec/gnubin"
-    gnugrep="/usr/local/opt/grep/bin"
-    gnufind="/usr/local/opt/findutils/bin"
-    
-    pth=$(remove-non-existing $gnucore $gnugrep $gnufind)
+    pth=(
+        $(remove-non-existing \
+        "/usr/local/opt/coreutils/libexec/gnubin" \
+        "/usr/local/opt/grep/bin" \
+        "/usr/local/opt/findutils/bin" \
+        "$HOME/.ghcup/bin" \
+        )
+    )
     echo "${(j.:.)pth}"
 }
     
