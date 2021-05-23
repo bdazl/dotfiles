@@ -21,8 +21,8 @@ endfunction
 autocmd ColorScheme * call AdaptColorscheme()
 
 try
-    #colorscheme monokai
-    colorscheme elflord
+    " colorscheme monokai
+    colorscheme gruvbox
 catch
     try
         colorscheme elflord

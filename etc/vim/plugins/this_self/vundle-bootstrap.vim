@@ -26,6 +26,9 @@ Plugin 'simnalamburt/vim-mundo.git'
 
 Plugin 'crusoexia/vim-monokai'
 
+" Themes
+Plugin 'morhetz/gruvbox'
+
 Plugin 'iamcco/markdown-preview.nvim'
 
 " Realtime linting (python and others)
@@ -54,8 +57,8 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
 
 " Airline status bar
 "let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme = 'solarized'
-let g:airline_solarized_bg = 'dark'
+let g:airline_theme = 'molokai'
+" let g:airline_solarized_bg = 'dark'
 " let g:airline_powerline_fonts = 1
 "
 let g:virtualenv_directory = '~/.local/share/virtualenvs'
