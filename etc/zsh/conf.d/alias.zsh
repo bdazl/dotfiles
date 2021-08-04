@@ -36,6 +36,8 @@ function config_aliases()
     alias gb='git branch'
 
     alias gpp='git pull --prune'
+
+    alias gdiff='diff --color -u'
 }
 
 config_aliases
