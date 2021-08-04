@@ -8,7 +8,7 @@ Xft.rgba:                   rgb
 URxvt.depth:                32
 URxvt.geometry:             90x30
 URxvt.transparent:          true
-URxvt.fading:               20
+URxvt.fading:               60
 ! URxvt.urgentOnBell:         true
 ! URxvt.visualBell:           true
 URxvt.loginShell:           true
