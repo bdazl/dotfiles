@@ -38,6 +38,8 @@ function config_aliases()
     alias gpp='git pull --prune'
 
     alias gdiff='diff --color -u'
+
+    alias pygrep='grep --exclude-dir=build --exclude-dir=venv --exclude-dir=.git --exclude-dir=__pycache__ -R'
 }
 
 config_aliases
