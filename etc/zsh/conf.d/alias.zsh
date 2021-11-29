@@ -39,7 +39,7 @@ function config_aliases()
 
     alias gdiff='diff --color -u'
 
-    alias pygrep='grep --exclude-dir=build --exclude-dir=venv --exclude-dir=.git --exclude-dir=__pycache__ -R'
+    alias pygrep='grep --exclude-dir=build --exclude-dir=venv --exclude-dir=.git --exclude-dir=__pycache__ --exclude-dir=.mypy_cache -R'
 }
 
 config_aliases
