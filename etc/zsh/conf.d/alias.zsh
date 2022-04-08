@@ -38,6 +38,8 @@ function config_aliases()
     alias gpp='git pull --prune'
 
     alias gdiff='diff --color -u'
+
+    alias nvi='nvim -u ~/.vimrc'
 }
 
 config_aliases
