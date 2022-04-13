@@ -14,7 +14,7 @@
   - mkdir -p ~/.local/share/zsh
   - mkdir -p ~/.local/share/qutebrowser
   - mkdir -p ~/.urxvt/ext
-#- crontab etc/crontab/jobs
+  - mkdir -p ~/.cargo/bin
 
 - link:
     ~/.dotfiles: ''
@@ -23,7 +23,6 @@
     ~/.config/Code/User/settings.json: etc/code/settings.json
     ~/.config/Code/User/keybindings.json: etc/code/settings.json 
     ~/.config/i3status: etc/i3status
-    #~/.config/pip: etc/pip
     ~/.config/sway: etc/sway
     ~/.config/ranger: etc/ranger
     ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
