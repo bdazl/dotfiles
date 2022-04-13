@@ -37,6 +37,7 @@ function echo-path-base()
             "$HOME/.local/bin" \
             "$HOME/bin" \
             "$HOME/go/bin" \
+            "$HOME/.cargo/bin" \
         ) \
         ${PATH} \
     )
