@@ -14,3 +14,6 @@ found_sep=$(grep "$separator" /etc/resolv.conf)
 if [ -z "$found_sep" ]; then
     echo_resolv | sudo tee --append /etc/resolv.conf > /dev/null
 fi
+
+cd
+if [ "$TMUX" = "" ]; then tmux; fi
