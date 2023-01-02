@@ -47,4 +47,4 @@
     ~/.gitconfig: etc/git/gitconfig
     ~/.tmux.conf: etc/tmux/tmux.conf
     ~/.ctags: etc/ctags/ctags
-
+    ~/.ssh/config: etc/ssh/config
