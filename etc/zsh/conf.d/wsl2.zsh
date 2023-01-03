@@ -14,7 +14,7 @@ function install_jep_resolv()
 {
     found_sep=$(grep "$separator" /etc/resolv.conf)
     if [ -z "$found_sep" ]; then
-        echo "I need sudo access to patch WSL2 with the correct /etc/resolv.conf:"nd -v foo >/dev/null 2>&1l
+        echo "I need sudo access to patch WSL2 with the correct /etc/resolv.conf:"
         echo_resolv | sudo tee --append /etc/resolv.conf > /dev/null
     fi
 }
@@ -25,6 +25,14 @@ function start_tmux()
     if [ "$TMUX" = "" ] && tmux
 }
 
-cd
-install_jep_resolv
-start_tmux
+function is_wsl2()
+{
+    iswsl="$(uname -a | grep WSL2 )"
+    [ -n "$iswsl" ]
+}
+
+if [ is_wsl2 ]; then
+    cd
+    install_jep_resolv
+    start_tmux
+fi
