@@ -10,6 +10,3 @@
 [submodule "etc/xorg/plugins/urxvt-resize-font"]
 	path = etc/xorg/plugins/urxvt-resize-font
 	url = https://github.com/simmel/urxvt-resize-font
-[submodule "etc/zsh/conf.d/antigen"]
-	path = etc/zsh/conf.d/antigen
-	url = https://github.com/zsh-users/antigen.git
