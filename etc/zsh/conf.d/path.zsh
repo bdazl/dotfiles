@@ -52,7 +52,6 @@ function echo-path-osx()
         "/usr/local/opt/coreutils/libexec/gnubin" \
         "/usr/local/opt/grep/bin" \
         "/usr/local/opt/findutils/bin" \
-        "$HOME/.ghcup/bin" \
         )
     )
     echo "${(j.:.)pth}"
