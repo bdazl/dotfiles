@@ -1,0 +1,9 @@
+--pdftk:
+merge
+    pdftk in1.pdf in2.pdf cat output out.pdf
+
+rm page 3
+    pdftk in.pdf cat 1-2 4-end output out.pdf
+
+merge and rm some pages
+    pdftk A=in1.pdf B=in2.pdf cat A1 B1-end output out.pdf
