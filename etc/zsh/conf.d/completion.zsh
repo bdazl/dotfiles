@@ -5,7 +5,7 @@
 # Author: Jacob Peyron
 #
 
-function config_completion()
+config_completion()
 {
 # The following lines were added by compinstall
 
@@ -30,4 +30,10 @@ function config_completion()
     setopt extendedglob
 }
 
+program_completions()
+{
+    [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+}
+
 config_completion
+program_completions
