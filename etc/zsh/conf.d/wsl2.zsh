@@ -21,8 +21,9 @@ function install_jep_resolv()
 
 function start_tmux()
 {
-    command -v tmux >/dev/null 2>&1 || exit 0
-    if [ "$TMUX" = "" ] && tmux
+    #command -v tmux >/dev/null 2>&1 || exit 0
+    #if [ "$TMUX" = "" ] && tmux
+    [[ $commands[tmux] ]] && [ "$TMUX" = "" ] && tmux
 }
 
 function is_wsl2()
@@ -32,7 +33,6 @@ function is_wsl2()
 }
 
 if [ is_wsl2 ]; then
-    cd
     install_jep_resolv
     start_tmux
 fi
