@@ -39,6 +39,7 @@ function echo-path-base()
             "$HOME/go/bin" \
             "$HOME/.cargo/bin" \
             "${KREW_ROOT:-$HOME/.krew}/bin" \
+            "$HOME/istio-1.17.1/bin" \
         ) \
         ${PATH} \
     )
