@@ -1,7 +1,2 @@
 #!/bin/zsh
 
-# If running trom tty1 start sway
-if [[ $(tty) == "/dev/tty1" ]]; then
-    sway
-fi
-
