@@ -33,6 +33,7 @@ config_completion()
 program_completions()
 {
     [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+    [[ $commands[istioctl] ]] && source <(istioctl completion zsh)
 }
 
 config_completion
