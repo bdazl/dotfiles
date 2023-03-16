@@ -20,6 +20,10 @@ function config_aliases()
         alias lsmnt='sudo fdisk -l'
     fi
 
+    # This ensures that whatever comes after sudo also is expanded prior to exection
+    # So my user aliases works as sudo. Very neat :D
+    alias sudo='sudo '
+
     # ask before delete
     alias rm='rm -i'
 
@@ -40,6 +44,12 @@ function config_aliases()
     alias gdiff='diff --color -u'
 
     alias nvi='nvim -u ~/.vimrc'
+
+    alias k='kubectl'
+
+    alias podrm='podman container rm --all --force'
+    alias podprune='podman system prune'
+    alias podclean='podprune || podrm'
 }
 
 config_aliases
