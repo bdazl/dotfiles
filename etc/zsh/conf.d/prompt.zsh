@@ -12,7 +12,7 @@ function echo-left-prompt()
     l+='%b%n'                # username
     l+='%F{magenta}@'        # @
     l+='%F{cyan}%m%u'        # hostname
-    l+='%F{red}# %F{fg}'     # #
+    l+='%F{yellow}# %F{fg}'  # #
 
     echo "$l"
 }
@@ -25,7 +25,7 @@ function echo-right-prompt()
     if [[ $KEYMAP = vicmd ]] then
        r+="%F{white}[%F{red}CMD%F{white}]"
     fi
-    r+="%F{green}%~%f"
+    r+="%F{green}%~%f %F{yellow}%T%f"
 
     echo "$r"
 }
