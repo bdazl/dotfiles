@@ -8,7 +8,6 @@ sudo dnf install \
     util-linux-user \
     zsh \
     tmux \
-	rxvt-unicode \
 	vim \
     git \
     cscope \
@@ -24,7 +23,8 @@ sudo dnf install \
     podman-compose \
     ranger \
     java \
-    e2fsprogs
+    e2fsprogs \
+    tree
 
 # Must be done after rpmfusion is installed
 sudo dnf install ffmpeg

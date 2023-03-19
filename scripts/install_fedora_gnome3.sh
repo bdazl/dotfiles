@@ -3,6 +3,7 @@
 # Gui related programs end up here
 sudo dnf install \
     xsel \
+    rxvt-unicode \
     gnome-tweaks
 
 # set caps -> esc
