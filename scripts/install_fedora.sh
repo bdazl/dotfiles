@@ -23,7 +23,8 @@ sudo dnf install \
     podman \
     podman-compose \
     ranger \
-    java
+    java \
+    e2fsprogs
 
 # Must be done after rpmfusion is installed
 sudo dnf install ffmpeg
