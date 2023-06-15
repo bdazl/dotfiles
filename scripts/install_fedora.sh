@@ -25,6 +25,8 @@ sudo dnf install \
     java \
     e2fsprogs \
     tree
+    fd-find \
+    bat
 
 # Must be done after rpmfusion is installed
 sudo dnf install ffmpeg
@@ -35,9 +37,7 @@ echo Dont forget to generate SSH key
 
 
 # User should have access to:
-#   - terminal -> zsh 
+#   - terminal -> zsh
 
 echo Changing shell:
 sudo chsh -s $(which zsh) $(whoami)
-
-
