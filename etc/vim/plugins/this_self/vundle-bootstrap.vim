@@ -32,9 +32,6 @@ Plugin 'iamcco/markdown-preview.nvim'
 " Realtime linting (python and others)
 Plugin 'dense-analysis/ale'
 
-Plugin 'jmcantrell/vim-virtualenv'
-Plugin 'PieterjanMontens/vim-pipenv'
-
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
