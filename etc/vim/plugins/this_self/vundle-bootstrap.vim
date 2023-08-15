@@ -20,9 +20,10 @@ Plugin 'francoiscabrol/ranger.vim'
 
 Plugin 'tpope/vim-fugitive'
 
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'simnalamburt/vim-mundo.git'
+
+Plugin 'junegunn/fzf.vim'
 
 Plugin 'crusoexia/vim-monokai'
 
@@ -60,4 +61,11 @@ let g:airline_solarized_bg = 'dark'
 
 let g:virtualenv_directory = '~/.local/share/virtualenvs'
 
-let b:ale_fixers = ['autopep8', 'mypy', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
+" :help ale-python-options
+let b:ale_fixers = ['black', 'autoimport', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
+let g:ale_python_flake8_options = '--max-line-length=88'
+" let g:ale_fix_on_save = 1
+
+" Ranger defaults to:
+" map <leader>f :Ranger<CR>
+let g:ranger_map_keys = 0
