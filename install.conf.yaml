@@ -10,6 +10,7 @@
   - mkdir -p ~/.vim/bundle
   - mkdir -p ~/.config/Code/User
   - mkdir -p ~/.config/qutebrowser
+  - mkdir -p ~/.config/lf
   - mkdir -p ~/.local/bin
   - mkdir -p ~/.local/share/zsh
   - mkdir -p ~/.local/share/qutebrowser
@@ -28,6 +29,7 @@
     ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
     ~/.config/redshift.conf: etc/redshift/redshift.conf
     ~/.config/zsh: etc/zsh/conf.d
+    ~/.config/lf/lfrc: etc/lf/lfrc
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
     ~/.local/bin/dropbox_upload.sh: bin/dropbox/dropbox_uploader.sh
     ~/.local/bin/frepl: bin/frepl
