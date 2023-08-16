@@ -24,7 +24,9 @@ sudo dnf install \
     ranger \
     java \
     e2fsprogs \
-    tree
+    tree \
+    fd-find \
+    bat
 
 # Must be done after rpmfusion is installed
 sudo dnf install ffmpeg
