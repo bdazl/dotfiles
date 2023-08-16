@@ -24,6 +24,8 @@ sudo dnf install \
     podman-compose \
     ranger \
     java \
+    e2fsprogs \
+    tree \
     fd-find \
     bat
 
