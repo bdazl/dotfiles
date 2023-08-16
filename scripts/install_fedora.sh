@@ -33,6 +33,9 @@ sudo dnf install ffmpeg
 
 sudo dnf update
 
+echo Downloading Go utilities
+go get github.com/svent/sift
+
 echo Dont forget to generate SSH key
 
 
