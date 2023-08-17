@@ -17,4 +17,4 @@ map <leader>r :Ranger<cr>
 
 " fzf (BTags = search ctags in current file, Files = open files)
 map <leader>f :BTags<cr>
-nmap <leader>o :Files<cr>
+nmap <leader>o :Files!<cr>
