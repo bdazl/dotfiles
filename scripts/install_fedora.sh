@@ -26,7 +26,8 @@ sudo dnf install \
     e2fsprogs \
     tree \
     fd-find \
-    bat
+    bat \
+    zoxide
 
 # Must be done after rpmfusion is installed
 sudo dnf install ffmpeg
