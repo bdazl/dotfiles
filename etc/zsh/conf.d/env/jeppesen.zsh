@@ -16,4 +16,4 @@ src_got > /dev/null
 # export ACCESS_TOKEN=$(cat ~/cfg/gototsatrium-token | tr -d "\n")
 # export TOKEN_H="PRIVATE-TOKEN: $ACCESS_TOKEN"
 
-export DOCKER_BUILD_EXTRA="--format docker"
+# export DOCKER_BUILD_EXTRA="--format docker"
