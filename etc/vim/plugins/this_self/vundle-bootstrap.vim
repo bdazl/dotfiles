@@ -66,3 +66,6 @@ let g:ale_python_flake8_options = '--max-line-length=88'
 " Ranger defaults to:
 " map <leader>f :Ranger<CR>
 let g:ranger_map_keys = 0
+
+command! -bang -nargs=? -complete=dir Files
+            \ call fzf#vim#files(<q-args>, {'options': ['--info=inline', '--preview', '~/.dotfiles/scripts/preview.sh {}']}, <bang>0)
