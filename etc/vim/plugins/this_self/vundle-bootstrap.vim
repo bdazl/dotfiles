@@ -67,5 +67,30 @@ let g:ale_python_flake8_options = '--max-line-length=88'
 " map <leader>f :Ranger<CR>
 let g:ranger_map_keys = 0
 
+" fzf
 command! -bang -nargs=? -complete=dir Files
-            \ call fzf#vim#files(<q-args>, {'options': ['--info=inline', '--preview', '~/.dotfiles/scripts/preview.sh {}']}, <bang>0)
+            \ call MyFZFFiles(<q-args>, <bang>0)
+
+function! MyFZFFiles(dir, bang)
+    if !empty(a:dir)
+        let dir = a:dir
+    else
+        let dir = getcwd()
+    endif
+
+    " Store previous value of global variable g:fzf_action and reset it after call
+    " This is the only call (:Files) where I want enter to default to new tab
+    let default = { 'enter': 'e', 'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v': 'vsplit' }
+    let pre_fzf_action = get(g:, 'fzf_action', default)
+    let g:fzf_action = { 'enter': 'tab split', 'ctrl-t': 'e' }
+
+    " Wrapped call
+    " * Full screen, not windowed
+    " * Always open results/files in new tab
+    " * Preview using my script
+    let options = {'options': ['--info=inline', '--preview', '~/.dotfiles/scripts/preview.sh {}']}
+    call fzf#vim#files(dir, options, a:bang)
+
+    " Restore
+    let g:fzf_action = pre_fzf_action
+endfunction
