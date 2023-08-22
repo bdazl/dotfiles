@@ -68,6 +68,7 @@ let g:ale_python_flake8_options = '--max-line-length=88'
 let g:ranger_map_keys = 0
 
 " fzf
+let g:fzf_preview_window = ['right,50%', 'ctrl-p']
 command! -bang -nargs=? -complete=dir Files
             \ call MyFZFFiles(<q-args>, <bang>0)
 
