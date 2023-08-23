@@ -25,18 +25,16 @@ function config_aliases()
     alias sudo='sudo '
 
     alias ga='git add'
+    alias gb='git branch'
+    alias gc='git commit --verbose'
     alias gs='git status'
     alias gd='git diff'
+    alias gpp='git pull --prune'
 
     # ShortSHA Date Author Decorate/Branch etc
     # Commit message
     alias gl='git log --graph --date=short --pretty=format:"%C(yellow)%h %C(blue)%ad %C(green)%an %C(auto)%d %n %s"'
     alias gla='git log --oneline --all --graph --decorate'
-
-    alias gc='git commit --verbose'
-    alias gb='git branch'
-
-    alias gpp='git pull --prune'
 
     alias gdiff='diff --color -u'
 
