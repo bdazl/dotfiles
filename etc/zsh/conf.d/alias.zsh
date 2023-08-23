@@ -24,9 +24,6 @@ function config_aliases()
     # So my user aliases works as sudo. Very neat :D
     alias sudo='sudo '
 
-    # ask before delete
-    alias rm='rm -i'
-
     alias ga='git add'
     alias gs='git status'
     alias gd='git diff'
