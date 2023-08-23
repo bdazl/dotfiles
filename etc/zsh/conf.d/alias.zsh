@@ -35,6 +35,9 @@ function config_aliases()
     alias gdiff='diff --color -u'
 
     alias nvi='nvim -u ~/.vimrc'
+
+    alias ta='tmux attach'
+    alias td='tmux detach'
 }
 
 config_aliases
