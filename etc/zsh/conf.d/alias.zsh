@@ -40,6 +40,9 @@ function config_aliases()
 
     alias nvi='nvim -u ~/.vimrc'
 
+    alias ta='tmux attach'
+    alias td='tmux detach'
+
     alias k='kubectl'
     alias kns='k config view -o jsonpath="{.contexts[?(@.name == \"$(k config current-context)\")].context.namespace}"'
 
