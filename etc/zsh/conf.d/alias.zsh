@@ -20,9 +20,6 @@ function config_aliases()
         alias lsmnt='sudo fdisk -l'
     fi
 
-    # ask before delete
-    alias rm='rm -i'
-
     alias ga='git add'
     alias gs='git status'
     alias gd='git diff'
