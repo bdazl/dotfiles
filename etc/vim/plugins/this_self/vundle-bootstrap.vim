@@ -20,9 +20,10 @@ Plugin 'francoiscabrol/ranger.vim'
 
 Plugin 'tpope/vim-fugitive'
 
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'simnalamburt/vim-mundo.git'
+
+Plugin 'junegunn/fzf.vim'
 
 Plugin 'crusoexia/vim-monokai'
 
@@ -30,9 +31,6 @@ Plugin 'iamcco/markdown-preview.nvim'
 
 " Realtime linting (python and others)
 Plugin 'dense-analysis/ale'
-
-Plugin 'jmcantrell/vim-virtualenv'
-Plugin 'PieterjanMontens/vim-pipenv'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -60,4 +58,40 @@ let g:airline_solarized_bg = 'dark'
 
 let g:virtualenv_directory = '~/.local/share/virtualenvs'
 
-let b:ale_fixers = ['autopep8', 'mypy', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
+" :help ale-python-options
+let b:ale_fixers = ['black', 'autoimport', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
+let g:ale_python_flake8_options = '--max-line-length=88'
+" let g:ale_fix_on_save = 1
+
+" Ranger defaults to:
+" map <leader>f :Ranger<CR>
+let g:ranger_map_keys = 0
+
+" fzf
+let g:fzf_preview_window = ['right,50%', 'ctrl-p']
+command! -bang -nargs=? -complete=dir Files
+            \ call MyFZFFiles(<q-args>, <bang>0)
+
+function! MyFZFFiles(dir, bang)
+    if !empty(a:dir)
+        let dir = a:dir
+    else
+        let dir = getcwd()
+    endif
+
+    " Store previous value of global variable g:fzf_action and reset it after call
+    " This is the only call (:Files) where I want enter to default to new tab
+    let default = { 'enter': 'e', 'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v': 'vsplit' }
+    let pre_fzf_action = get(g:, 'fzf_action', default)
+    let g:fzf_action = { 'enter': 'tab split', 'ctrl-t': 'e' }
+
+    " Wrapped call
+    " * Full screen, not windowed
+    " * Always open results/files in new tab
+    " * Preview using my script
+    let options = {'options': ['--info=inline', '--preview', '~/.dotfiles/scripts/preview.sh {}']}
+    call fzf#vim#files(dir, options, a:bang)
+
+    " Restore
+    let g:fzf_action = pre_fzf_action
+endfunction
