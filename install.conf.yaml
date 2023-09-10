@@ -26,6 +26,7 @@
     ~/.config/i3status: etc/i3status
     ~/.config/sway: etc/sway
     ~/.config/ranger: etc/ranger
+    ~/.config/hypr: etc/hypr
     ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
     ~/.config/redshift.conf: etc/redshift/redshift.conf
     ~/.config/zsh: etc/zsh/conf.d
