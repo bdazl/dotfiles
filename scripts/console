@@ -1,0 +1,9 @@
+#!/bin/bash
+
+loadkeys sv-latin1
+cat <<EOF | loadkeys
+keymaps 0-127
+keycode 58 = Escape
+EOF
+
+setfont drdos8x16
