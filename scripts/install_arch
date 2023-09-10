@@ -1,0 +1,30 @@
+#!/bin/bash
+
+pacman -Syu --needed \
+    base-devel \
+    dhcpcd \
+    e2fsprogs \
+    dosfstools \
+    openssh \
+    samba \
+    sudo \
+    zsh \
+    git \
+    vi \
+    vim \
+    tmux \
+    cscope \
+    make \
+    cmake \
+    ranger \
+    python \
+    go \
+    ghc \
+    cabal-install \
+    podman \
+    podman-compose \
+    tree \
+    fzf \
+    fd \
+    bat \
+    zoxide
