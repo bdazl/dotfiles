@@ -7,6 +7,7 @@
 export LANG=en_US.UTF-8
 export EDITOR=vim
 export PAGER=less
+export SUDO_EDITOR=vim
 
 #export BROWSER=qutebrowser
 export BROWSER=firefox
