@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# THIS SCRIPT DIR
+# INCLUDE COMMON
+# refuse_root
+
+# TODO: NO ROOT PLS
+
+yay -Su --needed \
+    linux-headers \
+    nvidia-dkms \
+    qt5-wayland \
+    qt5ct \
+    libva \
+    libva-nvidia-driver-git \
+    firefox \
+    kitty \
+    waybar
+    hyprland-nvidia \
+    sift \
+    wofi
