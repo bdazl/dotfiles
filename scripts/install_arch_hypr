@@ -8,14 +8,16 @@
 
 yay -Su --needed \
     linux-headers \
+    wl-clipboard \
     nvidia-dkms \
     qt5-wayland \
     qt5ct \
     libva \
     libva-nvidia-driver-git \
+    polkit-kde-agent \
     firefox \
     kitty \
-    waybar
+    waybar \
     hyprland-nvidia \
     sift \
     wofi
