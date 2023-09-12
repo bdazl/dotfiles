@@ -1,10 +1,11 @@
 #!/bin/bash
 
-pacman -Syu --needed \
+sudo pacman -Syu --needed \
     base-devel \
     dhcpcd \
     e2fsprogs \
     dosfstools \
+    linux-headers \
     openssh \
     samba \
     sudo \
@@ -28,3 +29,6 @@ pacman -Syu --needed \
     fd \
     bat \
     zoxide
+
+# yay
+# mkdir -p $HOME/src/ext
