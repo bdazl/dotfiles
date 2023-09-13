@@ -38,6 +38,8 @@ function config_aliases()
 
     alias ta='tmux attach'
     alias td='tmux detach'
+
+    alias h='hyprctl'
 }
 
 config_aliases
