@@ -32,3 +32,7 @@ sudo pacman -Syu --needed \
 
 # yay
 # mkdir -p $HOME/src/ext
+#
+
+yay -Su --needed \
+    sift
