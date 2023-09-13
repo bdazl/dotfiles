@@ -8,6 +8,9 @@
 
 yay -Su --needed \
     linux-headers \
+    hyprland-nvidia \
+    wireplumber \
+    pipewire \
     wl-clipboard \
     nvidia-dkms \
     qt5-wayland \
@@ -15,9 +18,9 @@ yay -Su --needed \
     libva \
     libva-nvidia-driver-git \
     polkit-kde-agent \
+    pipewire-pulse \
+    pavucontrol \
     firefox \
     kitty \
     waybar \
-    hyprland-nvidia \
-    sift \
-    wofi
+    wofi \
