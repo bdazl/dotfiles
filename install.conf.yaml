@@ -27,6 +27,7 @@
     ~/.config/Code/User/settings.json: etc/code/settings.json
     ~/.config/hypr: etc/hypr
     ~/.config/i3status: etc/i3status
+    ~/.config/kitty: etc/kitty
     ~/.config/lf/lfrc: etc/lf/lfrc
     ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
     ~/.config/ranger: etc/ranger
