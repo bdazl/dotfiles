@@ -40,15 +40,16 @@ function config_aliases()
 
     alias nvi='nvim -u ~/.vimrc'
 
-    alias ta='tmux attach'
-    alias td='tmux detach'
-
-    alias k='kubectl'
     alias kns='k config view -o jsonpath="{.contexts[?(@.name == \"$(k config current-context)\")].context.namespace}"'
 
     alias podrm='podman container rm --all --force'
     alias podprune='podman system prune'
     alias podclean='podprune || podrm'
+
+    alias ta='tmux attach'
+    alias td='tmux detach'
+
+    alias h='hyprctl'
 }
 
 config_aliases

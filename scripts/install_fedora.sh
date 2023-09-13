@@ -8,7 +8,6 @@ sudo dnf install \
     util-linux-user \
     zsh \
     tmux \
-	rxvt-unicode \
 	vim \
     git \
     cscope \

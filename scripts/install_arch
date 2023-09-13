@@ -1,0 +1,38 @@
+#!/bin/bash
+
+sudo pacman -Syu --needed \
+    base-devel \
+    dhcpcd \
+    e2fsprogs \
+    dosfstools \
+    linux-headers \
+    openssh \
+    samba \
+    sudo \
+    zsh \
+    git \
+    vi \
+    vim \
+    tmux \
+    cscope \
+    make \
+    cmake \
+    ranger \
+    python \
+    go \
+    ghc \
+    cabal-install \
+    podman \
+    podman-compose \
+    tree \
+    fzf \
+    fd \
+    bat \
+    zoxide
+
+# yay
+# mkdir -p $HOME/src/ext
+#
+
+yay -Su --needed \
+    sift
