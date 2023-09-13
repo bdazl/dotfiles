@@ -19,36 +19,36 @@
 
 - link:
     ~/.dotfiles: ''
-    ~/.conan/conan.conf: etc/conan/conan.conf
-    ~/.conan/conan.conf: etc/conan/registry.txt
-    ~/.config/Code/User/settings.json: etc/code/settings.json
-    ~/.config/Code/User/keybindings.json: etc/code/settings.json 
-    ~/.config/i3status: etc/i3status
-    ~/.config/sway: etc/sway
-    ~/.config/ranger: etc/ranger
-    ~/.config/hypr: etc/hypr
-    ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
-    ~/.config/redshift.conf: etc/redshift/redshift.conf
-    ~/.config/zsh: etc/zsh/conf.d
-    ~/.config/lf/lfrc: etc/lf/lfrc
-    ~/.local/bin/notify.sh: etc/crontab/notify.sh
-    ~/.local/bin/dropbox_upload.sh: bin/dropbox/dropbox_uploader.sh
-    ~/.local/bin/frepl: bin/frepl
-    ~/.local/bin/wg-gen: bin/wg-gen
-    ~/.local/bin/wireguard: bin/wireguard
-    ~/.urxvt/ext/resize-font: etc/xorg/plugins/urxvt-resize-font/resize-font
-    ~/.git_template: etc/git/template
     ~/.Xdefaults: etc/xorg/Xdefaults
     ~/.Xresources: etc/xorg/Xdefaults
-    ~/.vimrc: etc/vim/vimrc
-    ~/.ideavimrc: etc/vim/vimrc
-    ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
-    ~/.zshrc: etc/zsh/zshrc
-    ~/.zshenv: etc/zsh/zshenv
-    ~/.zlogin: etc/zsh/zlogin
-    ~/.zprofile: etc/zsh/zprofile
-    ~/.gitconfig: etc/git/gitconfig
-    ~/.tmux.conf: etc/tmux/tmux.conf
+    ~/.conan/conan.conf: etc/conan/conan.conf
+    ~/.conan/conan.conf: etc/conan/registry.txt
+    ~/.config/Code/User/keybindings.json: etc/code/settings.json 
+    ~/.config/Code/User/settings.json: etc/code/settings.json
+    ~/.config/hypr: etc/hypr
+    ~/.config/i3status: etc/i3status
+    ~/.config/lf/lfrc: etc/lf/lfrc
+    ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
+    ~/.config/ranger: etc/ranger
+    ~/.config/redshift.conf: etc/redshift/redshift.conf
+    ~/.config/sway: etc/sway
+    ~/.config/zsh: etc/zsh/conf.d
     ~/.ctags: etc/ctags/ctags
+    ~/.git_template: etc/git/template
+    ~/.gitconfig: etc/git/gitconfig
+    ~/.ideavimrc: etc/vim/vimrc
+    ~/.local/bin/dropbox_upload.sh: bin/dropbox/dropbox_uploader.sh
+    ~/.local/bin/frepl: bin/frepl
+    ~/.local/bin/notify.sh: etc/crontab/notify.sh
+    ~/.local/bin/wg-gen: bin/wg-gen
+    ~/.local/bin/wireguard: bin/wireguard
     ~/.sift.conf: etc/sift/sift.conf
     ~/.ssh/config: etc/ssh/config
+    ~/.tmux.conf: etc/tmux/tmux.conf
+    ~/.urxvt/ext/resize-font: etc/xorg/plugins/urxvt-resize-font/resize-font
+    ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
+    ~/.vimrc: etc/vim/vimrc
+    ~/.zlogin: etc/zsh/zlogin
+    ~/.zprofile: etc/zsh/zprofile
+    ~/.zshenv: etc/zsh/zshenv
+    ~/.zshrc: etc/zsh/zshrc
