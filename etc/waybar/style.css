@@ -13,8 +13,9 @@
 }
 */
 window#waybar {
-    background: darkgray;
-    color: black;
+    background: black;
+    color: white;
+    border-radius: 20px;
 }
 
 #window {
@@ -71,6 +72,7 @@ window#waybar {
 }
 
 #pulseaudio {
+    color: rgb(102, 220, 105);
 }
 
 #pulseaudio.muted {
