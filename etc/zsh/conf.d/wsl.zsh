@@ -14,7 +14,7 @@ start_tmux()
     [[ $commands[tmux] ]] && [ "$TMUX" = "" ] && tmux
 }
 
-if [ is_wsl2 ]; then
+if is_wsl2; then
     start_tmux
     set bell-style none
 fi
