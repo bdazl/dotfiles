@@ -12,9 +12,9 @@ export SUDO_EDITOR=vim
 #export BROWSER=qutebrowser
 export BROWSER=firefox
 if [ "$(uname)" = "Darwin" ]; then
+    export MAC_OS="yes"
     export BROWSER=/Applications/Firefox.app/Contents/MacOS/firefox
 fi
-#export BROWSER=vimb
 
-export GITHUB_USER=HexHacks
+export GITHUB_USER=bdazl
 export RANGER_LOAD_DEFAULT_RC=FALSE
