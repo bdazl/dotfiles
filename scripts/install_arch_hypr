@@ -20,7 +20,8 @@ yay -Su --needed \
     polkit-kde-agent \
     pipewire-pulse \
     pavucontrol \
+    noto-fonts \
     firefox \
     kitty \
     waybar \
-    wofi \
+    rofi-lbonn-wayland-git
