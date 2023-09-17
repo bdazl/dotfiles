@@ -8,7 +8,7 @@ if [[ ! $commands[loginctl] ]]; then
 fi
 
 # Session information
-export SESSION=$(loginctl | grep $USER | awk '{print $1}')
+export SESSION=$(loginctl | grep active |  grep $USER | awk '{print $1}')
 export SESSION_TYPE=$(loginctl show-session $SESSION | grep Type | tr '=' ' ' | awk '{print $2}')
 
 if [[ "$SESSION_TYPE" == "wayland" ]]; then
