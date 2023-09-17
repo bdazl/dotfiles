@@ -1,7 +1,20 @@
 #!/bin/zsh
+#
+# .zlogin
+# login -> desktop
 
+readonly desktop=Hyprland
+#readonly desktop=tmux
+
+start_tmux() {
+    [[ $commands[tmux] ]] && [ "$TMUX" = "" ] && tmux
+}
+
+# TODO: double check if SESSION_TYPE == "tty"
 # If running trom tty1 start sway
 if [[ $(tty) == "/dev/tty1" ]]; then
-    sway
+    $desktop
+    start_tmux
 fi
+
 
