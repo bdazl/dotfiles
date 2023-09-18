@@ -5,8 +5,7 @@
 # Author: Jacob Peyron
 #
 
-function config_completion()
-{
+config_completion() {
 # The following lines were added by compinstall
 
     zstyle ':completion:*' auto-description 'specify: %d'
@@ -30,4 +29,12 @@ function config_completion()
     setopt extendedglob
 }
 
+apply_if_exist() {
+    cmd=$1
+    complete=$2
+    [[ $commands[$cmd] ]] && eval $("${complete[@]}")
+}
+
 config_completion
+
+[[ $commands[gh] ]] && eval $(gh completion -s zsh)
