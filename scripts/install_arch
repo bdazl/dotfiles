@@ -28,6 +28,7 @@ sudo pacman -Syu --needed \
     fzf \
     fd \
     bat \
+    task \
     zoxide
 
 # yay
@@ -35,4 +36,4 @@ sudo pacman -Syu --needed \
 #
 
 yay -Su --needed \
-    sift
+    sift \
