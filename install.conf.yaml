@@ -32,6 +32,7 @@
     ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
     ~/.config/ranger: etc/ranger
     ~/.config/redshift.conf: etc/redshift/redshift.conf
+    ~/.config/task: etc/task
     ~/.config/sway: etc/sway
     ~/.config/waybar: etc/waybar
     ~/.config/zsh: etc/zsh/conf.d
