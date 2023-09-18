@@ -34,8 +34,8 @@ window#waybar {
 }
 
 #workspaces button.active {
-    color: #c9545d;
-    border-top: 2px solid #c9545d;
+    font-weight: bold;
+    border-top: 2px solid rgb(102, 220, 105);
 }
 
 #mode {
@@ -79,8 +79,8 @@ window#waybar {
 }
 
 #hyprland-workspaces {
-    color: rgb(102, 220, 105);
 }
+
 #hyprland-window {
 }
 
