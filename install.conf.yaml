@@ -39,11 +39,7 @@
     ~/.git_template: etc/git/template
     ~/.gitconfig: etc/git/gitconfig
     ~/.ideavimrc: etc/vim/vimrc
-    ~/.local/bin/dropbox_upload.sh: bin/dropbox/dropbox_uploader.sh
-    ~/.local/bin/frepl: bin/frepl
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
-    ~/.local/bin/wg-gen: bin/wg-gen
-    ~/.local/bin/wireguard: bin/wireguard
     ~/.sift.conf: etc/sift/sift.conf
     ~/.ssh/config: etc/ssh/config
     ~/.tmux.conf: etc/tmux/tmux.conf
