@@ -4,7 +4,7 @@
     "height": 28, // Waybar height
     "width": 1500, // Waybar width
     // Choose the order of the modules
-    "modules-left": ["custom/hypr/workspaces", "custom/spotify"],
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
     "modules-right": ["pulseaudio", "network", "cpu", "memory", "tray"],
     },
@@ -44,9 +44,15 @@
         },
         "on-click": "pavucontrol"
     },
-    "custom/hypr/workspaces": {
-        "exec": "whoami"
-    },
+	"hyprland/workspaces": {
+		 "format": "{icon}",
+		 "on-scroll-up": "hyprctl dispatch workspace e+1",
+		 "on-scroll-down": "hyprctl dispatch workspace e-1"
+	}
+    "hyprland/window": {
+        "max-length": 200,
+        "separate-outputs": true
+    }
     "custom/spotify": {
         "format": " {}",
         "max-length": 40,
