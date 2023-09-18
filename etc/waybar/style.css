@@ -33,7 +33,7 @@ window#waybar {
     border-top: 2px solid transparent;
 }
 
-#workspaces button.focused {
+#workspaces button.active {
     color: #c9545d;
     border-top: 2px solid #c9545d;
 }
@@ -43,7 +43,7 @@ window#waybar {
     border-bottom: 3px solid white;
 }
 
-#clock, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode {
+#hyprland-workspaces, #hyprland-window, #clock, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode {
     padding: 0 3px;
     margin: 0 5px;
 }
@@ -76,6 +76,12 @@ window#waybar {
 }
 
 #pulseaudio.muted {
+}
+
+#hyprland-workspaces {
+    color: rgb(102, 220, 105);
+}
+#hyprland-window {
 }
 
 #custom-spotify {
