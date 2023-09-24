@@ -21,7 +21,10 @@ yay -Su --needed \
     pipewire-pulse \
     pavucontrol \
     noto-fonts \
+    libnotify \
     firefox \
     kitty \
     waybar \
-    rofi-lbonn-wayland-git
+    rofi-lbonn-wayland-git \
+    bluez \
+    bluez-utils
