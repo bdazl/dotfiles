@@ -1,6 +1,6 @@
 [user]
 	name = Jacob Peyron
-	email = jacob.peyron@gmail.com
+	email = $EMAIL
 [init]
 	templatedir = ~/.git_template
 [alias]
