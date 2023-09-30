@@ -17,6 +17,9 @@
   - mkdir -p ~/.urxvt/ext
   - mkdir -p ~/.cargo/bin
 
+# All paths are relative the repo-root (./)
+# Everything that is sourced from ./etc/* can be assumed to be "static"
+# Everything that is sourced from ./gen/out/* is generated with ./generate
 - link:
     ~/.dotfiles: ''
     ~/.Xdefaults: etc/xorg/Xdefaults
@@ -38,7 +41,7 @@
     ~/.config/zsh: etc/zsh/conf.d
     ~/.ctags: etc/ctags/ctags
     ~/.git_template: etc/git/template
-    ~/.gitconfig: etc/git/gitconfig
+    ~/.gitconfig: gen/out/gitconfig
     ~/.ideavimrc: etc/vim/vimrc
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
     ~/.sift.conf: etc/sift/sift.conf

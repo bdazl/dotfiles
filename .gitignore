@@ -1,1 +1,2 @@
-etc/zsh/conf.d/0_antigen.zsh.zwc
+gen/out
+gen/active.env

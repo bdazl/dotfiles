@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -e
+
+error() {
+    echo "error: $1" 1>&2
+    exit 1
+}
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "${REPO_ROOT}"
+
+# Source active environment (specific to this machine, not version controlled)
+# This file includes all variables that will later be expanded for each file below
+# This should explicitly fail if the repo has not yet been bootstrapped
+. "gen/active.env" || error "fix this by running ./bootstrap"
+
+# Dictionary from source -> target files
+declare -A targets
+targets['etc/git/gitconfig']='gen/out/gitconfig'
+
+# For each source (key), make environment substitution to destination (value)
+for src in "${!targets[@]}"; do
+    dst=${targets[$src]}
+    echo "$src -> $dst"
+
+    # Substitution
+    cat $src | envsubst > $dst
+done
