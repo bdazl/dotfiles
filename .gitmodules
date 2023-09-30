@@ -1,5 +1,5 @@
 [submodule "dotbot"]
-	path = dotbot
+	path = ext/dotbot
 	url = https://github.com/anishathalye/dotbot
 [submodule "etc/vim/python-mode"]
 	path = etc/vim/plugins/python-mode
