@@ -3,7 +3,7 @@ This is a collection of my personal dotfiles. I have machines running various fl
 and I try to make all settings agnostic to the underlying OS. All configuration files are exist under [etc/](env).
 
 ## Install
-_Warning:_ *DO NOT INSTALL THESE ON YOUR SYSTEM*. You should never install a strangers dotfiles. But please, if you
+***Warning: DO NOT INSTALL THESE ON YOUR SYSTEM.*** You should never install a strangers dotfiles. But please, if you
 find anything useful: feel free to steal it and let it wither with your health (as the swedish proverb goes:
 "slit den med hälsan")
 
