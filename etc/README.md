@@ -1,54 +1,14 @@
-# **TODO**
+# Configuration files
 
-This message was sent to me, by me, as a message in this repository.
-If it couldn't be more META, wait until you see what happened next.
+Herein lies configuration files. Some are used actively and some are very stale indeed.
 
-Move this log into here, but young Padawan, format it well.
+## General
+My editor of choice is [vim](https://www.vim.org/). My [vim configuration](vim/vimrc) is the basis
+for many of the key-strokes that I setup for various programs. I don't use the modern neovim (yet)
+because I use the completion plugin [YouCompleteMe](https://github.com/ycm-core/YouCompleteMe).
 
-> git log -n 1 >> README.md
-
-commit 42a18092e89d179626345aad3966b3c95091f832
-Author: Jacob Peyron <jacob.peyron@gmail.com>
-Date:   Wed Apr 25 10:31:44 2018 +0200
-
-    Directory re-structure for VIM plugins (LONG MSG).
-    
-    I have plans to reorder all of the configurations
-    such that all programs have a folder hierarchy like this:
-    
-    <program>/plugins/this_self
-    <program>/plugins/<*plugins>
-    <program>/some_small.conf
-    
-    The small configuration file will idealistically be
-    lightweight and just point to a directory of (possibly ordered)
-    scripts (or features).
-    
-    Examples of features:
-    
-    -> __vim__:
-    
-    * <leading>: shortcuts.
-    * <C-x>: CTRL shortcuts. AKA tab management
-    
-    -> __ranger__:
-    
-    * Special directories:
-        * ge (goto etc/dotfiles)
-        * gj (goto src/jacob)
-    * File/Folder management
-        * ...
-    
-    -> __sway__:
-    * Options:
-        * window-decoration
-        * shorcuts
-        * login_startup (?)
-    
-    Okay. Too long log message. Let's put this in a README somewhere ;)
-    
-    Changes committed:
-            modified:   ../../.gitmodules
-            renamed:    Vundle.vim -> plugins/Vundle.vim
-            new file:   plugins/python-mode
-            modified:   vundle-bootstrap.vim
+## Important files
+This is (not an exhaustive) list of configuration files that I use daily:
+* [vimrc](vim/vimrc): with [a bunch of sub-scripts](vim/plugins/this_self)
+* [zshrc](zsh/zshrc): my favorite shell is [zsh](https://www.zsh.org/); [sub-scripts](zsh/conf.d)
+* [tmux.conf](tmux/tmux.conf): I use C-f as prefix key and setup various copy/paste mechanisms
