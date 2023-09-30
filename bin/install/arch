@@ -9,6 +9,7 @@ sudo pacman -Syu --needed \
     openssh \
     samba \
     sudo \
+    ntp \
     zsh \
     git \
     vi \
@@ -32,8 +33,14 @@ sudo pacman -Syu --needed \
     zoxide
 
 # yay
-# mkdir -p $HOME/src/ext
-#
+EXT=$HOME/src/ext
+YAY=$EXT/yay.git
+mkdir -p $EXT
+if [[ ! -d "$YAY" ]]; then
+    git clone https://aur.archlinux.org/yay.git $YAY
+    cd $YAY
+    makepkg -si
+fi
 
 yay -Su --needed \
-    sift \
+    sift
