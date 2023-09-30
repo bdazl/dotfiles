@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-error() {
-    echo "error: $1" 1>&2
-    exit 1
-}
-
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${REPO_ROOT}"
+
+# Common functions (like error)
+. "bin/common"
 
 # Source active environment (specific to this machine, not version controlled)
 # This file includes all variables that will later be expanded for each file below
