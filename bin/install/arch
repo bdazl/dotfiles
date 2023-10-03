@@ -18,6 +18,9 @@ sudo pacman -Syu --needed \
     cscope \
     make \
     cmake \
+    less \
+    tldr \
+    lf \
     ranger \
     python \
     go \
