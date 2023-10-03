@@ -5,5 +5,8 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${REPO_ROOT}"
 
 if [[ ! -e "gen/active.env" ]]; then
+    echo "default.env -> active.env"
     cp gen/default.env gen/active.env
+else
+    echo "active.env already configured"
 fi
