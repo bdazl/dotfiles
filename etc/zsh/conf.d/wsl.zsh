@@ -16,5 +16,4 @@ start_tmux()
 
 if is_wsl2; then
     start_tmux
-    set bell-style none
 fi
