@@ -9,5 +9,8 @@ DOTBOT_BIN="bin/dotbot"
 
 git submodule update --init --recursive 
 
+./bootstrap
+./generate
+
 CONFIG="etc/install.yml"
 "${REPO_ROOT}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${REPO_ROOT}" -c "${CONFIG}" "${@}"
