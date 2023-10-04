@@ -2,6 +2,7 @@
 
 sudo pacman -Syu --needed \
     base-devel \
+    man-db \
     dhcpcd \
     e2fsprogs \
     dosfstools \
