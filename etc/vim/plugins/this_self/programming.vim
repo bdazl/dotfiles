@@ -20,7 +20,11 @@ autocmd FileType python nmap <leader>gf :YcmCompleter GoToReferences<cr>
 autocmd FileType go nmap <leader>gr :w <bar> :GoRun<cr>
 autocmd FileType go nmap <leader>gb :w <bar> :GoBuild<cr>
 autocmd FileType go nmap <leader>gg :w <bar> :GoTest<cr>
-autocmd FileType go nmap <leader>gd :GoDef<cr>
+autocmd FileType go nmap <leader>gd <plug>(go-def-tab)
 autocmd FileType go nmap <leader>go :GoDocBrowser<cr>
 autocmd FileType go nmap <leader>gf :GoReferrers<cr>
  
+" OLD GoDef helpers (go-def-tab) is doing something funny
+" autocmd FileType go nmap <leader>gd :GoDef<cr>
+" autocmd FileType go nmap <leader>gd :<C-u>call go#def#Jump("tab", 0)<cr>
+" let g:go_debug = 1
