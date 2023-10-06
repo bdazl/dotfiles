@@ -7,10 +7,10 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Bootstrap: Vundle plug-in manager
-source ~/.dotfiles/etc/vim/plugins/this_self/vundle-bootstrap.vim
+source ~/.dotfiles/etc/vim/vim.d/vundle-bootstrap.vim
 
 " Source all files from my home-made directory
-for f in split(glob('~/.dotfiles/etc/vim/plugins/this_self/*.vim'), '\n')
+for f in split(glob('~/.dotfiles/etc/vim/vim.d/*.vim'), '\n')
     exe 'source' f
 endfor
 
