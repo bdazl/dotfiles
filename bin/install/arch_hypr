@@ -27,4 +27,5 @@ yay -Su --needed \
     waybar \
     rofi-lbonn-wayland-git \
     bluez \
-    bluez-utils
+    bluez-utils \
+    1password
