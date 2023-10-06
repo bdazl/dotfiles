@@ -47,4 +47,5 @@ if [[ ! -d "$YAY" ]]; then
 fi
 
 yay -Su --needed \
-    sift
+    sift \
+    1password-cli
