@@ -4,3 +4,15 @@ error() {
     echo "error: $1" 1>&2
     exit 1
 }
+
+prompt_user() {
+    # TODO: handle input default values
+    prompt="$1"
+
+    read -p "$prompt [y/N] " -n 1 -r
+    echo # TODO: don't echo if reply was \n
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        return 0
+    fi
+    return 1
+}

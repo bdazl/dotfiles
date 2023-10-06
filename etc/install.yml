@@ -16,6 +16,8 @@
   - mkdir -p ~/.local/share/qutebrowser
   - mkdir -p ~/.urxvt/ext
   - mkdir -p ~/.cargo/bin
+  - mkdir -p ~/.vim/backup
+  - mkdir -p ~/.vim/swap
 
 # All paths are relative the repo-root (./)
 # Everything that is sourced from ./etc/* can be assumed to be "static"
