@@ -7,7 +7,10 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'   " plugin management
-Plugin 'Valloric/YouCompleteMe' " completion
+
+if ! has('nvim')
+    Plugin 'Valloric/YouCompleteMe' " completion
+endif
 
 Plugin 'simnalamburt/vim-mundo.git' " undo tree
 Plugin 'vim-airline/vim-airline'    " status bar
