@@ -6,31 +6,20 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'   " plugin management
+Plugin 'Valloric/YouCompleteMe' " completion
 
-" Auto-complete / Intellisense for many languages
-Plugin 'Valloric/YouCompleteMe'
-" Status bar
-Plugin 'vim-airline/vim-airline'
+Plugin 'simnalamburt/vim-mundo.git' " undo tree
+Plugin 'vim-airline/vim-airline'    " status bar
 Plugin 'vim-airline/vim-airline-themes'
 
-Plugin 'fatih/vim-go'
+Plugin 'fatih/vim-go'       " golang
+Plugin 'dense-analysis/ale' " python linting
 
-Plugin 'francoiscabrol/ranger.vim'
+Plugin 'junegunn/fzf.vim' " fuzzy search
+Plugin 'francoiscabrol/ranger.vim' " ranger (file explorer)
 
-Plugin 'tpope/vim-fugitive'
-
-Plugin 'majutsushi/tagbar'
-Plugin 'simnalamburt/vim-mundo.git'
-
-Plugin 'junegunn/fzf.vim'
-
-Plugin 'crusoexia/vim-monokai'
-
-Plugin 'iamcco/markdown-preview.nvim'
-
-" Realtime linting (python and others)
-Plugin 'dense-analysis/ale'
+Plugin 'tpope/vim-fugitive' " git
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -57,8 +46,6 @@ let g:ycm_collect_identifiers_from_tags_files = 1
 let g:airline_theme = 'solarized'
 let g:airline_solarized_bg = 'dark'
 " let g:airline_powerline_fonts = 1
-
-let g:virtualenv_directory = '~/.local/share/virtualenvs'
 
 " :help ale-python-options
 let b:ale_fixers = ['black', 'autoimport', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
