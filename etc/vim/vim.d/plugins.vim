@@ -45,10 +45,8 @@ let g:ycm_goto_buffer_command = 'split-or-existing-window'
 let g:ycm_collect_identifiers_from_tags_files = 1
 
 " Airline status bar
-"let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme = 'solarized'
-let g:airline_solarized_bg = 'dark'
-" let g:airline_powerline_fonts = 1
+let g:airline_theme = 'simple'
+let g:airline_powerline_fonts = 1
 
 " :help ale-python-options
 let b:ale_fixers = ['black', 'autoimport', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
