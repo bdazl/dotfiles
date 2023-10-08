@@ -5,8 +5,6 @@ filetype plugin on
 filetype indent on
 syntax enable "syntax highlighting
 
-set t_Co=256 "256 colors palette
-
 set expandtab "spaces instead of tabs
 set smarttab
 set shiftwidth=4
@@ -65,8 +63,7 @@ set lazyredraw  "don't redraw while executing macros
 " => Colors
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"slate, elflord, wildcharm, monokai, lunaperche
-colorscheme wildcharm
+set t_Co=256 "256 colors palette
 set background=dark
 
 " Don't let the colorscheme mess with transparency (let the terminal dictate)
@@ -82,6 +79,13 @@ function! AdaptColorscheme()
 endfunction
 autocmd ColorScheme * call AdaptColorscheme()
 
+"wildcharm, slate, elflord, monokai, lunaperche
+if has('nvim')
+    colorscheme slate
+    call AdaptColorscheme()
+else
+    colorscheme wildcharm
+endif
 
 " Ensure PEP8 indentation
 autocmd FileType python
