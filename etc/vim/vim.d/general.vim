@@ -17,6 +17,7 @@ set textwidth=500
 set autoindent
 set si "smart indent
 set wrap "wrap lines
+set whichwrap+=<,>,h,l
 
 set ruler          "always show current position
 set number         "margin has current line number
@@ -51,7 +52,6 @@ set mat=2 "tenths of a seconds to blink when matching brackets
 set hid "buffer becomes hidden when it is abandoned
 
 set backspace=eol,start,indent
-set whichwrap+=<,>,h,l
 
 set ignorecase "ignore case when searching
 set smartcase "smart case search
@@ -65,9 +65,11 @@ set lazyredraw  "don't redraw while executing macros
 " => Colors
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-colorscheme elflord
+"slate, elflord, wildcharm, monokai, lunaperche
+colorscheme wildcharm
 set background=dark
 
+" Don't let the colorscheme mess with transparency (let the terminal dictate)
 function! AdaptColorscheme()
     highlight clear CursorLine
     highlight Normal ctermbg=none
