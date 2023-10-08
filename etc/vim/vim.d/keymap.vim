@@ -25,7 +25,8 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 " Remove Q mapping
 nnoremap Q <nop>
 
-" Useful mappings for managing tabs
+" Useful mappings for managing tabs and windows
+map <leader>q :quit<cr>
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
