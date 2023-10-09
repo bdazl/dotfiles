@@ -41,7 +41,7 @@ filetype plugin indent on    " required
 "
 " let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
-let g:ycm_goto_buffer_command = 'split-or-existing-window'
+let g:ycm_goto_buffer_command = 'split'
 let g:ycm_collect_identifiers_from_tags_files = 1
 
 " Airline status bar
