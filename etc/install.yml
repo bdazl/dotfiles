@@ -4,20 +4,20 @@
 
 - clean: ['~']
 
-- shell:
-  - mkdir -p ~/.cache
-  - mkdir -p ~/.conan
-  - mkdir -p ~/.vim/bundle
-  - mkdir -p ~/.config/Code/User
-  - mkdir -p ~/.config/qutebrowser
-  - mkdir -p ~/.config/lf
-  - mkdir -p ~/.local/bin
-  - mkdir -p ~/.local/share/zsh
-  - mkdir -p ~/.local/share/qutebrowser
-  - mkdir -p ~/.urxvt/ext
-  - mkdir -p ~/.cargo/bin
-  - mkdir -p ~/.vim/backup
-  - mkdir -p ~/.vim/swap
+- create:
+  - ~/.cache
+  - ~/.conan
+  - ~/.vim/bundle
+  - ~/.config/Code/User
+  - ~/.config/qutebrowser
+  - ~/.config/lf
+  - ~/.local/bin
+  - ~/.local/share/zsh
+  - ~/.local/share/qutebrowser
+  - ~/.urxvt/ext
+  - ~/.cargo/bin
+  - ~/.vim/backup
+  - ~/.vim/swap
 
 # All paths are relative the repo-root (./)
 # Everything that is sourced from ./etc/* can be assumed to be "static"
