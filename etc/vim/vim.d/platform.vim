@@ -6,22 +6,13 @@ if !exists("g:os")
     endif
 endif
 
-if has("gui_running")
-    if g:os == "Darwin"
-		" OSX
-        "set guifont=Fira\ Mono:h12
+let g:wsl = 0
 
-    elseif g:os == "Linux"
-        "set guifont=Fira\ Mono\ 10
-        "
-        " Airline status bar
-        "let g:airline#extensions#tabline#enabled = 1
-        let g:airline_theme = 'solarized'
-        let g:airline_solarized_bg = 'dark'
-        " let g:airline_powerline_fonts = 1
-
-    elseif g:os == "Windows"
-        "set guifont=Fira_Mono:h12:cANSI
-
+if g:os == "Linux"
+	let lines = readfile("/proc/version")
+    if lines[0] =~ "microsoft"
+        let g:wsl = 1
+    else
+        let g:wsl = 0
     endif
 endif
