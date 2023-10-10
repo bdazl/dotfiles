@@ -10,14 +10,15 @@ function config_aliases()
     if [ "$(uname)" = "Darwin" ]; then
         alias ls='ls -G'
         alias ll='ls -G -l'
+        alias la='ls -G -la'
         alias grep='grep --color=auto'
-        alias lsmnt='sudo diskutil list'
+        alias lsblk='sudo diskutil list'
     else
         alias ls='ls --color=auto --group-directories-first'
         alias ll='ls -l'
+        alias la='ls -la'
         alias grep='grep --color=auto'
-        alias tl='tree -C | less -R'
-        alias lsmnt='sudo fdisk -l'
+        alias tl='tree -C | bat'
     fi
 
     alias ga='git add'
@@ -40,6 +41,7 @@ function config_aliases()
     alias td='tmux detach'
 
     alias h='hyprctl'
+    alias k='kubectl'
 }
 
 config_aliases
