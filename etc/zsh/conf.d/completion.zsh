@@ -29,12 +29,7 @@ config_completion() {
     setopt extendedglob
 }
 
-apply_if_exist() {
-    cmd=$1
-    complete=$2
-    [[ $commands[$cmd] ]] && eval $("${complete[@]}")
-}
-
 config_completion
 
-[[ $commands[gh] ]] && eval $(gh completion -s zsh)
+[[ $commands[zoxide] ]] && eval "$(zoxide init --cmd j zsh)"
+[[ $commands[gh] ]] && eval "$(gh completion -s zsh)"
