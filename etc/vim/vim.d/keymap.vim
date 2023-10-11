@@ -85,6 +85,24 @@ nmap <leader>t :YcmCompleter GetType<cr>
 nmap <leader>d :YcmCompleter GoToDefinitionElseDeclaration<cr>
 nmap <leader>f :YcmCompleter GoToReferences<cr>
 
+"""" GOLANG
+autocmd FileType go nmap <leader>R :GoRename<cr>
+autocmd FileType go nmap <leader>gr :w <bar> :GoRun<cr>
+autocmd FileType go nmap <leader>gb :w <bar> :GoBuild<cr>
+autocmd FileType go nmap <leader>gg :w <bar> :GoTest<cr>
+autocmd FileType go nmap <leader>go :GoDocBrowser<cr>
+" Use YouCompleter for these instead
+" autocmd FileType go nmap <leader>gd <plug>(go-def-split)
+" autocmd FileType go nmap <leader>gf :GoReferrers<cr>
+
+"""" PYTHON
+" F9 runs current file as python script
+autocmd FileType python map <buffer> <F9> :exec '!python3' shellescape(@%, 1)<cr>
+" Same as above, but letting user enter any arguments before executing
+autocmd FileType python map <F10> :exec '!python3' shellescape(@%, 1) 'args'
+autocmd FileType python nmap <leader>gr :w <bar> exec '!python3' shellescape(@%, 1) 'args'
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Search
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -99,25 +117,6 @@ nmap <leader>sr :.,$s///gi<left><left><left><left>
 vmap a y<esc>:<c-r>=GetSearchFromYanked("%s")<cr><left><left><left>
 vmap A y<esc>:<c-r>=GetSearchFromYanked(".,+2s")<cr><left><left><left>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => FileType mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""" PYTHON
-" F9 runs current file as python script
-autocmd FileType python map <buffer> <F9> :exec '!python3' shellescape(@%, 1)<cr>
-" Same as above, but letting user enter any arguments before executing
-autocmd FileType python map <F10> :exec '!python3' shellescape(@%, 1) 'args'
-autocmd FileType python nmap <leader>gr :w <bar> exec '!python3' shellescape(@%, 1) 'args'
-
-
-"""" GOLANG
-autocmd FileType go nmap <leader>gr :w <bar> :GoRun<cr>
-autocmd FileType go nmap <leader>gb :w <bar> :GoBuild<cr>
-autocmd FileType go nmap <leader>gg :w <bar> :GoTest<cr>
-autocmd FileType go nmap <leader>go :GoDocBrowser<cr>
-" Use YouCompleter for these instead
-" autocmd FileType go nmap <leader>gd <plug>(go-def-split)
-" autocmd FileType go nmap <leader>gf :GoReferrers<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
