@@ -22,6 +22,9 @@ map <C-l> <C-W>l
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
+" In M$ terminals ctrl-v may be difficult
+nnoremap <leader>v <c-v>
+
 " Remove Q mapping
 nnoremap Q <nop>
 
