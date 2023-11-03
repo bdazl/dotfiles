@@ -12,11 +12,21 @@ dconf write /org/gnome/desktop/input-sources/xkb-options "['caps:escape']"
 # set keyboard shortcuts
 dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-up "['<Super>k']"
 dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-down "['<Super>j']"
+dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-left "['<Shift><Super>h']"
+dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-right "['<Shift><Super>l']"
 dconf write /org/gnome/desktop/wm/keybindings/switch-windows "['<Alt>Tab']"
 dconf write /org/gnome/desktop/wm/keybindings/switch-windows-backward "['<Shift><Alt>Tab']"
+dconf write /org/gnome/desktop/wm/keybindings/toggle-maximized "['<Super>f']"
+dconf write /org/gnome/desktop/wm/keybindings/toggle-fullscreen "['<Shift><Super>f']"
+
+# The following command shows what is currently configured
+# dconf dump /org/gnome/desktop/wm/keybindings
 
 # No alert sound
 dconf write /org/gnome/desktop/sound/event-sounds "false"
+
+# Disable hot corner
+gsettings set org.gnome.desktop.interface enable-hot-corners false
 
 echo caps mapped to esc
 
