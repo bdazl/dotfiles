@@ -16,8 +16,9 @@ Plugin 'simnalamburt/vim-mundo.git' " undo tree
 Plugin 'vim-airline/vim-airline'    " status bar
 Plugin 'vim-airline/vim-airline-themes'
 
-Plugin 'fatih/vim-go'       " golang
-Plugin 'dense-analysis/ale' " python linting
+Plugin 'fatih/vim-go'               " golang
+Plugin 'dense-analysis/ale'         " python linting
+Plugin 'neovimhaskell/haskell-vim'  " haskell
 
 Plugin 'junegunn/fzf.vim' " fuzzy search
 Plugin 'francoiscabrol/ranger.vim' " ranger (file explorer)
