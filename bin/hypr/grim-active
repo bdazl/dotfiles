@@ -1,0 +1,3 @@
+#!/bin/bash
+
+grim -g "$(hyprctl activewindow -j | jq -r '(.at[0] | tostring)  + "," + (.at[1] | tostring) + " " + (.size[0] | tostring) + "x" + (.size[1] | tostring)')"
