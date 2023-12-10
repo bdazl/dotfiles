@@ -28,4 +28,7 @@ yay -Su --needed \
     rofi-lbonn-wayland-git \
     bluez \
     bluez-utils \
-    1password
+    1password \
+    mupdf \
+    feh \
+    grim
