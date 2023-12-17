@@ -76,8 +76,8 @@ nmap <leader>b :TagbarToggle<cr>
 nmap <leader>r :Ranger<cr>
 
 " fzf (BTags = search ctags in current file, Files = open files)
-nmap <leader>s :BLines<cr>
-nmap <leader>S :BTags<cr>
+nmap <leader>S :BLines<cr>
+nmap <leader>s :BTags<cr>
 nmap <leader>o :Files!<cr>
 
 " YouCompleteMe
