@@ -1,0 +1,7 @@
+#!/bin/bash
+
+go install github.com/bdazl/tmpl@latest
+go install golang.org/x/tools/cmd/deadcode@latest
+go install golang.org/x/tools/cmd/goimports@latest
+go install golang.org/x/tools/cmd/godoc@latest
+go install golang.org/x/tools/cmd/stringer@latest
