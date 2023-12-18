@@ -5,8 +5,8 @@
 Xft.dpi:                    96
 Xft.rgba:                   rgb
 
-*background:  #2d2c28
-*foreground:  #a4a6ab
+*background:  #000000
+*foreground:  #ffffff
 
 
 ! BLACK
