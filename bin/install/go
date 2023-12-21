@@ -1,7 +1,15 @@
 #!/bin/bash
 
+# my tools
 go install github.com/bdazl/tmpl@latest
+
+# x/tools
+go install golang.org/x/tools/cmd/gopls@latest
+go install golang.org/x/tools/cmd/godoc@latest
 go install golang.org/x/tools/cmd/deadcode@latest
 go install golang.org/x/tools/cmd/goimports@latest
-go install golang.org/x/tools/cmd/godoc@latest
 go install golang.org/x/tools/cmd/stringer@latest
+
+# external
+go install github.com/svent/sift@latest
+go install github.com/cheat/cheat/cmd/cheat@latest
