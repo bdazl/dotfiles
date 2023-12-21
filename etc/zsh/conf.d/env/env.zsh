@@ -39,6 +39,7 @@ export GITHUB_USER=bdazl
 export RANGER_LOAD_DEFAULT_RC=FALSE
 export FZF_DEFAULT_COMMAND="find ."
 # export FZF_PREVIEW_COMMAND="~/.dotfiles/scripts/preview.sh {}"
+export CHEAT_USE_FZF=true
 
 export GTK_THEME=Adapta
 
