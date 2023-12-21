@@ -1,0 +1,6 @@
+# Execute your_command for each newline (\n). Command invoked per line.
+#   tr '\n' '\0' <- changes \n chars to nil-char
+#   xargs:
+#       -0    <- use nil-cahr
+#       -I {} <- replace occurrence on input to whatever comes in your_command {}
+printf "a\nb" | tr '\n' '\0' | xargs -0 -I {} your_command {}
