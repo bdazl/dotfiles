@@ -1,0 +1,2 @@
+# Delete deployments that are older than 120m (7200s)
+kubectl get deployments -o json | jq -r '.items[] | select(.metadata.creationTimestamp | fromdateiso8601 < now - 7200) | .metadata.name' | xargs -I {} kubectl delete deployment {}
