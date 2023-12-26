@@ -31,4 +31,5 @@ yay -Su --needed \
     1password \
     mupdf \
     feh \
-    grim
+    grim \
+    vlc
