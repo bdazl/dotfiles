@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# install essentials
+sudo dnf install \
+    util-linux-user \
+    zsh \
+	vim \
+    git \
+    cscope \
+    python \
+    python3-devel \
+    golang \
+    make \
+    gcc-c++ \
+    cmake \
+    java \
+    e2fsprogs \
+    tree
+
+sudo dnf update
+
+# User should have access to:
+#   - terminal -> zsh
+
+echo Change shell by:
+printf "\tsudo usermod -s $(which zsh) $(whoami)\n""
+# sudo usermod -s $(which zsh) $(whoami)
