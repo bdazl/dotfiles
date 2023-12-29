@@ -36,7 +36,8 @@ sudo pacman -Syu --needed \
     task \
     zoxide \
     jq \
-    yq
+    yq \
+    perl-image-exiftool
 
 # yay
 EXT=$HOME/src/ext
@@ -50,4 +51,5 @@ fi
 
 yay -Su --needed \
     sift \
-    1password-cli
+    1password-cli \
+    steghide # steganography
