@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install essentials
-sudo dnf install \
+sudo yum install \
     util-linux-user \
     zsh \
 	vim \
@@ -17,11 +17,11 @@ sudo dnf install \
     e2fsprogs \
     tree
 
-sudo dnf update
+sudo yum update
 
 # User should have access to:
 #   - terminal -> zsh
 
 echo Change shell by:
-printf "\tsudo usermod -s $(which zsh) $(whoami)\n""
+printf "\tsudo usermod -s $(which zsh) $(whoami)\n"
 # sudo usermod -s $(which zsh) $(whoami)
