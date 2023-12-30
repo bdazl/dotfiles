@@ -37,7 +37,9 @@ sudo pacman -Syu --needed \
     zoxide \
     jq \
     yq \
-    perl-image-exiftool
+    perl-image-exiftool \
+    sysstat \
+    iotop
 
 # yay
 EXT=$HOME/src/ext
