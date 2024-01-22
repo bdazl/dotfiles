@@ -108,7 +108,7 @@ autocmd FileType python nmap <leader>gr :w <bar> exec '!python3' shellescape(@%,
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Search and Replace from current line to last
-nmap <leader>sr :.,$s///gi<left><left><left><left>
+nmap <leader>sr :.,$s///gI<left><left><left><left>
 
 " In visual mode, pressing a results in yanking 
 " current selection and letting the user decide
