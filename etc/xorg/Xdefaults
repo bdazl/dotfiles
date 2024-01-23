@@ -10,12 +10,12 @@ Xft.rgba:                   rgb
 
 
 ! BLACK
-*color0:      #5b5955
+*color0:      #000000
 *color8:      #707277
 
 ! WHITE
 *color7:      #dbdde2
-*color15:     #f7f9ff
+*color15:     #ffffff
 
 ! RED
 *color1:      #c4756e
