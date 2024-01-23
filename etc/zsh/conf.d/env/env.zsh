@@ -21,6 +21,7 @@ export XKB_DEFAULT_LAYOUT=se
 export XKB_DEFAULT_MODEL=pc105
 export XKB_DEFAULT_OPTIONS=caps:escape
 #export XKB_DEFAULT_VARIANT=,nodeadkeys
+export KEYTIMEOUT=1  # Remove ESC-key lag in ZSH
 
 # Wayland keyboard variables
 export WLC_REPEAT_RATE=45
