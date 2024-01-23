@@ -12,7 +12,7 @@ readonly ZSH_DIR=$XDG_CONFIG_HOME/zsh
 . "$ZSH_DIR/path.zsh"
 . "$ZSH_DIR/alias.zsh"
 . "$ZSH_DIR/prompt.zsh"
-. "$ZSH_DIR/keyboard.zsh"
+. "$ZSH_DIR/bindkey.zsh"
 . "$ZSH_DIR/completion.zsh"
 
 . "$ZSH_DIR/fzf-completion.zsh"
