@@ -15,7 +15,5 @@ readonly ZSH_DIR=$XDG_CONFIG_HOME/zsh
 . "$ZSH_DIR/bindkey.zsh"
 . "$ZSH_DIR/completion.zsh"
 
-. "$ZSH_DIR/fzf-completion.zsh"
-
 # When this is a problem, look into: {{ template "zshrc.extra" | nindent 0 }}
 # . "$ZSH_DIR/wsl.zsh"
