@@ -5,10 +5,25 @@
 # Author: Jacob Peyron
 #
 
+# This variable is the first thing defined in .zshrc and since this file
+# is sourced; we do not need to re-define it. It is left here as a reference
+# to not get confused where it is used.
+#
+# readonly ZSH_DIR=$XDG_CONFIG_HOME/zsh
+
+# Main options
 bindkey -v  # VIM-mode
 
 bindkey -M vicmd "ö" beginning-of-line
 bindkey -M vicmd "ä" end-of-line
+
+# Load fzf plugins
+. "$ZSH_DIR/fzf/file-search.zsh"
+
+autoload fzf-completion
+zle -N fzf-completion
+
+bindkey '^i' fzf-completion
 
 # ctrl+r is search backward
 bindkey '^r' history-incremental-search-backward
