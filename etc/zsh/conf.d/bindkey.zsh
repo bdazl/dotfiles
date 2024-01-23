@@ -19,14 +19,16 @@ bindkey -M vicmd "ä" end-of-line
 
 # Load fzf plugins
 . "$ZSH_DIR/fzf/file-search.zsh"
+. "$ZSH_DIR/fzf/history-search.zsh"
 
 autoload fzf-completion
+autoload fzf-history-search
+
 zle -N fzf-completion
+zle -N fzf-history-search
 
 bindkey '^i' fzf-completion
-
-# ctrl+r is search backward
-bindkey '^r' history-incremental-search-backward
+bindkey '^r' fzf-history-search
 
 # The rest of the code in this file is inspired from:
 # http://www.zshwiki.org/home/zle/bindkeys
