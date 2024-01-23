@@ -1,28 +1,21 @@
 #!/bin/zsh
 
-# The infamous .zshrc
-# This is to be kept as clean as possible.
-# All configurations are put in separate
-# units inside of ~/.config/zsh 
-# (or whatever your XDG_CONFIG_HOME is).
+# .zshrc
+# This is the main configuration of zsh
 #
 # Author: Jacob Peyron
 #
 
-function exec_config_dir()
-{
-    zsh_dir=$XDG_CONFIG_HOME/zsh
+readonly ZSH_DIR=$XDG_CONFIG_HOME/zsh
 
-    if [[ -d "$zsh_dir" ]] then
-        scripts=($zsh_dir/*.zsh)
-        foreach s in $scripts
-            test -r "$s" && . "$s";
-        end
-    else
-        echo Found no zsh script directory.
-        echo Functionality of this shell is reduced.
-    fi
+. "$ZSH_DIR/init.zsh"
+. "$ZSH_DIR/path.zsh"
+. "$ZSH_DIR/alias.zsh"
+. "$ZSH_DIR/prompt.zsh"
+. "$ZSH_DIR/keyboard.zsh"
+. "$ZSH_DIR/completion.zsh"
 
-}
+. "$ZSH_DIR/fzf-completion.zsh"
 
-exec_config_dir
+# When this is a problem, look into: {{ template "zshrc.extra" | nindent 0 }}
+# . "$ZSH_DIR/wsl.zsh"
