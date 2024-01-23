@@ -72,8 +72,3 @@ fzf-history-search() {
   zle reset-prompt
   return $ret
 }
-
-autoload fzf-history-search
-zle -N fzf-history-search
-
-bindkey '^r' fzf-history-search
