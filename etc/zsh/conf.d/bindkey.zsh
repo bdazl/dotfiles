@@ -18,17 +18,12 @@ bindkey -M vicmd "ö" beginning-of-line
 bindkey -M vicmd "ä" end-of-line
 
 # Load fzf plugins
-. "$ZSH_DIR/fzf/file-search.zsh"
-. "$ZSH_DIR/fzf/history-search.zsh"
-
-autoload fzf-completion
-autoload fzf-history-search
-
-zle -N fzf-completion
-zle -N fzf-history-search
-
-bindkey '^i' fzf-completion
-bindkey '^r' fzf-history-search
+. "$ZSH_DIR/fzf/completion.zsh"
+. "$ZSH_DIR/fzf/key-bindings.zsh"
+# bindkey -M vicmd '^T' fzf-file-widget
+# bindkey -M viins '^T' fzf-file-widget
+# bindkey -M vicmd '^R' fzf-history-widget
+# bindkey -M viins '^R' fzf-history-widget
 
 # The rest of the code in this file is inspired from:
 # http://www.zshwiki.org/home/zle/bindkeys
