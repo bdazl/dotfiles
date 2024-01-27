@@ -1,0 +1,14 @@
+#!/bin/bash
+
+readonly file=$1
+
+if [ -z "$file" ]; then
+    echo "usage: watermark ut/some.jpg"
+    exit 1
+fi
+
+# embed watermark
+steghide embed -ef watermark.txt -p "$(cat waterpass.txt)" -cf $file
+
+# add copyright to exif
+exiftool -copyright="$(date +%Y) Jacob Peyron" $file
