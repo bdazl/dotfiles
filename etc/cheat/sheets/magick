@@ -1,0 +1,5 @@
+# Create thumbnail from image
+magick convert $in -thumbnail 200x200^ -gravity center -extent 200x200 $ut
+
+# Convert to jpeg (quality 80), resize and strip metadata
+magick convert $in -resize 2048x2048 -strip -quality 80 $ut
