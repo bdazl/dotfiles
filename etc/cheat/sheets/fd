@@ -1,0 +1,2 @@
+# Find files from an attached power supply, print its filename in red and then print its content
+fd . /sys/class/power_supply/hidpp_battery_0/ -t f -x bash -c 'echo -e "\e[31m{}\e[0m" && cat {}' \;
