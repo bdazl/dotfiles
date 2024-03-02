@@ -1,0 +1,2 @@
+# /abs/path
+readlink -f ./softlink
