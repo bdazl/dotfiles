@@ -8,7 +8,17 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'   " plugin management
 
-if ! has('nvim')
+if has('nvim')
+    " Lean with dependencies
+    Plugin 'Julian/lean.nvim'
+    Plugin 'neovim/nvim-lspconfig'
+    Plugin 'nvim-lua/plenary.nvim'
+
+    " optional
+    Plugin 'hrsh7th/nvim-cmp'        " For LSP completion
+    Plugin 'hrsh7th/cmp-nvim-lsp'
+    Plugin 'hrsh7th/cmp-buffer'
+else
     Plugin 'Valloric/YouCompleteMe' " completion
 endif
 
