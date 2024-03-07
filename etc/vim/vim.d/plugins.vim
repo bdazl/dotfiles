@@ -29,6 +29,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'fatih/vim-go'               " golang
 Plugin 'dense-analysis/ale'         " python linting
 Plugin 'neovimhaskell/haskell-vim'  " haskell
+Plugin 'hashivim/vim-terraform'     " terraform
 
 Plugin 'junegunn/fzf.vim' " fuzzy search
 Plugin 'francoiscabrol/ranger.vim' " ranger (file explorer)
