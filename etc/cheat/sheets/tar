@@ -1,3 +1,6 @@
+# Lis[t] the contents of a tar [f]ile [v]erbosely:
+tar tvf path/to/source.tar
+
 # [c]reate an archive and write it to a [f]ile:
 tar cf path/to/target.tar path/to/file1 path/to/file2 ...
 
@@ -10,6 +13,12 @@ tar czf path/to/target.tar.gz --directory=path/to/directory .
 # [c]reate a compressed archive and write it to a [f]ile, using the file extension to [a]utomatically determine the compression program:
 tar caf path/to/target.tar.xz path/to/file1 path/to/file2 ...
 
+# [c]reate a g[z]ipped archive from a directory and base64 encode it to a text file
+tar czf - [katalognamn] | base64 > b64.txt
+
+# E[x]tract a (compressed) archive [f]ile from a base64 encoded string:
+base64 -d b64.txt | tar xzf -
+
 # E[x]tract a (compressed) archive [f]ile into the current directory [v]erbosely:
 tar xvf path/to/source.tar[.gz|.bz2|.xz]
 
@@ -18,6 +27,3 @@ tar xf path/to/source.tar[.gz|.bz2|.xz] --directory=path/to/directory
 
 # E[x]tract files matching a pattern from an archive [f]ile:
 tar xf path/to/source.tar --wildcards "*.html"
-
-# Lis[t] the contents of a tar [f]ile [v]erbosely:
-tar tvf path/to/source.tar
