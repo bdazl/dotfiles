@@ -31,6 +31,7 @@ sudo pacman -Syu --needed \
     podman-compose \
     tree \
     fzf \
+    eza \
     fd \
     bat \
     task \
