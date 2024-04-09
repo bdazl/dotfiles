@@ -1,0 +1,2 @@
+# Check what package owns this file
+pacman -Qo /usr/bin/vim

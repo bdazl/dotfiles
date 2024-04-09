@@ -47,7 +47,6 @@ function config_aliases()
     alias dimb='gammastep -O 2500'
     alias dimmörk='gammastep -O 1900'
 
-    alias yay-owner='yay -Qo'
 }
 
 config_aliases
