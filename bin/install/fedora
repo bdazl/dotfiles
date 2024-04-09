@@ -26,7 +26,8 @@ sudo dnf install \
     tree \
     fd-find \
     bat \
-    zoxide
+    zoxide \
+    eza
 
 # Must be done after rpmfusion is installed
 sudo dnf install ffmpeg
