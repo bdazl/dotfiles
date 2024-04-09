@@ -15,8 +15,9 @@ function config_aliases()
         alias lsblk='sudo diskutil list'
     else
         alias ls='ls --color=auto --group-directories-first'
-        alias ll='ls -l'
-        alias la='ls -la'
+        alias la='ls -lha --time-style=iso'
+        alias ll='ls -lh --time-style=iso'
+        alias lll='ls -lhaZ --time-style=full-iso'
         alias grep='grep --color=auto'
         alias tl='tree -C | bat'
     fi
