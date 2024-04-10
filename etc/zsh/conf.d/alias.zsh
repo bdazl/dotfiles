@@ -48,13 +48,11 @@ function config_aliases()
     alias dimb='gammastep -O 2500'
     alias dimmörk='gammastep -O 1900'
 
-    # Modern 'ls', they call it. I don't think it replaces ls, but the '--total-size' feature is nice
-    alias lz='eza -lo --group-directories-first --time-style=iso --no-permissions --no-user --no-time'
-    alias lzz='eza -loZM --group-directories-first --time-style=iso'
+    alias lz='eza -loM --group-directories-first --git --time-style=+%Y-%m-%d'
+    alias lzz='eza -loaM --group-directories-first --git --time-style=long-iso'
 
-    # Recurse directories for size of folders
-    # this can take a while, make it difficult for me to slip onto this alias
-    alias lzzz='eza -loSM --group-directories-first --time-style=full-iso --total-size'
+    # Recurse directories for size of folders. This can take a while.
+    alias lzzz='eza -loaZM --group-directories-first --no-time --total-size'
 }
 
 config_aliases
