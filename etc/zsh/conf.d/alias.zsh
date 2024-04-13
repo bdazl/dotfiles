@@ -48,6 +48,9 @@ function config_aliases()
     alias dimb='gammastep -O 2500'
     alias dimmörk='gammastep -O 1900'
 
+    alias lb='lsblk -o name,size,fstype,uuid,model,mountpoints'
+    alias lba='lsblk -o name,label,size,fstype,uuid,model,mountpoints'
+
     alias lz='eza -1 --group-directories-first'
     alias lzz='eza -loM --group-directories-first --git --time-style=+%Y-%m-%d'
     alias lza='eza -liaoM --group-directories-first --git --time-style=+%Y-%m-%d'
