@@ -59,6 +59,10 @@ function config_aliases()
     # Recurse directories for size of folders. This can take a while.
     alias lt='eza -lar --sort=size --total-size --no-time --no-permissions --no-user'
     alias ltt='lt --tree --color=always | bat -p'
+
+    alias today='date +%Y-%m-%d'
+    alias now='date +%H:%M%t%Y-%m-%d%tV.%V'
+    alias nowi='date +%Y-%m-%d_%H:%M'
 }
 
 config_aliases
