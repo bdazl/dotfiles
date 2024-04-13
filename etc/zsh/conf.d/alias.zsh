@@ -50,11 +50,12 @@ function config_aliases()
 
     alias lz='eza -1 --group-directories-first'
     alias lzz='eza -loM --group-directories-first --git --time-style=+%Y-%m-%d'
-    alias lza='eza -liaoM --group-directories-first'
-    alias lzl='eza -liaoM --group-directories-first --git --time-style=long-iso'
+    alias lza='eza -liaoM --group-directories-first --git --time-style=+%Y-%m-%d'
+    alias lzl='eza -liaoMH --group-directories-first --git --time-style=long-iso'
 
     # Recurse directories for size of folders. This can take a while.
-    alias lzt='eza -lar --sort=size --total-size --no-time --no-permissions --no-user'
+    alias lt='eza -lar --sort=size --total-size --no-time --no-permissions --no-user'
+    alias ltt='lt --tree --color=always | bat -p'
 }
 
 config_aliases
