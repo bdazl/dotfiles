@@ -63,8 +63,8 @@ function config_aliases()
     alias ltt='lt --tree --color=always | bat -p'
 
     alias today='date +%Y-%m-%d'
+    alias vecka='date +%V'
     alias now='date +%H:%M%t%Y-%m-%d%tV.%V'
-    alias nowi='date +%Y-%m-%d_%H:%M'
 }
 
 config_aliases
