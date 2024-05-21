@@ -80,12 +80,22 @@ function! AdaptColorscheme()
 endfunction
 autocmd ColorScheme * call AdaptColorscheme()
 
-"wildcharm, slate, elflord, monokai, lunaperche
+function! TryColorschemes(colorschemes)
+    for scheme in a:colorschemes
+        try
+            execute 'colorscheme ' . scheme
+            return
+        catch /^Vim\%((\a\+)\)\=:E185/
+            " Do nothing, just continue to the next scheme
+        endtry
+    endfor
+endfunction
+
+let colorschemes = ['wildcharm', 'slate', 'elflord', 'monokai', 'lunaperche']
+call TryColorschemes(colorschemes)
+
 if has('nvim')
-    colorscheme slate
     call AdaptColorscheme()
-else
-    colorscheme wildcharm
 endif
 
 " Ensure PEP8 indentation
