@@ -3,7 +3,7 @@
 # Author: Jacob Peyron <jacob.peyron@gmail.com>
 #
 
-if [[ ! $commands[loginctl] ]]; then
+if ! command -v loginctl &> /dev/null; then
     return
 fi
 
