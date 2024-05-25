@@ -1,0 +1,5 @@
+# Check unit logs
+journalctl -u some.service
+
+# On crash, check the last boot journal
+journalctl -b -1
