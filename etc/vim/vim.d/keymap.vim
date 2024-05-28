@@ -33,14 +33,17 @@ map <leader>q :quit<cr>
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove 
-map <leader>t<leader> :tabnext 
+
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 map <leader>te :tabedit <c-r>=expand("%:p:h") . "/"<cr>
 
 nmap <TAB> :tabnext<cr>
 nmap <S-TAB> :tabprev<cr>
+
+" Quickfix (or YcmCompleter GoToReferences for instance)
+nmap <leader>n :cn<cr>
+nmap <leader>p :cp<cr>
 
 " Split tab vertically and horizontally
 map <leader>so :vs <c-r>=expand("%:p:h") . "/"<cr>
