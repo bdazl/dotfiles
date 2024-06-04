@@ -3,7 +3,23 @@
 # Author: Jacob Peyron <jacob.peyron@gmail.com>
 #
 
-if ! command -v loginctl &> /dev/null; then
+readonly remote=remote/ssh
+
+export SESSION=na
+export SESSION_TYPE=unknown
+export SEAT=na
+export TTY_=na
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    SESSION_TYPE=$remote
+else
+    case $(ps -o comm= -p "$PPID") in
+        sshd|*/sshd) SESSION_TYPE=$remote;;
+    esac
+fi
+
+
+if ! command -v loginctl &> /dev/null || [[ "$SESSION_TYPE" == "$remote" ]]; then
     return
 fi
 
