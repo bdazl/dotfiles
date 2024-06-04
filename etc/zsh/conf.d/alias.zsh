@@ -67,5 +67,14 @@ function config_aliases()
     alias now='date +%H:%M%t%Y-%m-%d%tV.%V'
 }
 
+#----  Aliases as functions (because aliases can't have params)
+
+# nargs: runs your specified param for each newline supplied to stdin
+# ex: pgrep slack | nargs renice -n 5 -p {}
+function nargs() {
+    tr '\n' '\0' | xargs -0 -I {} "${@[@]}"
+}
+
+# Init aliases
 config_aliases
 
