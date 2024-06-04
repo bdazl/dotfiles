@@ -7,11 +7,16 @@
 
 function echo-left-prompt()
 {
+    host_col='%F{cyan}'
+    if [[ "$SESSION_TYPE" == "remote/ssh" ]]; then
+        host_col='%F{red}'
+    fi
+
     l='%B%(?..%F{red}[%F{white}%?%F{red}] )' # status code: %?
     l+='%(!.%F{red}.%F{fg})' # Color selector for if super user
     l+='%b%n'                # username
     l+='%F{magenta}@'        # @
-    l+='%F{cyan}%m%u'        # hostname
+    l+="${host_col}%m%u"     # hostname
     l+='%F{yellow}# %F{fg}'  # #
 
     echo "$l"
