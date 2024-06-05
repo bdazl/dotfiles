@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pip install pillow ranger-fm
