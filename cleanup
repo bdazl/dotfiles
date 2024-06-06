@@ -1,6 +1,0 @@
-#!/bin/bash
-
-WDIR=$( realpath $( pwd ) )
-
-cd $WDIR/etc/zsh/conf.d/antigen
-git clean -fd

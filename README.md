@@ -29,7 +29,6 @@ bash-variables and these are substituted into all generated files (defined in [g
 
 ## Scripts
 * [bootstrap](bootstrap): ensures the `gen/active.env` file has [default values](gen/default.env).
-* [cleanup](cleanup): cleanup any residues (such as dirty git modules)
 * [generate](generate): populate the `gen/out/` directory, based on `gen/active.env` values substituting `etc/` files
 * [install](install): ensure git submodules are initialized and link all configuration files to `$HOME`
 * [update](update): update git submodules to latest commits
