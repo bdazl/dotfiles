@@ -1,6 +1,7 @@
 [submodule "dotbot"]
-	path = ext/dotbot
-	url = https://github.com/anishathalye/dotbot
+    path = ext/dotbot
+    url = https://github.com/anishathalye/dotbot
+    ignore = dirty
 [submodule "etc/xorg/plugins/urxvt-resize-font"]
-	path = etc/xorg/plugins/urxvt-resize-font
-	url = https://github.com/simmel/urxvt-resize-font
+    path = etc/xorg/plugins/urxvt-resize-font
+    url = https://github.com/simmel/urxvt-resize-font
