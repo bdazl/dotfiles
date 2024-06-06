@@ -1,0 +1,2 @@
+# Update submodules to latest commit
+git submodule foreach --recursive git pull --prune
