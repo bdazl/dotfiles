@@ -7,28 +7,24 @@ sudo pacman -Syu --needed \
     e2fsprogs \
     dosfstools \
     linux-headers \
+    iptables-nft \
     openssh \
-    samba \
     sudo \
+    vim \
+    tmux \
     ntp \
     zsh \
     git \
-    vi \
-    vim \
-    tmux \
     cscope \
     make \
-    cmake \
     less \
     tldr \
     lf \
     ranger \
     python \
+    python-pip \
+    python-pillow \
     go \
-    ghc \
-    cabal-install \
-    podman \
-    podman-compose \
     tree \
     fzf \
     eza \
