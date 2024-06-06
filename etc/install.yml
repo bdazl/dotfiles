@@ -51,7 +51,6 @@
     ~/.ideavimrc: etc/vim/vimrc
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
     ~/.sift.conf: etc/sift/sift.conf
-    ~/.ssh/config: etc/ssh/config
     ~/.tmux.conf: etc/tmux/tmux.conf
     ~/.urxvt/ext/resize-font: etc/xorg/plugins/urxvt-resize-font/resize-font
     ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
@@ -60,3 +59,6 @@
     ~/.zprofile: etc/zsh/zprofile
     ~/.zshenv: etc/zsh/zshenv
     ~/.zshrc: etc/zsh/zshrc
+
+shell:
+  - [~/.dotfiles/migrate, Migrating]
