@@ -60,5 +60,5 @@
     ~/.zshenv: etc/zsh/zshenv
     ~/.zshrc: etc/zsh/zshrc
 
-shell:
+- shell:
   - [~/.dotfiles/migrate, Migrating]
