@@ -41,6 +41,8 @@ function config_aliases()
     alias ta='tmux attach'
     alias td='tmux detach'
 
+    alias trn='tr -d "\n"'
+
     alias sss='ss -ltpn'
 
     alias h='hyprctl'
