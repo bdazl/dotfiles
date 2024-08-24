@@ -36,7 +36,8 @@ sudo pacman -Syu --needed \
     yq \
     perl-image-exiftool \
     sysstat \
-    iotop
+    iotop \
+    the_silver_searcher
 
 # yay
 EXT=$HOME/src/ext
