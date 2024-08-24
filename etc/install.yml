@@ -59,6 +59,3 @@
     ~/.zprofile: etc/zsh/zprofile
     ~/.zshenv: etc/zsh/zshenv
     ~/.zshrc: etc/zsh/zshrc
-
-- shell:
-  - [~/.dotfiles/migrate, Migrating]
