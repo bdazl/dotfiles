@@ -18,16 +18,14 @@ bindkey -M vicmd "ö" beginning-of-line
 bindkey -M vicmd "ä" end-of-line
 
 # Load fzf plugins
-. "$ZSH_DIR/fzf/completion.zsh"
-. "$ZSH_DIR/fzf/key-bindings.zsh"
-# bindkey -M vicmd '^T' fzf-file-widget
-# bindkey -M viins '^T' fzf-file-widget
-# bindkey -M vicmd '^R' fzf-history-widget
-# bindkey -M viins '^R' fzf-history-widget
+if command -v fzf &> /dev/null; then
+    . "$ZSH_DIR/fzf/completion.zsh"
+    . "$ZSH_DIR/fzf/key-bindings.zsh"
+fi
 
 # The rest of the code in this file is inspired from:
 # http://www.zshwiki.org/home/zle/bindkeys
-#
+
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
 typeset -g -A key
@@ -45,8 +43,8 @@ key[PageUp]="$terminfo[kpp]"
 key[PageDown]="$terminfo[knp]"
 
 # Setup keys accordingly
-#
-# I don't really like the insert key, so I skip that one here
+
+# I don't use the insert key, so I skip that one here
 #[[ -n "$key[Insert]"    ]] && bindkey -- "$key[Insert]"    overwrite-mode
 [[ -n "$key[Home]"      ]] && bindkey -- "$key[Home]"      beginning-of-line
 [[ -n "$key[End]"       ]] && bindkey -- "$key[End]"       end-of-line
