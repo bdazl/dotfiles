@@ -21,6 +21,8 @@ bindkey -M vicmd "ä" end-of-line
 if command -v fzf &> /dev/null; then
     . "$ZSH_DIR/fzf/completion.zsh"
     . "$ZSH_DIR/fzf/key-bindings.zsh"
+else
+    bindkey "^R" history-incremental-search-backward
 fi
 
 # The rest of the code in this file is inspired from:
