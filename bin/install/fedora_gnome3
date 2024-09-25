@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Gui related programs end up here
 sudo dnf install \
@@ -10,8 +10,8 @@ sudo dnf install \
 dconf write /org/gnome/desktop/input-sources/xkb-options "['caps:escape']"
 
 # set keyboard shortcuts
-dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-up "['<Super>k']"
-dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-down "['<Super>j']"
+dconf write /org/gnome/desktop/wm/keybindings/move-to-monitor-up "['<Super>k']"
+dconf write /org/gnome/desktop/wm/keybindings/move-to-monitor-down "['<Super>j']"
 dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-left "['<Shift><Super>h']"
 dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-right "['<Shift><Super>l']"
 dconf write /org/gnome/desktop/wm/keybindings/switch-windows "['<Alt>Tab']"
@@ -27,8 +27,6 @@ dconf write /org/gnome/desktop/sound/event-sounds "false"
 
 # Disable hot corner
 gsettings set org.gnome.desktop.interface enable-hot-corners false
-
-echo caps mapped to esc
 
 echo Please set keyboard shortcuts from
 echo Super+enter - Open terminal with tmux urxvt -
