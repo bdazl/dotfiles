@@ -64,6 +64,9 @@ function config_aliases()
     alias lt='eza -lar --sort=size --total-size --no-time --no-permissions --no-user'
     alias ltt='lt --tree --color=always | bat -p'
 
+    alias yas='yes ""'
+    alias ys='yay -Syu'
+
     alias signin='eval $(op signin)'
 
     alias today='date +%Y-%m-%d'
