@@ -22,6 +22,8 @@ function config_aliases()
         alias tl='tree -C | bat'
     fi
 
+    alias agh='ag --hidden'
+
     alias ga='git add'
     alias gb='git branch'
     alias gc='git commit --verbose'
