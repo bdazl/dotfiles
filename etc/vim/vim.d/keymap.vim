@@ -113,12 +113,12 @@ autocmd FileType python nmap <leader>gr :w <bar> exec '!python3' shellescape(@%,
 " Search and Replace from current line to last
 nmap <leader>sr :.,$s///gI<left><left><left><left>
 
-" In visual mode, pressing a results in yanking 
-" current selection and letting the user decide
-" what to replace that text with.
-" Replaces all occurrences in the file.
-vmap a y<esc>:<c-r>=GetSearchFromYanked("%s")<cr><left><left><left>
-vmap A y<esc>:<c-r>=GetSearchFromYanked(".,+2s")<cr><left><left><left>
+" In visual mode, pressing 'a' results in yanking
+" current selection and then make an interactive search and replace
+" in the whole file
+vmap a y<esc>:<c-r>=GetSearchFromYanked("%s", "gc")<cr><left><left><left>
+" 'A' searches and replaces all occurrences in the file
+vmap A y<esc>:<c-r>=GetSearchFromYanked("%s", "gi")<cr><left><left><left>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -135,8 +135,8 @@ function! EscapeYanked()
     return escape(@", "\\/.*'$^~[]:")
 endfunction
 
-function! GetSearchFromYanked(pre)
-    return a:pre . ":" . EscapeYanked() . "::gi"
+function! GetSearchFromYanked(pre, post)
+    return a:pre . ":" . EscapeYanked() . "::" . a:post
 endfunction
 
 function! CmdLine(str)
