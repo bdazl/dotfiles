@@ -37,7 +37,9 @@ sudo pacman -Syu --needed \
     perl-image-exiftool \
     sysstat \
     iotop \
-    the_silver_searcher
+    the_silver_searcher \
+    noto-fonts \
+    noto-fonts-emoji
 
 # yay
 EXT=$HOME/src/ext
@@ -50,6 +52,5 @@ if [[ ! -d "$YAY" ]]; then
 fi
 
 yay -Su --needed \
-    sift \
     1password-cli \
     steghide # steganography
