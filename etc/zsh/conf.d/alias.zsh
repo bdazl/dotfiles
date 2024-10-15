@@ -35,6 +35,7 @@ function config_aliases()
     # Commit message
     alias gl='git log --graph --date=short --pretty=format:"%C(yellow)%h %C(blue)%ad %C(green)%an %C(auto)%d %n %s"'
     alias gla='git log --oneline --all --graph --decorate'
+    alias gfc='git-files-changed'
 
     alias gdiff='diff --color -u'
 
@@ -81,6 +82,13 @@ function config_aliases()
 # ex: pgrep slack | nargs renice -n 5 -p {}
 function nargs() {
     tr '\n' '\0' | xargs -0 -I {} "${@[@]}"
+}
+
+function git-files-changed() {
+    local dev=${1:-$(git branch --show-current)}
+    local main=${2:-$(git branch -l main master --format '%(refname:short)')}
+
+    git diff --name-only $dev $(git merge-base $dev $main)
 }
 
 # Init aliases
