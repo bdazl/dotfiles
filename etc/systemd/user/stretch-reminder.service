@@ -1,0 +1,6 @@
+[Unit]
+Description=Stretch Reminder Notification
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/notify-send "Stretch Reminder" "Step away from the console!"

@@ -43,6 +43,7 @@
     ~/.config/redshift.conf: etc/redshift/redshift.conf
     ~/.config/task: etc/task
     ~/.config/sway: etc/sway
+    ~/.config/systemd: etc/systemd
     ~/.config/waybar: etc/waybar
     ~/.config/zsh: etc/zsh/conf.d
     ~/.ctags: etc/ctags/ctags
