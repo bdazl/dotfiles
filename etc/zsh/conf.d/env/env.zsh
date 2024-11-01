@@ -8,8 +8,8 @@ export LANG=en_US.UTF-8
 export EDITOR=vim
 export PAGER=less
 export SUDO_EDITOR=vim
-export HISTSIZE=1000000         # maximum history size in terminal's memory
-export SAVEHIST=1000000         # maximum size of history file
+export HISTSIZE=10000000  # maximum history size in terminal's memory
+export SAVEHIST=10000000  # maximum size of history file
 
 # freedesktop.org
 export XDG_CONFIG_HOME="$HOME/.config"
