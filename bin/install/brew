@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if ! command -v brew; then
+    echo "Install brew first"
+fi
+
+
+brew install \
+    bash zsh vim tmux fzf lf \
+    the_silver_searcher \
+    python 
