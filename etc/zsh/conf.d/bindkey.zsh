@@ -57,6 +57,12 @@ key[PageDown]="$terminfo[knp]"
 [[ -n "$key[Left]"      ]] && bindkey -- "$key[Left]"      backward-char
 [[ -n "$key[Right]"     ]] && bindkey -- "$key[Right]"     forward-char
 
+if [ "$(uname)" = "Darwin" ]; then
+    # I had problems with append at the end messing up
+    # ability to remove stuff
+    bindkey '^?' backward-delete-char
+fi
+
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
