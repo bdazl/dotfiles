@@ -12,6 +12,7 @@ sudo pacman -Syu --needed \
     sudo \
     vim \
     tmux \
+    sshfs \
     ntp \
     zsh \
     git \
