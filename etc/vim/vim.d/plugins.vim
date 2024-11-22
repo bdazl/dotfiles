@@ -22,9 +22,10 @@ else
     Plugin 'Valloric/YouCompleteMe' " completion
 endif
 
-Plugin 'simnalamburt/vim-mundo.git' " undo tree
-Plugin 'vim-airline/vim-airline'    " status bar
-Plugin 'vim-airline/vim-airline-themes'
+Plugin 'simnalamburt/vim-mundo.git'     " undo tree
+Plugin 'vim-airline/vim-airline'        " status bar
+Plugin 'vim-airline/vim-airline-themes' " status bar themes
+Plugin 'christoomey/vim-tmux-navigator' " awareness of tmux-panes
 
 Plugin 'fatih/vim-go'               " golang
 Plugin 'dense-analysis/ale'         " python linting
