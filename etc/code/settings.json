@@ -6,4 +6,5 @@
     "editor.renderWhitespace": "all",
     "editor.trimAutoWhitespace": true,
     "go.useLanguageServer": true,
+    "redhat.telemetry.enabled": false,
 }
