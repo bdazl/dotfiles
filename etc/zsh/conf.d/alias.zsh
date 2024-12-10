@@ -24,6 +24,8 @@ function config_aliases()
 
     alias agh='ag --hidden'
 
+    alias eop='eval $(op signin)'
+
     alias ga='git add'
     alias gb='git branch'
     alias gcb='git branch --show-current'
