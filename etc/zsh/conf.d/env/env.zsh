@@ -36,13 +36,41 @@ export DOWNLOADS="$HOME/Downloads"
 export DOTFILES="$HOME/.dotfiles"
 
 # Program defaults
+export CHEAT_USE_FZF=true
 export GITHUB_USER=bdazl
 export RANGER_LOAD_DEFAULT_RC=FALSE
-export FZF_DEFAULT_COMMAND="find ."
-# export FZF_PREVIEW_COMMAND="~/.dotfiles/scripts/preview.sh {}"
-export CHEAT_USE_FZF=true
-
 export GTK_THEME=Adapta
+
+_find_exclude() {
+    local exclude_dirs=(
+        ".git"
+        "__pycache__"
+        "node_modules"
+    )
+
+    exclude_pattern=""
+    for dir in "${exclude_dirs[@]}"; do
+        exclude_pattern+=" -name \"$dir\" -o"
+    done
+
+    # Remove the trailing '-o'
+    exclude_pattern="${exclude_pattern%-o}"
+    echo $exclude_pattern
+}
+
+export FZF_CTRL_T_COMMAND="find . -mindepth 1 \
+  -type d \( $(_find_exclude) \) -prune \
+  -o -type d -print \
+  -o -type f -print \
+  -o -type l -print \
+  2> /dev/null | cut -b3-"
+# export FZF_CTRL_T_OPTS="
+#   --height 50%
+#   --preview '~/.dotfiles/bin/preview.sh {}'
+#   --preview-window=right
+#   --preview-label=' Preview '
+#   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+export FZF_PREVIEW_COMMAND="~/.dotfiles/bin/preview.sh {}"
 
 # MacOS
 if [ "$(uname)" = "Darwin" ]; then
