@@ -22,7 +22,9 @@ function config_aliases()
         alias tl='tree -C | bat'
     fi
 
-    alias agh='ag --hidden'
+    alias agh='ag --hidden --ignore .git'
+
+    alias c='clear'
 
     alias eop='eval $(op signin)'
 
