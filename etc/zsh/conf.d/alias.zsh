@@ -61,14 +61,21 @@ function config_aliases()
     alias lb='lsblk -o name,size,fstype,uuid,model,mountpoints'
     alias lba='lsblk -o name,label,size,fstype,uuid,model,mountpoints'
 
-    alias lz='eza -1 --group-directories-first'
-    alias lzz='eza -loM --group-directories-first --git --time-style=+%Y-%m-%d'
-    alias lza='eza -liaoM --group-directories-first --git --time-style=+%Y-%m-%d'
-    alias lzl='eza -liaoMH --group-directories-first --git --time-style=long-iso'
+    local list='ls'
+    if command -v eza >/dev/null 2>&1; then
+        alias lz='eza -1 --group-directories-first'
+        alias lzz='eza -loM --group-directories-first --git --time-style=+%Y-%m-%d'
+        alias lza='eza -liaoM --group-directories-first --git --time-style=+%Y-%m-%d'
+        alias lzl='eza -liaoMH --group-directories-first --git --time-style=long-iso'
 
-    # Recurse directories for size of folders. This can take a while.
-    alias lt='eza -lar --sort=size --total-size --no-time --no-permissions --no-user'
-    alias ltt='lt --tree --color=always | bat -p'
+        # Recurse directories for size of folders. This can take a while.
+        alias lt='eza -lar --sort=size --total-size --no-time --no-permissions --no-user'
+        alias ltt='lt --tree --color=always | bat -p'
+        list='eza'
+    fi
+
+    alias ldi='find . -maxdepth 1 -type d | sed "s|^\./||"'
+    alias ldir="ldi | nargs $list --color=always -ld --time-style=+%Y-%m-%d {} ;"
 
     alias ys='yay -Syu --noconfirm'
 
