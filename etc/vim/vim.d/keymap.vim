@@ -28,6 +28,10 @@ nnoremap <leader>v <c-v>
 " Remove Q mapping
 nnoremap Q <nop>
 
+" Jumping big chunks always centers the cursor mid screen
+nnoremap <C-u> <C-u>zz
+nnoremap <C-d> <C-d>zz
+
 " Useful mappings for managing tabs and windows
 map <leader>q :quit<cr>
 map <leader>tn :tabnew<cr>
