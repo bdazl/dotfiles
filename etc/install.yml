@@ -33,6 +33,7 @@
     ~/.config/cheat/sheets/personal: etc/cheat/sheets
     ~/.config/Code/User/keybindings.json: etc/code/settings.json 
     ~/.config/Code/User/settings.json: etc/code/settings.json
+    ~/.config/ghostty: etc/ghostty
     ~/.config/hypr: etc/hypr
     ~/.config/i3status: etc/i3status
     ~/.config/kitty: etc/kitty
