@@ -46,6 +46,8 @@ function config_aliases()
 
     alias nvi='nvim -u ~/.vimrc'
 
+    alias rs='rsync --progress'
+
     alias ta='tmux attach'
     alias td='tmux detach'
 
