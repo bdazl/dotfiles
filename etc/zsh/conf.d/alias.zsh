@@ -68,8 +68,8 @@ function config_aliases()
     local list='ls'
     if command -v eza >/dev/null 2>&1; then
         alias lz='eza -1 --group-directories-first'
+        alias lza='eza -1a --group-directories-first'
         alias lzz='eza -loM --group-directories-first --git --time-style=+%Y-%m-%d'
-        alias lza='eza -liaoM --group-directories-first --git --time-style=+%Y-%m-%d'
         alias lzl='eza -liaoMH --group-directories-first --git --time-style=long-iso'
 
         # Recurse directories for size of folders. This can take a while.
