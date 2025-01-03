@@ -1,0 +1,6 @@
+background = 1d1f21
+foreground = ffffff
+fullscreen = true
+window-decoration = false
+command = tmux
+keybind = ctrl+shift+r=reload_config
