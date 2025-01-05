@@ -1,0 +1,64 @@
+#!/bin/bash
+set -e
+
+BIN="${BIN:-$HOME/bin}"
+
+error() {
+    echo "error: $1" > /dev/stderr
+    exit 1
+}
+
+ln-exe() {
+    file=$(realpath $1)
+    if [ ! -x "$file" ]; then
+        error "$file not executable"
+    fi
+
+    filename=$(basename "$file")
+
+    # Check if a link with the same name already exists
+    if [ -L "$BIN/$filename" ]; then
+        # Check if the link points to the same file
+        old_link=$(readlink "$BIN/$filename")
+        if [ "$old_link" = "$file" ]; then
+            echo "Soft link $filename is up-to-date"
+        else
+            # Remove the old link and create a new one
+            rm "$BIN/$filename"
+            ln -s "$file" "$BIN/$filename"
+            echo "Soft link $filename updated (old link: $old_link)"
+        fi
+    elif [ -e "$BIN/$filename" ]; then
+        # Non-link file with the same name exists  
+        echo "Warning: $BIN/$filename exists but is not a link, skipping"
+    else
+        # Create new soft link
+        ln -s "$file" "$BIN/$filename"
+        echo "Soft link $filename created"
+    fi
+}
+
+if [ $# -eq 0 ]; then
+    echo "Usage: ln-bin <path>" > /dev/stderr
+    error "path should point to executable or directory (of executables)"
+fi
+
+path=$1
+
+if [ ! -d "$BIN" ]; then
+    mkdir "$BIN"
+fi
+
+if [ -f "$path" ]; then
+    if [ ! -x "$file"]; then
+        error "File is not executable"
+    fi
+
+    ln-exe $path
+elif [ -d "$path"]; then
+    for file in "$path"/*; do
+        if [ -x "$file"]; then
+            ln-exe $file
+        fi
+    done
+fi
