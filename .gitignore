@@ -2,3 +2,5 @@ gen/out
 gen/active.env
 
 etc/assets
+
+__pycache__
