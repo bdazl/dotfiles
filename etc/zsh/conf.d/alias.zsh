@@ -44,6 +44,8 @@ function config_aliases()
 
     alias gdiff='diff --color -u'
 
+    alias hexit='hyprctl dispatch exit'
+
     alias nvi='nvim -u ~/.vimrc'
 
     alias rs='rsync --progress'
