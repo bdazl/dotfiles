@@ -1,0 +1,2 @@
+# Find m4a files by looking in sub-directories (find seem to cap search at a certain level on android)
+adb shell find /sdcard/ -type d -print | nargs adb shell find {} -name "*.m4a"
