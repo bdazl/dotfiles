@@ -1,0 +1,281 @@
+#!/usr/bin/env python3
+# Copyright (c) 2025 Jacob Peyron <jacob.peyron@gmail.com>
+# Use of this source code is governed by an ICU License that can be found in the LICENSE file.
+import os
+import re
+import sys
+import argparse
+import shutil
+import pprint as pp
+from dataclasses import dataclass
+from datetime import datetime
+from os.path import join, exists, abspath, dirname
+from typing import Optional
+
+
+@dataclass
+class Relocation:
+    src: str
+    dst: str
+
+
+def date_mv_cmd(args: argparse.Namespace) -> int:
+    chat("Collecting files...", args.verbose)
+    relocs = collect_date_relocations(
+            args.directory,
+            args.directory, # same as base_dir for top-level directory
+            args.dst_fmt,
+            args.recursive,
+            args.relative,
+            args.verbose)
+
+    collision_relocs = [r for r in relocs if exists(r.dst)]
+
+    if collision_relocs:
+        print("\nDestinations that already exists:")
+        print_relocs(collision_relocs)
+        print("The above destinations (on the right) already exists")
+        # TODO: Add the options to include these
+        user_said_yes = prompt_yn("Continue / skip these?", default_yes=False)
+        if not user_said_yes:
+            return 2
+
+    dst_free_relocs = [r for r in relocs if not exists(r.dst)]
+    movable_free_relocs = [
+        r for r in dst_free_relocs if abspath(r.src) != abspath(r.dst)
+    ]
+
+    # Collect relocations with the same destination
+    dst_to_srcs = map_dst_to_sources(movable_free_relocs)
+    unique_dsts = [srcs[0] for dst, srcs in dst_to_srcs.items() if len(srcs) == 1]
+    similar_dsts = [srcs for dst, srcs in dst_to_srcs.items() if len(srcs) > 1]
+
+    # Check if there are any destination collisions, and in that case let the
+    # user decide which options to move.
+    final_relocs = list(unique_dsts)
+    if similar_dsts:
+        addition, ok = prompt_relocation_sources(similar_dsts)
+        if not ok:
+            return 2
+        final_relocs += addition
+    
+    if not final_relocs:
+        print("No files to move")
+        return 0
+
+    print("\nRelocations:")
+    print_relocs(final_relocs)
+    if args.apply:
+        user_said_yes = prompt_yn("Move files?", default_yes=False)
+        if not user_said_yes:
+            return 2
+
+        move(final_relocs)
+        print("Done!")
+    else:
+        print("This is a dry-run. To move the files, re-run the command with --apply")
+
+    return 0
+
+
+def collect_date_relocations(
+        base_dir: str,
+        directory: str,
+        dst_fmt: str,
+        recursive: bool,
+        relative: bool,
+        verbose: bool,
+        ) -> list[Relocation]:
+    """Collect files that can be relocated, based on their filenames"""
+    files = []
+    dst_dir = directory if relative else base_dir
+    for entry in os.scandir(directory):
+        if entry.is_file():
+            date = find_date_substr(entry.name)
+            if date is None:
+                chat(f"Date not found, {entry.name} skipped", verbose)
+                continue
+
+            target_dir = os.path.join(dst_dir, date.strftime(dst_fmt))
+            target = join(target_dir, entry.name)
+
+            files.append(Relocation(src=entry.path, dst=target))
+        elif entry.is_dir() and recursive:
+            files += collect_date_relocations(
+                    base_dir,
+                    entry.path,
+                    dst_fmt,
+                    recursive,
+                    relative,
+                    verbose)
+        else:
+            chat(f"Skip {entry.name}", verbose)
+    return files
+
+
+def find_date_substr(date_str: str) -> Optional[datetime]:
+    date_pattern = r'\d{4}-\d{2}-\d{2}|\d{2}-\d{2}-\d{2}|\d{8}|\d{6}'
+    match = re.search(date_pattern, date_str)
+    if not match:
+        return None
+
+    date_substr = match.group()
+    match len(date_substr):
+        case 6:
+            date_format = '%y%m%d'
+        case 8:
+            if '-' in date_substr:
+                date_format = '%y-%m-%d'
+            else:
+                date_format = '%Y%m%d'
+        case 10:
+            date_format = '%Y-%m-%d'
+        case _:
+            return None
+
+    try:
+        return datetime.strptime(date_substr, date_format)
+    except ValueError:
+        pass
+
+    return None 
+
+
+def move(relocs: list[Relocation]) -> bool:
+    for r in relocs:
+        print(f"Moving {r.src} to {r.dst}")
+        directory = dirname(r.dst)
+
+        os.makedirs(directory, exist_ok=True)
+        shutil.move(r.src, r.dst)
+
+
+def map_dst_to_sources(
+        relocs: list[Relocation]
+        ) -> list[list[Relocation]]:
+
+    dst_map = dict()
+    for r in relocs:
+        if r.dst in dst_map:
+            dst_map[r.dst].append(r)
+        else:
+            dst_map[r.dst] = [r]
+    return dst_map
+
+
+def chat(s: str, verbose: bool) -> None:
+    if verbose:
+        print(s)
+
+def prompt_relocation_sources(
+        similar_dsts: list[list[Relocation]]
+        ) -> tuple[list[Relocation], bool]:
+    """Given buckets of similar destinations, let the user choose sources"""
+    relocs_out = []
+    for srcs in similar_dsts:
+        srcs_strs = [s.src for s in srcs]
+        src_opts = [(f"{n+1}", s) for n, s in enumerate(srcs_strs)]
+        opts = src_opts + [("s", "Skip"), ("a", "Skip all"), ("q", "Quit")]
+        choice = prompt_options("These would end up in the same destination, "
+                                "pick which one to move.", opts)
+        if not choice or choice == "q":
+            return None, False
+        elif choice == "s":
+            continue
+        elif choice == "a":
+            break
+
+        result = [r for opt, src in opts if opt == choice
+                  for r in srcs if r.src == src]
+        if len(result) != 1:
+            raise RuntimeError(f"Could not determine result from user decision: {result}")
+
+        relocs_out.append(result[0])
+
+    return relocs_out, True
+
+def prompt_yn(message: str, default_yes: bool = True) -> bool:
+    options = "Y/n" if default_yes else "y/N"
+    user_input = input(f"{message} ({options}): ").strip().lower()
+
+    if not user_input:
+        user_input = "y" if default_yes else "n"
+
+    return user_input == "y"
+
+
+def prompt_options(message: str, options: list[tuple[str, str]]) -> Optional[str]:
+    print(message)
+    print("Options:")
+    [print(f"  {opt}) {text}") for opt, text in options]
+    user_input = input("Choose option: ").strip().lower()
+
+    opts = {k.lower(): v for k, v in options}
+    if user_input not in opts:
+        return None
+
+    return user_input
+
+
+def print_relocs(relocs: list[Relocation]) -> None:
+    tabs = [[r.src, "->", r.dst] for r in relocs]
+    lines = matrix_space_align(tabs)
+    for l in lines:
+        print(f"{indent}{l}")
+
+
+# Align spaces between columns of strings in a matrix
+def matrix_space_align(matrix: list[list[str]]) -> list[str]:
+    col_widths = [
+        max(len(str(row[col])) for row in matrix if col < len(row))
+        for col in range(max(len(row) for row in matrix))
+    ]
+
+    space = " "
+    aligned_rows = []
+    for row in matrix:
+        aligned_row = space.join(
+            str(row[col]).ljust(col_widths[col])
+            if col < len(row) else space * col_widths[col]
+            for col in range(len(col_widths))
+        )
+        aligned_rows.append(aligned_row)
+
+    return aligned_rows
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="File system organization")
+
+    def add_v(p):
+        p.add_argument("-v", "--verbose", action="store_true",
+                       help="Verbose output")
+
+    subparsers = parser.add_subparsers(dest="command", required=True,
+                                       help="Sub-commands (choose one)")
+
+    date_mv = subparsers.add_parser("date-mv",
+                                    help="Organize files into folders, based on filename dates")
+    date_mv.add_argument("directory", help="Directory to organize")
+    date_mv.add_argument("-r", "--recursive", action="store_true",
+                         help="Recursively traverse subdirectories")
+    date_mv.add_argument("-R", "--relative", action="store_true",
+                         help="Destination is always relative to the file location (as opposed to the input directory)")
+    date_mv.add_argument("-f", "--dst-fmt", default="%Y/%Y-%m",
+                         help="Destination directory (date) format")
+    date_mv.add_argument("-a", "--apply", action="store_true", help="Actually perform the file operations")
+
+    add_v(date_mv)
+    date_mv.set_defaults(func=date_mv_cmd)
+
+
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
