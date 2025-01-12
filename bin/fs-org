@@ -6,47 +6,79 @@ import re
 import sys
 import argparse
 import shutil
-import pprint as pp
+import hashlib
+from enum import Enum
 from dataclasses import dataclass
 from datetime import datetime
 from os.path import join, exists, abspath, dirname
 from typing import Optional
+from collections.abc import Generator
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
 @dataclass
 class Relocation:
+    """ Represents a file move from the paths src to dst """
     src: str
     dst: str
 
 
+@dataclass
+class Range:
+    """ Inclusive range of integers """
+    min: int
+    max: int
+
+    def valid(self):
+        return self.min <= self.max
+
+    def shift(self, step: int) -> 'Range':
+        return Range(self.min + step, self.max + step)
+
+    def iter(self) -> Generator[int, None, None]:
+        if not self.valid():
+            raise RuntimeError("trying to iterate a non-valid range")
+
+        return range(self.min, self.max)
+
+    def __str__(self) -> str:
+        return f"[{self.min} - {self.max}]"
+
+
+class PromptAction(Enum):
+    OK = 1
+    QUIT = 2
+    SKIPALL = 3
+
+
 def date_mv_cmd(args: argparse.Namespace) -> int:
-    chat("Collecting files...", args.verbose)
-    relocs = collect_date_relocations(
+    chat("Collecting files...\n", args.verbose)
+    relocs = scan_date_relocations(
             args.directory,
-            args.directory, # same as base_dir for top-level directory
             args.dst_fmt,
             args.recursive,
             args.relative,
             args.verbose)
 
-    collision_relocs = [r for r in relocs if exists(r.dst)]
+    no_self_refs = [
+        r for r in relocs if abspath(r.src) != abspath(r.dst)
+    ]
+
+    collision_relocs = [r for r in no_self_refs if exists(r.dst)]
 
     if collision_relocs:
-        print("\nDestinations that already exists:")
+        print("Destinations that already exists:")
         print_relocs(collision_relocs)
         print("The above destinations (on the right) already exists")
         # TODO: Add the options to include these
-        user_said_yes = prompt_yn("Continue / skip these?", default_yes=False)
-        if not user_said_yes:
+        answer = prompt_yn("Continue / skip these?", default_yes=True)
+        if not answer:
             return 2
 
-    dst_free_relocs = [r for r in relocs if not exists(r.dst)]
-    movable_free_relocs = [
-        r for r in dst_free_relocs if abspath(r.src) != abspath(r.dst)
-    ]
+    dst_free_relocs = [r for r in no_self_refs if not exists(r.dst)]
 
     # Collect relocations with the same destination
-    dst_to_srcs = map_dst_to_sources(movable_free_relocs)
+    dst_to_srcs = map_dst_to_sources(dst_free_relocs)
     unique_dsts = [srcs[0] for dst, srcs in dst_to_srcs.items() if len(srcs) == 1]
     similar_dsts = [srcs for dst, srcs in dst_to_srcs.items() if len(srcs) > 1]
 
@@ -60,17 +92,17 @@ def date_mv_cmd(args: argparse.Namespace) -> int:
         final_relocs += addition
     
     if not final_relocs:
-        print("No files to move")
+        print("\nNo files to move")
         return 0
 
     print("\nRelocations:")
     print_relocs(final_relocs)
     if args.apply:
-        user_said_yes = prompt_yn("Move files?", default_yes=False)
-        if not user_said_yes:
+        answer = prompt_yn("Move files?")
+        if not answer:
             return 2
 
-        move(final_relocs)
+        move(final_relocs, args.verbose)
         print("Done!")
     else:
         print("This is a dry-run. To move the files, re-run the command with --apply")
@@ -78,8 +110,50 @@ def date_mv_cmd(args: argparse.Namespace) -> int:
     return 0
 
 
-def collect_date_relocations(
-        base_dir: str,
+def checksum_rm_cmd(args: argparse.Namespace):
+    chat("Collecting checksums...", args.verbose)
+    checksums = scan_checksums(args.directory, args.recursive, args.verbose)
+    if args.verbose:
+        print_checksums(checksums)
+
+    inv_sums = invert_dict_buckets(checksums)
+    dupe_groups = [paths for _, paths in inv_sums.items() if len(paths) > 1]
+
+    if args.verbose:
+        print("\nDuplicate files:")
+        print_buckets(
+            {sum.hex(): paths for sum, paths in inv_sums.items() if len(paths) > 1}
+        )
+
+    if len(dupe_groups) == 0:
+        print("All files unique, got nothing to do")
+        return 0
+
+    to_remove, ok = prompt_multi_combi_skip("These file have the same content, which one to remove?", dupe_groups)
+    if not ok:
+        return 2
+    elif len(to_remove) == 0:
+        print("\nNo files selected, got nothing to do")
+        return 0
+
+    print("\nTo be removed:")
+    for r in to_remove:
+        print(r)
+
+    if args.apply:
+        answer = prompt_yn("Remove files?")
+        if not answer:
+            return 2
+
+        remove(to_remove, args.verbose)
+        print("Done!")
+    else:
+        print("This is a dry-run. To remove the files, re-run the command with --apply")
+
+    return 0
+
+
+def scan_date_relocations(
         directory: str,
         dst_fmt: str,
         recursive: bool,
@@ -88,28 +162,21 @@ def collect_date_relocations(
         ) -> list[Relocation]:
     """Collect files that can be relocated, based on their filenames"""
     files = []
-    dst_dir = directory if relative else base_dir
-    for entry in os.scandir(directory):
-        if entry.is_file():
-            date = find_date_substr(entry.name)
-            if date is None:
-                chat(f"Date not found, {entry.name} skipped", verbose)
-                continue
+    for entry in scan_directory(directory, recursive, verbose):
+        if not entry.is_file():
+            raise RuntimeError("scan_directory returned directory")
 
-            target_dir = os.path.join(dst_dir, date.strftime(dst_fmt))
-            target = join(target_dir, entry.name)
+        date = find_date_substr(entry.name)
+        if date is None:
+            chat(f"Date not found, {entry.name} skipped", verbose)
+            continue
 
-            files.append(Relocation(src=entry.path, dst=target))
-        elif entry.is_dir() and recursive:
-            files += collect_date_relocations(
-                    base_dir,
-                    entry.path,
-                    dst_fmt,
-                    recursive,
-                    relative,
-                    verbose)
-        else:
-            chat(f"Skip {entry.name}", verbose)
+        dst_dir = dirname(entry.path) if relative else directory
+        target_dir = os.path.join(dst_dir, date.strftime(dst_fmt))
+        target = join(target_dir, entry.name)
+
+        files.append(Relocation(src=entry.path, dst=target))
+
     return files
 
 
@@ -141,31 +208,101 @@ def find_date_substr(date_str: str) -> Optional[datetime]:
     return None 
 
 
-def move(relocs: list[Relocation]) -> bool:
+def scan_checksums(
+        directory: str,
+		recursive: bool,
+        verbose: bool) -> dict[str, bytes]:
+    # Collect files to calculate digests from
+    files = [e.path for e in scan_directory(directory, recursive, verbose) if e.is_file()]
+
+    out = dict()
+    # Calculate checksums in parallell
+    with ProcessPoolExecutor() as executor:
+        future_to_path = {executor.submit(sha1, f): f for f in files}
+
+        # Collect results as they complete
+        for future in as_completed(future_to_path):
+            path = future_to_path[future]
+            try:
+                out[path] = future.result()
+            except Exception as e:
+                raise RuntimeError(f"Error processing {path}: {e}")
+
+    return out
+
+
+def sha1(path: str) -> bytes:
+    hasher = hashlib.sha1()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hasher.update(chunk)
+    return hasher.digest()
+
+
+def scan_directory(
+        root_dir: str,
+        recursive: bool,
+        verbose: bool) -> Generator[os.DirEntry, None, None]:
+    for entry in os.scandir(root_dir):
+        if entry.is_file():
+            if os.access(entry.path, os.R_OK):
+                yield entry
+            else:
+                chat(f"scan r perms failed: {entry.path}", verbose)
+        elif entry.is_dir() and recursive:
+            if (os.access(entry.path, os.R_OK) and
+                os.access(entry.path, os.X_OK)):
+                   yield from scan_directory(entry.path, recursive, verbose)
+            else:
+                chat(f"scan rx perms failed: {entry.path}", verbose)
+        else:
+            chat(f"scan skip: {entry.name}", verbose)
+
+
+def move(relocs: list[Relocation], verbose: bool) -> bool:
     for r in relocs:
-        print(f"Moving {r.src} to {r.dst}")
+        chat(f"Moving {r.src} to {r.dst}", verbose)
         directory = dirname(r.dst)
 
         os.makedirs(directory, exist_ok=True)
         shutil.move(r.src, r.dst)
 
 
+def remove(files: list[str], verbose: bool) -> bool:
+    for f in files:
+        chat(f"Removing {f}", verbose)
+        shutil.remove(f)
+
+
 def map_dst_to_sources(
         relocs: list[Relocation]
         ) -> list[list[Relocation]]:
-
-    dst_map = dict()
+    out = dict()
     for r in relocs:
-        if r.dst in dst_map:
-            dst_map[r.dst].append(r)
+        if r.dst in out:
+            out[r.dst].append(r)
         else:
-            dst_map[r.dst] = [r]
-    return dst_map
+            out[r.dst] = [r]
+    return out
+
+
+def invert_dict_buckets(
+        d: dict[str, any]
+        ) -> dict[any, list[str]]:
+
+    inverted_map = dict()
+    for k, v in d.items():
+        if v in inverted_map:
+            inverted_map[v].append(k)
+        else:
+            inverted_map[v] = [k]
+    return inverted_map
 
 
 def chat(s: str, verbose: bool) -> None:
     if verbose:
         print(s)
+
 
 def prompt_relocation_sources(
         similar_dsts: list[list[Relocation]]
@@ -178,6 +315,7 @@ def prompt_relocation_sources(
         opts = src_opts + [("s", "Skip"), ("a", "Skip all"), ("q", "Quit")]
         choice = prompt_options("These would end up in the same destination, "
                                 "pick which one to move.", opts)
+        choice = case_insensitive_validate(choice)
         if not choice or choice == "q":
             return None, False
         elif choice == "s":
@@ -194,7 +332,130 @@ def prompt_relocation_sources(
 
     return relocs_out, True
 
-def prompt_yn(message: str, default_yes: bool = True) -> bool:
+
+def prompt_multi_combi_skip(msg: str, similar: list[list[str]]) -> tuple[list[str], bool]:
+    """Multiple choices prompts, where user can pick none to many options"""
+    print()
+    out = []
+    for n, alts in enumerate(similar):
+        choices, action = multi_opt_parse_loop(msg, alts)
+        if action == PromptAction.QUIT:
+            return None, False
+        elif action == PromptAction.SKIPALL:
+            break
+        elif action == PromptAction.OK:
+            out += choices
+        print()
+
+    return out, True
+
+
+def multi_opt_parse_loop(
+        msg: str,
+        opts: list[str]) -> tuple[list[str], PromptAction]:
+    numbered_opts = [(f"{n+1}", s) for n, s in enumerate(opts)]
+
+    print_options(msg, numbered_opts)
+    print_align_indent([
+        ["n)", "None,", "a)", "All"],
+        ["q)", "Quit,", "s)", "Skip all"]], "  ")
+
+    max_val = len(opts)
+    answer = None
+    while not answer:
+        choice = input_choose_options(multi_select=True)
+        if not choice:
+            continue
+
+        multi = choice.split(",")
+        if len(multi) == 1:
+            # When only one command was given, it could be a special case
+            if choice == "q":
+                return None, PromptAction.QUIT
+            elif choice == "s":
+                return None, PromptAction.SKIPALL
+            elif choice == "n":
+                return [], PromptAction.OK
+            elif choice == "a":
+                return opts, PromptAction.OK
+
+        int_or_range, err = parse_multi_opt_answer(multi)
+        if err:
+            print(f"Parse error: {err}", file=sys.stderr)
+            continue
+
+        # 1, 2, 3 -> 0, 1, 2
+        bounds_ok = [valid_bounds(ior, 1, max_val) for ior in int_or_range]
+        if not all(bounds_ok):
+            print(f"One or multiple answers are out of bounds", file=sys.stderr)
+            continue
+
+        shifted = [shift_step(ior, -1) for ior in int_or_range]
+        return list({opts[s] for s in yield_ranges(shifted)}), PromptAction.OK
+
+
+def yield_ranges(many: list[int | Range]) -> Generator[int, None, None]:
+    for m in many:
+        if isinstance(m, int):
+            yield m
+        elif isinstance(m, Range):
+            yield from m.iter()
+        else:
+            raise RuntimeError(f"bad range: {str(m)}")
+
+
+def valid_bounds(p: int | Range, min: int, max: int) -> bool:
+    if isinstance(p, int):
+        return min <= p <= max
+    elif isinstance(p, Range):
+        return min <= p.min <= p.max <= max
+    return False
+
+
+def shift_step(p: int | Range, step: int) -> list[int | Range]: 
+    if isinstance(p, int):
+        return p + step
+    elif isinstance(p, Range):
+        return p.shift(step)
+    return None
+
+
+def parse_multi_opt_answer(
+        opts: list[str]) -> tuple[list[int | Range] | None, str | None]:
+    out = []
+    for o in opts:
+        ans, err = parse_int_or_range(o)
+        if err:
+            return None, err
+        out.append(ans)
+    return out, None
+
+
+def parse_int_or_range(in_s: str) -> tuple[int | Range | None, str | None]:
+    # Remove whitespaces
+    s = in_s.replace(" ", "")
+    try:
+        return int(s), None
+    except ValueError:
+        pass
+    rs = s.split("-")
+    if len(rs) != 2:
+        return None, f"Not int or range: {s}"
+
+    min, max = 0, 0
+    try:
+        min = int(rs[0])
+        max = int(rs[1])
+    except ValueError:
+        return None, f"Could not parse range: {s}"
+
+    range = Range(min, max)
+    if range.valid():
+        return range, None
+    return None, f"Invalid range: {s}"
+
+
+def prompt_yn(message: str, default_yes: bool = False) -> bool:
     options = "Y/n" if default_yes else "y/N"
     user_input = input(f"{message} ({options}): ").strip().lower()
 
@@ -205,21 +466,55 @@ def prompt_yn(message: str, default_yes: bool = True) -> bool:
 
 
 def prompt_options(message: str, options: list[tuple[str, str]]) -> Optional[str]:
+    print_options(message, options)
+    return input_choose_options()
+
+
+def print_options(message: str, options: list[tuple[str, str]]) -> None:
     print(message)
     print("Options:")
-    [print(f"  {opt}) {text}") for opt, text in options]
-    user_input = input("Choose option: ").strip().lower()
+    for opt, text in options:
+        print(f"  {opt}) {text}")
 
+
+def input_choose_options(multi_select: bool = False):
+    s = "s" if multi_select else ""
+    return input(f"Choose option{s}: ").strip().lower()
+
+
+def case_insensitive_validate(options: list[tuple[str, str]]) -> Optional[str]:
     opts = {k.lower(): v for k, v in options}
     if user_input not in opts:
         return None
 
     return user_input
 
+def print_checksums(checksums: dict[str, bytes]) -> None:
+    data = [[path, csum.hex()] for path, csum in checksums.items()]
+    sort = sorted(data, key=lambda x: x[1])
+
+    cols = [["Path", "Checksum"]]
+    cols += sort
+    lines = matrix_space_align(cols)
+    for l in lines:
+        print(l)
+
+
+def print_buckets(buckets: dict[str, any]) -> None:
+    for k in buckets.keys():
+        print(k)
+        vals = buckets[k]
+        for v in vals:
+            print(f"  {v}")
+
 
 def print_relocs(relocs: list[Relocation]) -> None:
     tabs = [[r.src, "->", r.dst] for r in relocs]
-    lines = matrix_space_align(tabs)
+    print_align_indent(tabs)
+
+
+def print_align_indent(matrix: list[list[str]], indent: str="") -> None:
+    lines = matrix_space_align(matrix)
     for l in lines:
         print(f"{indent}{l}")
 
@@ -227,18 +522,18 @@ def print_relocs(relocs: list[Relocation]) -> None:
 # Align spaces between columns of strings in a matrix
 def matrix_space_align(matrix: list[list[str]]) -> list[str]:
     col_widths = [
-        max(len(str(row[col])) for row in matrix if col < len(row))
-        for col in range(max(len(row) for row in matrix))
-    ]
+            max(len(str(row[col])) for row in matrix if col < len(row))
+            for col in range(max(len(row) for row in matrix))
+            ]
 
     space = " "
     aligned_rows = []
     for row in matrix:
         aligned_row = space.join(
-            str(row[col]).ljust(col_widths[col])
-            if col < len(row) else space * col_widths[col]
-            for col in range(len(col_widths))
-        )
+                str(row[col]).ljust(col_widths[col])
+                if col < len(row) else space * col_widths[col]
+                for col in range(len(col_widths))
+                )
         aligned_rows.append(aligned_row)
 
     return aligned_rows
@@ -250,24 +545,31 @@ def parse_args() -> argparse.Namespace:
     def add_v(p):
         p.add_argument("-v", "--verbose", action="store_true",
                        help="Verbose output")
+    def add_dir(p, msg):
+        p.add_argument("directory", help=msg)
+        p.add_argument("-r", "--recursive", action="store_true",
+                       help="Recursively traverse subdirectories")
 
     subparsers = parser.add_subparsers(dest="command", required=True,
                                        help="Sub-commands (choose one)")
 
     date_mv = subparsers.add_parser("date-mv",
                                     help="Organize files into folders, based on filename dates")
-    date_mv.add_argument("directory", help="Directory to organize")
-    date_mv.add_argument("-r", "--recursive", action="store_true",
-                         help="Recursively traverse subdirectories")
+    add_v(date_mv)
+    add_dir(date_mv, "Directory to organize")
     date_mv.add_argument("-R", "--relative", action="store_true",
                          help="Destination is always relative to the file location (as opposed to the input directory)")
     date_mv.add_argument("-f", "--dst-fmt", default="%Y/%Y-%m",
                          help="Destination directory (date) format")
     date_mv.add_argument("-a", "--apply", action="store_true", help="Actually perform the file operations")
-
-    add_v(date_mv)
     date_mv.set_defaults(func=date_mv_cmd)
 
+    sum_rm = subparsers.add_parser("sum-rm",
+                                   help="Remove duplicate files, based on checksum")
+    add_v(sum_rm)
+    add_dir(sum_rm, "Directory to prune")
+    sum_rm.add_argument("-a", "--apply", action="store_true", help="Actually perform the file operations")
+    sum_rm.set_defaults(func=checksum_rm_cmd)
 
     return parser.parse_args()
 
