@@ -15,6 +15,7 @@ from enum import Enum
 from os.path import abspath, dirname, exists, join
 from typing import Optional
 
+# pylint: disable=C0116,C0301
 
 @dataclass
 class Relocation:
@@ -48,6 +49,7 @@ class Range:
 
 
 class PromptAction(Enum):
+    """Action when prompting user for multiple options"""
     OK = 1
     QUIT = 2
     SKIPALL = 3
@@ -131,7 +133,7 @@ def checksum_rm_cmd(args: argparse.Namespace):
     )
     if not ok:
         return 2
-    elif len(to_remove) == 0:
+    if len(to_remove) == 0:
         print("\nNo files selected, got nothing to do")
         return 0
 
@@ -213,7 +215,7 @@ def scan_checksums(directory: str, recursive: bool, verbose: bool) -> dict[str, 
         e.path for e in scan_directory(directory, recursive, verbose) if e.is_file()
     ]
 
-    out = dict()
+    out = {}
     # Calculate checksums in parallell
     with ProcessPoolExecutor() as executor:
         future_to_path = {executor.submit(sha1, f): f for f in files}
@@ -224,7 +226,7 @@ def scan_checksums(directory: str, recursive: bool, verbose: bool) -> dict[str, 
             try:
                 out[path] = future.result()
             except Exception as e:
-                raise RuntimeError(f"Error processing {path}: {e}")
+                raise RuntimeError(f"Error processing {path}") from e
 
     return out
 
@@ -267,11 +269,11 @@ def move(relocs: list[Relocation], verbose: bool) -> bool:
 def remove(files: list[str], verbose: bool) -> bool:
     for f in files:
         chat(f"Removing {f}", verbose)
-        shutil.remove(f)
+        os.remove(f)
 
 
 def map_dst_to_sources(relocs: list[Relocation]) -> list[list[Relocation]]:
-    out = dict()
+    out = {}
     for r in relocs:
         if r.dst in out:
             out[r.dst].append(r)
@@ -281,8 +283,7 @@ def map_dst_to_sources(relocs: list[Relocation]) -> list[list[Relocation]]:
 
 
 def invert_dict_buckets(d: dict[str, any]) -> dict[any, list[str]]:
-
-    inverted_map = dict()
+    inverted_map = {}
     for k, v in d.items():
         if v in inverted_map:
             inverted_map[v].append(k)
@@ -306,15 +307,15 @@ def prompt_relocation_sources(
         src_opts = [(f"{n+1}", s) for n, s in enumerate(srcs_strs)]
         opts = src_opts + [("s", "Skip"), ("a", "Skip all"), ("q", "Quit")]
         choice = prompt_options(
-            "These would end up in the same destination, " "pick which one to move.",
+            "These would end up in the same destination, pick which one to move.",
             opts,
         )
-        choice = case_insensitive_validate(choice)
+        choice = case_insensitive_validate(choice, opts)
         if not choice or choice == "q":
             return None, False
-        elif choice == "s":
+        if choice == "s":
             continue
-        elif choice == "a":
+        if choice == "a":
             break
 
         result = [r for opt, src in opts if opt == choice for r in srcs if r.src == src]
@@ -334,13 +335,13 @@ def prompt_multi_combi_skip(
     """Multiple choices prompts, where user can pick none to many options"""
     print()
     out = []
-    for n, alts in enumerate(similar):
+    for alts in similar:
         choices, action = multi_opt_parse_loop(msg, alts)
         if action == PromptAction.QUIT:
             return None, False
-        elif action == PromptAction.SKIPALL:
+        if action == PromptAction.SKIPALL:
             break
-        elif action == PromptAction.OK:
+        if action == PromptAction.OK:
             out += choices
         print()
 
@@ -367,11 +368,11 @@ def multi_opt_parse_loop(msg: str, opts: list[str]) -> tuple[list[str], PromptAc
             # When only one command was given, it could be a special case
             if choice == "q":
                 return None, PromptAction.QUIT
-            elif choice == "s":
+            if choice == "s":
                 return None, PromptAction.SKIPALL
-            elif choice == "n":
+            if choice == "n":
                 return [], PromptAction.OK
-            elif choice == "a":
+            if choice == "a":
                 return opts, PromptAction.OK
 
         int_or_range, err = parse_multi_opt_answer(multi)
@@ -382,11 +383,14 @@ def multi_opt_parse_loop(msg: str, opts: list[str]) -> tuple[list[str], PromptAc
         # 1, 2, 3 -> 0, 1, 2
         bounds_ok = [valid_bounds(ior, 1, max_val) for ior in int_or_range]
         if not all(bounds_ok):
-            print(f"One or multiple answers are out of bounds", file=sys.stderr)
+            print("One or multiple answers are out of bounds", file=sys.stderr)
             continue
 
         shifted = [shift_step(ior, -1) for ior in int_or_range]
         return list({opts[s] for s in yield_ranges(shifted)}), PromptAction.OK
+
+    print("unknown error", file=sys.stderr)
+    return None, PromptAction.QUIT
 
 
 def yield_ranges(many: list[int | Range]) -> Generator[int, None, None]:
@@ -399,10 +403,10 @@ def yield_ranges(many: list[int | Range]) -> Generator[int, None, None]:
             raise RuntimeError(f"bad range: {str(m)}")
 
 
-def valid_bounds(p: int | Range, min: int, max: int) -> bool:
+def valid_bounds(p: int | Range, min: int, max: int) -> bool:  # pylint: disable=W0622
     if isinstance(p, int):
         return min <= p <= max
-    elif isinstance(p, Range):
+    if isinstance(p, Range):
         return min <= p.min <= p.max <= max
     return False
 
@@ -410,7 +414,7 @@ def valid_bounds(p: int | Range, min: int, max: int) -> bool:
 def shift_step(p: int | Range, step: int) -> list[int | Range]:
     if isinstance(p, int):
         return p + step
-    elif isinstance(p, Range):
+    if isinstance(p, Range):
         return p.shift(step)
     return None
 
@@ -438,14 +442,14 @@ def parse_int_or_range(in_s: str) -> tuple[int | Range | None, str | None]:
     if len(rs) != 2:
         return None, f"Not int or range: {s}"
 
-    min, max = 0, 0
+    min, max = 0, 0  # pylint: disable=W0622
     try:
         min = int(rs[0])
         max = int(rs[1])
     except ValueError:
         return None, f"Could not parse range: {s}"
 
-    range = Range(min, max)
+    range = Range(min, max)  # pylint: disable=W0622
     if range.valid():
         return range, None
     return None, f"Invalid range: {s}"
@@ -478,12 +482,12 @@ def input_choose_options(multi_select: bool = False):
     return input(f"Choose option{s}: ").strip().lower()
 
 
-def case_insensitive_validate(options: list[tuple[str, str]]) -> Optional[str]:
+def case_insensitive_validate(choice: str, options: list[tuple[str, str]]) -> Optional[str]:
     opts = {k.lower(): v for k, v in options}
-    if user_input not in opts:
+    if choice not in opts:
         return None
 
-    return user_input
+    return choice
 
 
 def print_checksums(checksums: dict[str, bytes]) -> None:
