@@ -10,23 +10,33 @@ sudo dnf install \
 dconf write /org/gnome/desktop/input-sources/xkb-options "['caps:escape']"
 
 # set keyboard shortcuts
-dconf write /org/gnome/desktop/wm/keybindings/move-to-monitor-up "['<Super>k']"
-dconf write /org/gnome/desktop/wm/keybindings/move-to-monitor-down "['<Super>j']"
-dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-left "['<Shift><Super>h']"
-dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-right "['<Shift><Super>l']"
-dconf write /org/gnome/desktop/wm/keybindings/switch-windows "['<Alt>Tab']"
-dconf write /org/gnome/desktop/wm/keybindings/switch-windows-backward "['<Shift><Alt>Tab']"
-dconf write /org/gnome/desktop/wm/keybindings/toggle-maximized "['<Super>f']"
-dconf write /org/gnome/desktop/wm/keybindings/toggle-fullscreen "['<Shift><Super>f']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-monitor-up "['<Super>k']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-monitor-down "['<Super>j']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Shift><Super>h']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Shift><Super>l']"
+gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings toggle-maximized "['<Super>f']"
+gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Shift><Super>f']"
+
+# These interfere with move-to-monitor-up and down
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up "[]"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "[]"
 
 # The following command shows what is currently configured
 # dconf dump /org/gnome/desktop/wm/keybindings
 
 # No alert sound
-dconf write /org/gnome/desktop/sound/event-sounds "false"
+gsettings set org.gnome.desktop.sound event-sounds "false"
 
 # Disable hot corner
 gsettings set org.gnome.desktop.interface enable-hot-corners false
+
+# Alt+Tab switches between individual windows, not per application group
+gsettings set org.gnome.shell.app-switcher window-switcher true
+
+# Alt+Tab switches between windows of this workspace, not all workspaces
+gsettings set org.gnome.shell.app-switcher current-workspace-only true
 
 echo Please set keyboard shortcuts from
 echo Super+enter - Open terminal with tmux urxvt -
