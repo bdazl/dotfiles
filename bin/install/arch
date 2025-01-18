@@ -7,7 +7,7 @@ sudo pacman -Syu --needed \
     e2fsprogs \
     dosfstools \
     linux-headers \
-    iptables-nft \
+    binutils \
     openssh \
     sudo \
     vim \
