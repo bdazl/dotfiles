@@ -1,0 +1,5 @@
+# Extract audio from 1m 30s -> 1m 40s (10s)
+ffmpeg -i input.mp4 -ss 00:01:30 -to 00:01:40 -vn -acodec copy output_audio.aac
+
+# Generate waveform image from audio in video
+ffmpeg -i input.mp4 -filter_complex "showwavespic=s=1920x1080" output.png
