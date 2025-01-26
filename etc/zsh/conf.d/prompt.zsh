@@ -1,12 +1,29 @@
 #!/bin/zsh
+# Copyright (c) 2025 Jacob Peyron <jacob.peyron@gmail.com>
+# Use of this source code is governed by an ICU License that can be found in the LICENSE file
 
-# My ZSH prompt
-#
-# Author: Jacob Peyron
-#
+# Define right and left prompt
 
-function echo-left-prompt()
-{
+config_prompt() {
+    autoload -Uz promptinit
+    autoload -Uz colors
+    promptinit
+
+    export PROMPT="$(left-prompt)"
+    export RPROMPT="$(right-prompt)"
+
+    # Pressing ESC in VI-mode triggers this
+    zle-keymap-select() {
+        PROMPT="$(left-prompt)"
+        RPROMPT="$(right-prompt)"
+
+        () { return $__prompt_status }
+        zle reset-prompt
+    }
+    zle -N zle-keymap-select
+}
+
+left-prompt() {
     host_col='%F{cyan}'
     if [[ "$SESSION_TYPE" == "remote/ssh" ]]; then
         host_col='%F{red}'
@@ -22,8 +39,7 @@ function echo-left-prompt()
     echo "$l"
 }
 
-function echo-right-prompt()
-{
+right-prompt() {
     r=""
 
     # If in vi-command mode
@@ -35,25 +51,7 @@ function echo-right-prompt()
     echo "$r"
 }
 
-function config_prompt()
-{
-    autoload -Uz promptinit
-    autoload -Uz colors
-    promptinit
-
-    export PROMPT="$(echo-left-prompt)"
-    export RPROMPT="$(echo-right-prompt)"
-
-    # Pressing ESC in VI-mode triggers this
-    zle-keymap-select() {
-        PROMPT="$(echo-left-prompt)"
-        RPROMPT="$(echo-right-prompt)"
-
-        () { return $__prompt_status }
-        zle reset-prompt
-    }
-    zle -N zle-keymap-select
-}
-
+# MAIN
 config_prompt
+
 
