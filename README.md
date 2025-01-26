@@ -2,18 +2,27 @@
 This is a collection of my personal dotfiles. I have machines running various flavors of Linux, MacOS and Win/WSL
 and I try to make all settings agnostic to the underlying OS. All configuration files are exist under [etc/](env).
 
-## Install
+## Prerequisites
+
+> [!NOTE]
+> The self-contained tool [Dotbot](https://github.com/anishathalye/dotbot) is used, linked as a submodule to this repo.
+
+### Linux and in general:
+* Shell of choice
+* [Python](https://www.python.org/)
+
+### Windows
+* [PowerShell](https://learn.microsoft.com/en-us/powershell/)
+
+### Mac
+* [Homebrew](https://brew.sh/)
+
+## Installation
 > [!WARNING]
 > Do not install a strangers dotfiles onto your computer.
 
-I want to install this anyway:
-1. First time run `./bootstrap && ./generate`
-2. Run `./install` to link all the static and generated content into your home folder
-   (This will not modify or erase any pre-existing files that might clash and you'll get warnings on collisions)
-
-The self-contained tool [Dotbot](https://github.com/anishathalye/dotbot) is used, linked as a submodule to this repo,
-to install my configurations as symlinks. This makes it easy to update any new configurations or install them to a
-new home folder.
+Main installation:
+* `[./install](install)` to symlink all the static and generated content into your home folder
 
 ## Scripts
 * [install](install): ensure git submodules are initialized and link all configuration files to `$HOME`
