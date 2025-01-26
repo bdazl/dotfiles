@@ -4,7 +4,7 @@ and I try to make all settings agnostic to the underlying OS. All configuration 
 
 ## Install
 > [!WARNING]
-> Do not install install a strangers dotfiles onto your computer.
+> Do not install a strangers dotfiles onto your computer.
 
 I want to install this anyway:
 1. First time run `./bootstrap && ./generate`
