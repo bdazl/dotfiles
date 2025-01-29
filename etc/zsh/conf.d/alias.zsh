@@ -26,6 +26,8 @@ function config_aliases()
 
     alias c='clear'
 
+    alias dff='df -h -x tmpfs -x devtmpfs -x efivarfs'
+
     alias eop='eval $(op signin)'
 
     alias ga='git add'
