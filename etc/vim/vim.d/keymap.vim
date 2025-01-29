@@ -17,6 +17,17 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" Use vim-tmux-navigator for insert and visual modes as well
+inoremap <silent> <C-h> <ESC>:<C-U>TmuxNavigateLeft<cr>
+inoremap <silent> <C-j> <ESC>:<C-U>TmuxNavigateDown<cr>
+inoremap <silent> <C-k> <ESC>:<C-U>TmuxNavigateUp<cr>
+inoremap <silent> <C-l> <ESC>:<C-U>TmuxNavigateRight<cr>
+
+vnoremap <silent> <C-h> <ESC>:<C-U>TmuxNavigateLeft<cr>
+vnoremap <silent> <C-j> <ESC>:<C-U>TmuxNavigateDown<cr>
+vnoremap <silent> <C-k> <ESC>:<C-U>TmuxNavigateUp<cr>
+vnoremap <silent> <C-l> <ESC>:<C-U>TmuxNavigateRight<cr>
+
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
