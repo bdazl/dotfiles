@@ -37,10 +37,8 @@ function config_aliases()
     alias gc='git commit --verbose'
     alias gd='git diff'
     alias gs='git status'
+    alias gsh='git show'
     alias gpp='git pull --prune'
-
-    # ShortSHA Date Author Decorate/Branch etc
-    # Commit message
     alias gl='git log --graph --date=short --pretty=format:"%C(yellow)%h %C(blue)%ad %C(green)%an %C(auto)%d %n %s"'
     alias gla='git log --oneline --all --graph --decorate'
 
