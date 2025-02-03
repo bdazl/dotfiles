@@ -1,0 +1,70 @@
+#!/bin/bash
+
+error() {
+    echo "error: $1" > /dev/stderr
+    exit 1
+}
+
+current=$(git branch --show-current)
+if [ -n "$current" ]; then
+    echo $current
+    exit 0
+fi
+
+declare -A candidates
+commit=$(git rev-parse HEAD)
+
+# Iterate over all local and remote branch refs to find candidates
+for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/ refs/remotes/); do
+    # TODO: find all remote references and check that this is not one of them
+    if [ "$branch" = "origin" ]; then
+        continue
+    fi
+
+    # If the branch is an ancestor to this commit, it is a candidate
+    if git merge-base --is-ancestor "$branch" "$commit"; then
+        distance=$(git rev-list --count "$branch..$commit")
+
+        # We list both local and remote references. This means that in some situations we
+        # may have a local master (for instance) and a remote master (origin/master).
+        # If the user setup a local branch that is unrelated to the origin branch with the
+        # same name, this will not work.
+        short_branch=$(echo $branch | sed 's:origin/::')
+        if [ -n "${candidates[$short_branch]}" ]; then
+            # Take the shortest distance of the "conflicting" branch
+            if [ $distance -lt ${candidates[$short_branch]} ]; then
+                candidates["$short_branch"]=$distance
+            fi
+        else
+            candidates["$short_branch"]=$distance
+        fi
+    fi
+done
+
+if [ ${#candidates[@]} -eq 0 ]; then
+    error "No candidates branches found"
+fi
+
+# We now find the closest branches (two branches may point to the same commit!)
+closest_branches=()
+min_distance=-1
+
+for branch in "${!candidates[@]}"; do
+    distance=${candidates[$branch]}
+
+    if [ $min_distance -eq -1 ] || [ $distance -lt $min_distance ]; then
+        # If we found a better match, reset closest_branches to this branch
+        closest_branches=("$branch")
+        min_distance=$distance
+    elif [ $distance -eq $min_distance ]; then
+        # Another branch with the same minimum distance, add it to the list
+        closest_branches+=("$branch")
+    fi
+done
+
+if [ ${#closest_branches[@]} -gt 0 ]; then
+    echo $closest_branches
+    exit 0
+fi
+
+error "No branch found"
