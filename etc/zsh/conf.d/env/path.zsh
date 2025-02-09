@@ -65,4 +65,15 @@ echo-path() {
     echo "${(j.:.)pth}"
 }
 
-export PATH="$(echo-path)"
+echo-pythonpath() {
+    pth=( \
+        $(remove-non-existing \
+            "$HOME/.etc/lib/python" \
+        ) \
+        ${PYTHONPATH} \
+    )
+    echo "${(j.:.)pth}"
+}
+
+export PATH=$(echo-path)
+export PYTHONPATH=$(echo-pythonpath)
