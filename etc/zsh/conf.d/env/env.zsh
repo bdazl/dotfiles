@@ -1,7 +1,6 @@
 #!/bin/zsh
-#
-# Author: Jacob Peyron <jacob@peyron.io>
-#
+# Copyright (c) 2025 Jacob Peyron <jacob.peyron@gmail.com>
+# Use of this source code is governed by an ICU License that can be found in the LICENSE file
 
 # Central exports
 export LANG=en_US.UTF-8

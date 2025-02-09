@@ -1,39 +1,17 @@
 #!/bin/zsh
-#
-# Author: Jacob Peyron <jacob.peyron@gmail.com>
-#
-
-readonly remote=remote/ssh
-
-export SESSION=na
-export SESSION_TYPE=unknown
-export SEAT=na
-export TTY_=na
+# Copyright (c) 2025 Jacob Peyron <jacob.peyron@gmail.com>
+# Use of this source code is governed by an ICU License that can be found in the LICENSE file
 
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-    SESSION_TYPE=$remote
+    REMOTE_SESSION=true
 else
     case $(ps -o comm= -p "$PPID") in
-        sshd|*/sshd) SESSION_TYPE=$remote;;
+        sshd|*/sshd) REMOTE_SESSION=true;;
+        *) REMOTE_SESSION=false;;
     esac
 fi
 
-
-if ! command -v loginctl &> /dev/null || [[ "$SESSION_TYPE" == "$remote" ]]; then
-    return
-fi
-
 # Session information
-export SESSION=$(loginctl | grep active |  grep $USER | awk '{print $1}')
-export SESSION_TYPE=$(loginctl show-session $SESSION | grep Type | tr '=' ' ' | awk '{print $2}')
-
-if [[ "$SESSION_TYPE" == "wayland" ]]; then
-    export WAYLAND="yes"
+if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+    export WAYLAND=true
 fi
-
-# export UID=$(loginctl | grep $USER | awk '{print $2}')
-# export USER=$(loginctl | grep $USER | awk '{print $3}')
-# export USER=$(loginctl | grep $USER | awk '{print $3}')
-export SEAT=$(loginctl | grep $USER | awk '{print $4}')
-# $TTY == /dev/pts/x (or somthn)
-export TTY_=$(loginctl | grep $USER | awk '{print $5}')

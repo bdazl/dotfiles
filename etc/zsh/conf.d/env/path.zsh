@@ -1,32 +1,29 @@
 #!/bin/zsh
+# Copyright (c) 2025 Jacob Peyron <jacob.peyron@gmail.com>
+# Use of this source code is governed by an ICU License that can be found in the LICENSE file
 #
-# Author: Jacob Peyron <jacob.peyron@gmail.com>
-#
-# Setup path for different system.
+# PATH manipulation
 
-function echo-if-dir-exists()
-{
-    if [[ -d "${1}" ]] then
+echo-if-dir-exists() {
+    if [ -d "${1}" ]; then
         echo ${1}
     fi
 }
 
-function remove-non-existing()
-{
+remove-non-existing() {
     local out=""
     for arg do
         e="$(echo-if-dir-exists $arg)"
 
         # if length of string is non-zero
-        if [[ -n "$e" ]] then
+        if [ -n "$e" ]; then
             out+="$e "
         fi
     done
     echo $out
 }
 
-function echo-path-base() 
-{
+echo-path-base() {
     # Setup path
     # set array-output to path typeset
 
@@ -47,9 +44,7 @@ function echo-path-base()
     echo "${(j.:.)pth}"
 }
 
-function echo-path-osx()
-{
-    # I crave GNU over BSD stuff
+echo-path-osx() {
     gnucore="/usr/local/opt/coreutils/libexec/gnubin"
     gnugrep="/usr/local/opt/grep/bin"
     gnufind="/usr/local/opt/findutils/bin"
@@ -58,8 +53,7 @@ function echo-path-osx()
     echo "${(j.:.)pth}"
 }
     
-function echo-my-path()
-{
+echo-path() {
     pth="$(echo-path-base)"
 
     u_name="$(uname)"
@@ -71,9 +65,4 @@ function echo-my-path()
     echo "${(j.:.)pth}"
 }
 
-function export-my-path()
-{
-    export PATH="$(echo-my-path)"
-}
-
-# export-my-path
+export PATH="$(echo-path)"

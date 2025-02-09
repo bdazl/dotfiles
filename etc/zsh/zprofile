@@ -1,9 +1,5 @@
 #!/bin/zsh
-#
-# Author: Jacob Peyron <jacob.peyron@gmail.com>
-#
-# Setup path for different systems
+# Copyright (c) 2025 Jacob Peyron <jacob.peyron@gmail.com>
+# Use of this source code is governed by an ICU License that can be found in the LICENSE file
 
-source $XDG_CONFIG_HOME/zsh/path.zsh
-
-export-my-path
+. $ENV_DIR/session.zsh

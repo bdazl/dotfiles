@@ -1,4 +1,6 @@
 #!/bin/zsh
+# Copyright (c) 2025 Jacob Peyron <jacob.peyron@gmail.com>
+# Use of this source code is governed by an ICU License that can be found in the LICENSE file
 
 # .zshrc
 # This is the main configuration of zsh
@@ -9,11 +11,7 @@
 readonly ZSH_DIR=$XDG_CONFIG_HOME/zsh
 
 . "$ZSH_DIR/init.zsh"
-. "$ZSH_DIR/path.zsh"
 . "$ZSH_DIR/alias.zsh"
 . "$ZSH_DIR/prompt.zsh"
 . "$ZSH_DIR/bindkey.zsh"
 . "$ZSH_DIR/completion.zsh"
-
-# When this is a problem, look into: {{ template "zshrc.extra" | nindent 0 }}
-# . "$ZSH_DIR/wsl.zsh"
