@@ -5,7 +5,7 @@
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-source ~/.dotfiles/etc/vim/vim.d/platform.vim
-source ~/.dotfiles/etc/vim/vim.d/plugins.vim
-source ~/.dotfiles/etc/vim/vim.d/general.vim
-source ~/.dotfiles/etc/vim/vim.d/keymap.vim
+source ~/.etc/etc/vim/vim.d/platform.vim
+source ~/.etc/etc/vim/vim.d/plugins.vim
+source ~/.etc/etc/vim/vim.d/general.vim
+source ~/.etc/etc/vim/vim.d/keymap.vim

@@ -32,7 +32,7 @@ export BROWSER=firefox
 # Paths
 export HISTFILE="$XDG_DATA_HOME/zsh/zhistory"
 export DOWNLOADS="$HOME/Downloads"
-export DOTFILES="$HOME/.dotfiles"
+export DOTFILES="$HOME/.etc"
 
 # Program defaults
 export CHEAT_USE_FZF=true
@@ -65,11 +65,11 @@ export FZF_CTRL_T_COMMAND="find . -mindepth 1 \
   2> /dev/null | cut -b3-"
 # export FZF_CTRL_T_OPTS="
 #   --height 50%
-#   --preview '~/.dotfiles/bin/preview.sh {}'
+#   --preview '~/.etc/bin/preview.sh {}'
 #   --preview-window=right
 #   --preview-label=' Preview '
 #   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
-export FZF_PREVIEW_COMMAND="~/.dotfiles/bin/preview.sh {}"
+export FZF_PREVIEW_COMMAND="~/.etc/bin/preview.sh {}"
 
 # MacOS
 if [ "$(uname)" = "Darwin" ]; then
