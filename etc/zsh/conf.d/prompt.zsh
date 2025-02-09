@@ -4,7 +4,7 @@
 
 # Define right and left prompt
 
-config_prompt() {
+config-prompt() {
     autoload -Uz promptinit
     autoload -Uz colors
     promptinit
@@ -25,7 +25,7 @@ config_prompt() {
 
 left-prompt() {
     host_col='%F{cyan}'
-    if [[ "$SESSION_TYPE" == "remote/ssh" ]]; then
+    if $REMOTE_SESSION; then
         host_col='%F{red}'
     fi
 
@@ -51,7 +51,4 @@ right-prompt() {
     echo "$r"
 }
 
-# MAIN
-config_prompt
-
-
+config-prompt

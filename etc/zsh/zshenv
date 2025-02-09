@@ -1,19 +1,8 @@
 #!/bin/zsh
+# Copyright (c) 2025 Jacob Peyron <jacob.peyron@gmail.com>
+# Use of this source code is governed by an ICU License that can be found in the LICENSE file
 
-function setup_environment()
-{
-    zsh_dir=~/.config/zsh/env
+readonly ENV_DIR=~/.config/zsh/env
 
-    if [[ -d "$zsh_dir" ]] then
-        scripts=($zsh_dir/*.zsh)
-        foreach s in $scripts
-            test -r "$s" && . "$s";
-        end
-    else
-        echo Found no zsh environment directory: $zsh_dir
-        echo Functionality of this shell is reduced.
-    fi
-
-}
-
-setup_environment
+. $ENV_DIR/env.zsh
+. $ENV_DIR/path.zsh
