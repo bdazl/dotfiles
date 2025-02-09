@@ -68,7 +68,7 @@ echo-path() {
 echo-pythonpath() {
     pth=( \
         $(remove-non-existing \
-            "$HOME/.etc/lib/python" \
+            "$HOME/.etc/lib/py" \
         ) \
         ${PYTHONPATH} \
     )
