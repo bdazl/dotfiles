@@ -77,7 +77,11 @@ function config_aliases()
         # Recurse directories for size of folders. This can take a while.
         alias lt='eza -lar --sort=size --total-size --no-time --no-permissions --no-user'
         alias ltt='lt --tree --color=always | bat -p'
-        list='eza'
+        alias list='eza'
+
+        alias lbin='lz ~/bin'
+    else
+        alias lbin='la ~/bin'
     fi
 
     alias ldi='find . -maxdepth 1 -type d | sed "s|^\./||"'
