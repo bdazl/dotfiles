@@ -11,9 +11,15 @@ export HISTSIZE=10000000  # maximum history size in terminal's memory
 export SAVEHIST=10000000  # maximum size of history file
 
 # freedesktop.org
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_STATE_HOME=$HOME/.local/state
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CACHE_HOME=$HOME/.cache
+export XDG_DATA_DIRS=/usr/local/share/:/usr/share/
+export XDG_CONFIG_DIRS=/etc/xdg
+if [ -z "$XDG_RUNTIME_DIR" ]; then
+    echo "Warning: \$XDG_RUNTIME_DIR not set"
+fi
 
 # Keyboard environment (layout, repeat rate, etc...)
 export XKB_DEFAULT_LAYOUT=se
@@ -32,7 +38,8 @@ export BROWSER=firefox
 # Paths
 export HISTFILE="$XDG_DATA_HOME/zsh/zhistory"
 export DOWNLOADS="$HOME/Downloads"
-export DOTFILES="$HOME/.etc"
+export ETC="$HOME/.etc"
+export DOTFILES="$ETC"
 
 # Program defaults
 export CHEAT_USE_FZF=true
