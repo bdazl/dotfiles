@@ -91,9 +91,13 @@ function config_aliases()
 
     alias signin='eval $(op signin)'
 
-    alias today='date +%Y-%m-%d'
-    alias vecka='date +%V'
-    alias now='date +%H:%M%t%Y-%m-%d%tV.%V'
+    alias today='date +"%Y-%m-%d  (%d %b)"'
+    alias now='date -Iseconds'
+
+    alias kl='date +%H:%M'
+    alias idag='date +"%d %b %Y"'
+    alias vecka='date +v.%V'
+    alias nu='kl; today; vecka'
 }
 
 #----  Aliases as functions (because aliases can't have params)
