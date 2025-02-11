@@ -1,9 +1,8 @@
 #!/bin/zsh
-
+# Copyright (c) 2018-2025 Jacob Peyron <jacob.peyron@gmail.com>
+# Use of this source code is governed by an ICU License that can be found in the LICENSE file
+#
 # Alias substitution for zsh
-#
-# Author: Jacob Peyron
-#
 
 function config_aliases() 
 {
