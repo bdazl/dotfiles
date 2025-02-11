@@ -1,9 +1,8 @@
 #!/bin/zsh
+# Copyright (c) 2018-2025 Jacob Peyron <jacob.peyron@gmail.com>
+# Use of this source code is governed by an ICU License that can be found in the LICENSE file
 
 # bindkey / zle configuration for zsh
-#
-# Author: Jacob Peyron
-#
 
 # This variable is the first thing defined in .zshrc and since this file
 # is sourced; we do not need to re-define it. It is left here as a reference
@@ -16,6 +15,9 @@ bindkey -v  # VIM-mode
 
 bindkey -M vicmd "ö" beginning-of-line
 bindkey -M vicmd "ä" end-of-line
+
+# Since we use
+bindkey '^n' clear-screen
 
 # Load fzf plugins
 if command -v fzf &> /dev/null; then
