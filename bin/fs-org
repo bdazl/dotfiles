@@ -17,6 +17,7 @@ from typing import Optional
 
 # pylint: disable=C0116,C0301
 
+
 @dataclass
 class Relocation:
     """Represents a file move from the paths src to dst"""
@@ -50,6 +51,7 @@ class Range:
 
 class PromptAction(Enum):
     """Action when prompting user for multiple options"""
+
     OK = 1
     QUIT = 2
     SKIPALL = 3
@@ -240,9 +242,9 @@ def sha1(path: str) -> bytes:
 
 
 def scan_directory(
-        root_dir: str, recursive: bool, verbose: bool
-        ) -> Generator[os.DirEntry, None, None]:
-    """"Scan a directory for files (not links), with good permissions"""
+    root_dir: str, recursive: bool, verbose: bool
+) -> Generator[os.DirEntry, None, None]:
+    """ "Scan a directory for files (not links), with good permissions"""
     for entry in os.scandir(root_dir):
         if entry.is_symlink():
             chat(f"ignoring symlink: {entry.path}", verbose)
@@ -303,8 +305,8 @@ def chat(s: str, verbose: bool) -> None:
 
 
 def prompt_relocation_sources(
-        similar_dsts: list[list[Relocation]],
-        ) -> tuple[list[Relocation], bool]:
+    similar_dsts: list[list[Relocation]],
+) -> tuple[list[Relocation], bool]:
     """Given buckets of similar destinations, let the user choose sources"""
     relocs_out = []
     for srcs in similar_dsts:
@@ -312,9 +314,9 @@ def prompt_relocation_sources(
         src_opts = [(f"{n+1}", s) for n, s in enumerate(srcs_strs)]
         opts = src_opts + [("s", "Skip"), ("a", "Skip all"), ("q", "Quit")]
         choice = prompt_options(
-                "These would end up in the same destination, pick which one to move.",
-                opts,
-                )
+            "These would end up in the same destination, pick which one to move.",
+            opts,
+        )
         choice = case_insensitive_validate(choice, opts)
         if not choice or choice == "q":
             return None, False
@@ -326,8 +328,8 @@ def prompt_relocation_sources(
         result = [r for opt, src in opts if opt == choice for r in srcs if r.src == src]
         if len(result) != 1:
             raise RuntimeError(
-                    f"Could not determine result from user decision: {result}"
-                    )
+                f"Could not determine result from user decision: {result}"
+            )
 
         relocs_out.append(result[0])
 
@@ -335,8 +337,8 @@ def prompt_relocation_sources(
 
 
 def prompt_multi_combi_skip(
-        msg: str, similar: list[list[str]]
-        ) -> tuple[list[str], bool]:
+    msg: str, similar: list[list[str]]
+) -> tuple[list[str], bool]:
     """Multiple choices prompts, where user can pick none to many options"""
     print()
     out = []
@@ -358,8 +360,8 @@ def multi_opt_parse_loop(msg: str, opts: list[str]) -> tuple[list[str], PromptAc
 
     print_options(msg, numbered_opts)
     print_align_indent(
-            [["n)", "None,", "a)", "All"], ["q)", "Quit,", "s)", "Skip all"]], "  "
-            )
+        [["n)", "None,", "a)", "All"], ["q)", "Quit,", "s)", "Skip all"]], "  "
+    )
 
     max_val = len(opts)
     answer = None
@@ -425,8 +427,8 @@ def shift_step(p: int | Range, step: int) -> list[int | Range]:
 
 
 def parse_multi_opt_answer(
-        opts: list[str],
-        ) -> tuple[list[int | Range] | None, str | None]:
+    opts: list[str],
+) -> tuple[list[int | Range] | None, str | None]:
     out = []
     for o in opts:
         ans, err = parse_int_or_range(o)
@@ -487,7 +489,9 @@ def input_choose_options(multi_select: bool = False):
     return input(f"Choose option{s}: ").strip().lower()
 
 
-def case_insensitive_validate(choice: str, options: list[tuple[str, str]]) -> Optional[str]:
+def case_insensitive_validate(
+    choice: str, options: list[tuple[str, str]]
+) -> Optional[str]:
     opts = {k.lower(): v for k, v in options}
     if choice not in opts:
         return None
