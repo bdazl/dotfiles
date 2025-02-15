@@ -98,15 +98,15 @@ def date_mv_cmd(args: argparse.Namespace) -> int:
 
     print("\nRelocations:")
     print_relocs(final_relocs)
-    if args.apply:
+    if args.dry_run:
+        print("This is a dry-run. To move the files, re-run the command with --apply")
+    else:
         answer = prompt_yn("Move files?")
         if not answer:
             return 2
 
         move(final_relocs, args.verbose)
         print("Done!")
-    else:
-        print("This is a dry-run. To move the files, re-run the command with --apply")
 
     return 0
 
@@ -143,15 +143,15 @@ def checksum_rm_cmd(args: argparse.Namespace):
     for r in to_remove:
         print(r)
 
-    if args.apply:
+    if args.dry_run:
+        print("This is a dry-run. To remove the files, re-run the command with --apply")
+    else:
         answer = prompt_yn("Remove files?")
         if not answer:
             return 2
 
         remove(to_remove, args.verbose)
         print("Done!")
-    else:
-        print("This is a dry-run. To remove the files, re-run the command with --apply")
 
     return 0
 
@@ -589,10 +589,10 @@ def parse_args() -> argparse.Namespace:
         help="Destination directory (date) format",
     )
     date_mv.add_argument(
-        "-a",
-        "--apply",
+        "-u",
+        "--dry-run",
         action="store_true",
-        help="Actually perform the file operations",
+        help="Don't do anything",
     )
     date_mv.set_defaults(func=date_mv_cmd)
 
@@ -602,10 +602,10 @@ def parse_args() -> argparse.Namespace:
     add_v(sum_rm)
     add_dir(sum_rm, "Directory to prune")
     sum_rm.add_argument(
-        "-a",
-        "--apply",
+        "-u",
+        "--dry-run",
         action="store_true",
-        help="Actually perform the file operations",
+        help="Don't do anything",
     )
     sum_rm.set_defaults(func=checksum_rm_cmd)
 
