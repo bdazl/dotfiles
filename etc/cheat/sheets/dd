@@ -1,0 +1,7 @@
+# Create a 2MB file, called mb, with only zero-bytes
+dd if=/dev/zero of=mb bs=2M count=1
+
+# Writing a live-usb
+#   conv=fsync -> ensure all data is written before the process completes
+#   status=progress -> show progress
+sudo dd if=/path/to.iso of=/dev/sdX bs=4M conv=fsync status=progress
