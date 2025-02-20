@@ -1,0 +1,16 @@
+#!/bin/bash
+
+TIMER_NAME="stretch-reminder.timer"
+
+# Check the status of the timer
+STATUS=$(systemctl --user is-active $TIMER_NAME)
+
+if [ "$STATUS" == "active" ]; then
+    echo "Stopping the timer..."
+    systemctl --user stop $TIMER_NAME
+    echo "Timer stopped."
+else
+    echo "Starting the timer..."
+    systemctl --user start $TIMER_NAME
+    echo "Timer started."
+fi
