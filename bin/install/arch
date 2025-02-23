@@ -5,6 +5,7 @@ sudo pacman -Syu --needed \
     man-db \
     dhcpcd \
     e2fsprogs \
+    ntfsprogs \
     dosfstools \
     linux-headers \
     binutils \
