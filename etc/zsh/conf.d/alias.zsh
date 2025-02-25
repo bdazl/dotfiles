@@ -47,6 +47,9 @@ function config_aliases()
 
     alias nvi='nvim -u ~/.vimrc'
 
+    alias pst='ps -e -o pid,user,cmd --forest'
+    alias psu='ps-user'
+
     alias rs='rsync --progress'
 
     alias ta='tmux attach'
@@ -103,15 +106,19 @@ function config_aliases()
 
 # nargs: runs your specified param for each newline supplied to stdin
 # ex: pgrep slack | nargs renice -n 5 -p {}
-function nargs() {
+nargs() {
     tr '\n' '\0' | xargs -0 -I {} "${@[@]}"
 }
 
-function git-files-changed() {
+git-files-changed() {
     local dev=${1:-$(git branch --show-current)}
     local main=${2:-$(git branch -l main master --format '%(refname:short)')}
 
     git diff --name-only $dev $(git merge-base $dev $main)
+}
+
+ps-user() {
+    ps -u $USER -U $USER -o pid,cmd --forest
 }
 
 # Init aliases
