@@ -13,8 +13,8 @@ set ifs "\n"
 # set scrolloff 50
 
 set preview true
-set previewer "~/.etc/bin/preview.sh"
-set cleaner "~/.etc/bin/preview-clean.sh"
+set previewer "~/.etc/etc/lf/preview.sh"
+set cleaner "~/.etc/etc/lf/preview-clean.sh"
 
 # Use the `dim` attribute instead of underline for the cursor in the preview pane
 set cursorpreviewfmt "\033[7;2m"
