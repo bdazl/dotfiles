@@ -32,6 +32,29 @@ map gs cd ~/src
 map gt cd ~/tmp
 map gp cd -
 
+cmd store-unselect ${{
+    echo "$fx" > "$XDG_DATA_HOME/lf/marked_files"
+    lf -remote "send $id unselect"
+}}
+
+cmd restore-select ${{
+    marked_files="$XDG_DATA_HOME/lf/marked_files"
+    if [ -f "$marked_files" ]; then
+        cat "$marked_files" \
+          | tr '\n' '\0'    \
+          | xargs -0 -I {} lf -remote "send $id toggle '{}'"
+        rm -f "$marked_files"
+    fi
+}}
+
+map u :store-unselect
+map U :restore-select
+
+# Yank selected filenames
+map y ${{
+    echo -n $fx | wl-copy
+}}
+
 # execute current file (must be executable)
 map x $$f
 map X !$f
