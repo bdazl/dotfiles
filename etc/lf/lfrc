@@ -16,6 +16,10 @@ set preview true
 set previewer "~/.etc/etc/lf/preview.sh"
 set cleaner "~/.etc/etc/lf/preview-clean.sh"
 
+# Disable parent pane and set size of first pane
+set hidden
+set ratios 1:2
+
 # Use the `dim` attribute instead of underline for the cursor in the preview pane
 set cursorpreviewfmt "\033[7;2m"
 
@@ -32,6 +36,15 @@ map gs cd ~/src
 map gt cd ~/tmp
 map gp cd -
 
+# Yank selected filenames
+map y ${{
+    echo -n $fx | wl-copy
+}}
+
+# Toggle show .hidden files and folders, and init lf by not showing .hidden
+set nohidden
+map H set hidden!
+
 cmd store-unselect ${{
     echo "$fx" > "$XDG_DATA_HOME/lf/marked_files"
     lf -remote "send $id unselect"
@@ -47,13 +60,10 @@ cmd restore-select ${{
     fi
 }}
 
+# u unselects all marked files, but first it stores the selection to a file
+# U restores any prior selection, from that file
 map u :store-unselect
 map U :restore-select
-
-# Yank selected filenames
-map y ${{
-    echo -n $fx | wl-copy
-}}
 
 # execute current file (must be executable)
 map x $$f
