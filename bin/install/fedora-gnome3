@@ -1,15 +1,61 @@
 #!/bin/bash -x
 
-# Gui related programs end up here
-sudo dnf install \
-    xsel \
-    rxvt-unicode \
-    gnome-tweaks
+add_or_update_keybinding() {
+    name="$1" cmd="$2" binding="$3" custom_id="$4"
+
+    # Define the custom keybinding path
+    path="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/$custom_id/"
+
+    # Check if the custom path is already registered
+    existing_bindings=$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings)
+    if [[ "$existing_bindings" != *"$path"* ]]; then
+        # Add the custom path to the list of keybindings
+        if [[ "$existing_bindings" == "@as []" ]]; then
+            # If no bindings exist, initialize the list
+            gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['$path']"
+        else
+            # Append the new binding to the existing list
+            local updated_bindings=$(echo "$existing_bindings" | sed "s:]$:, '$path']:")
+            gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "$updated_bindings"
+        fi
+    fi
+
+    # Set or update the custom keybinding properties
+    gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:"$path" name "$name"
+    gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:"$path" command "$cmd"
+    gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:"$path" binding "$binding"
+}
+
+initialize_custom_keybindings() {
+    existing_bindings=$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings)
+    if [[ "$existing_bindings" == "@as []" ]]; then
+        gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "[]"
+    fi
+}
+
+setup-ext-repos() {
+    if ! dnf copr list | grep -q pgdev/ghostty; then
+        sudo dnf copr enable pgdev/ghostty
+    fi
+}
+
+install-deps() {
+    sudo dnf install \
+        xsel \
+        ghostty \
+        gnome-tweaks
+}
+
+# dnf
+setup-ext-repos
+install-deps
+
+initialize_custom_keybindings
 
 # set caps -> esc
-dconf write /org/gnome/desktop/input-sources/xkb-options "['caps:escape']"
+gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
 
-# set keyboard shortcuts
+# Set keyboard shortcuts
 gsettings set org.gnome.desktop.wm.keybindings move-to-monitor-up "['<Super>k']"
 gsettings set org.gnome.desktop.wm.keybindings move-to-monitor-down "['<Super>j']"
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Shift><Super>h']"
@@ -20,11 +66,13 @@ gsettings set org.gnome.desktop.wm.keybindings toggle-maximized "['<Super>f']"
 gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Shift><Super>f']"
 
 # These interfere with move-to-monitor-up and down
+# Hint: do the following to check for intereference:
+#   gsettings list-recursively | grep '<Super>o'
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up "[]"
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "[]"
 
-# The following command shows what is currently configured
-# dconf dump /org/gnome/desktop/wm/keybindings
+# <Super>o interference
+gsettings set org.gnome.settings-daemon.plugins.media-keys rotate-video-lock-static "[]"
 
 # No alert sound
 gsettings set org.gnome.desktop.sound event-sounds "false"
@@ -38,6 +86,8 @@ gsettings set org.gnome.shell.app-switcher window-switcher true
 # Alt+Tab switches between windows of this workspace, not all workspaces
 gsettings set org.gnome.shell.app-switcher current-workspace-only true
 
-echo Please set keyboard shortcuts from
-echo Super+enter - Open terminal with tmux urxvt -
-echo 
+# Super+enter and Super+o opens a terminal
+terminal=ghostty
+browser=firefox
+add_or_update_keybinding "Open Terminal $terminal" "$terminal" "<Super>o" "custom0"
+add_or_update_keybinding "Open Browser $browser" "$browser" "<Super>e" "custom1"
