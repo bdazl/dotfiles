@@ -1,4 +1,5 @@
-background = 1d1f21
+theme = ayu
+background = 000000
 foreground = ffffff
 fullscreen = true
 window-decoration = false
