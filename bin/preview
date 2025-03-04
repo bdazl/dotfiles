@@ -5,11 +5,7 @@ has-cmd() {
 }
 
 image() {
-    file=$1
-    w=$2
-    h=$3
-    x=$4
-    y=$5
+    file=$1 w=$2 h=$3 x=$4 y=$5
 
     if has-cmd kitty; then
         # kitten icat $1
@@ -22,11 +18,19 @@ image() {
     fi
 }
 
-FILE=${FILE:-$1}
-W=$2
-H=$3
-X=$4
-Y=$5
+video_thumbnail() {
+    file=$1 w=$2 h=$3 x=$4 y=$5
+    thumbnail="$XDG_RUNTIME_DIR/lf-video-preview.jpg"
+
+    if ! has-cmd ffmpeg; then
+        return 0
+    fi
+
+    ffmpeg -y -i "$file" -vf "thumbnail,scale=800:-1" -vframes 1 "$thumbnail" > /dev/null 2>&1
+    image $thumbnail $w $h $x $y
+}
+
+FILE=${FILE:-$1} W=$2 H=$3 X=$4 Y=$5
 
 CENTER=${CENTER:-0}
 MIME=$(file --dereference --mime -- "$FILE" | awk -F': ' '{print $2}')
@@ -38,5 +42,6 @@ case $MIME in
     application/x-tar* | application/gzip*) tar tf "$FILE" | tree -C --fromfile . | bat "${B_ARGS[@]}" ;;
     inode/directory*) tree -C "$FILE" | bat "${B_ARGS[@]}" ;;
     image/*) image "$FILE" $W $H $X $Y ;;
+    video/*) video_thumbnail "$FILE" $W $H $X $Y ;;
     *) bat "${B_ARGS[@]}" -- "$FILE" ;;
 esac
