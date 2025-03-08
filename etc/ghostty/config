@@ -1,4 +1,6 @@
 theme = ayu
+font-family = "JetBrains Mono SemiBold"
+font-size = 13
 background = 000000
 foreground = ffffff
 fullscreen = true
