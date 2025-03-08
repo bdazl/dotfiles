@@ -23,7 +23,7 @@ yay -Su --needed \
     noto-fonts \
     libnotify \
     firefox \
-    kitty \
+    ghostty \
     waybar \
     rofi-lbonn-wayland-git \
     bluez \

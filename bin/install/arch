@@ -39,9 +39,7 @@ sudo pacman -Syu --needed \
     perl-image-exiftool \
     sysstat \
     iotop \
-    the_silver_searcher \
-    noto-fonts \
-    noto-fonts-emoji
+    the_silver_searcher
 
 # yay
 EXT=$HOME/src/ext
