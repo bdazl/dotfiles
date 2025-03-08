@@ -7,3 +7,5 @@ fullscreen = true
 window-decoration = false
 command = tmux
 keybind = ctrl+shift+r=reload_config
+background-opacity = 0.6
+background-blur = 20
