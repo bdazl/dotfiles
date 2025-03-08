@@ -5,6 +5,7 @@ background = 000000
 foreground = ffffff
 fullscreen = true
 window-decoration = false
+confirm-close-surface = false
 command = tmux
 keybind = ctrl+shift+r=reload_config
 background-opacity = 0.6
