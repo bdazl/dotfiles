@@ -98,7 +98,6 @@ function config_aliases()
 
     alias kl='date +%H:%M'
     alias idag='date +"%d %b %Y"'
-    alias vecka='date +v.%V'
     alias nu='kl; today; vecka'
 }
 
@@ -119,6 +118,24 @@ git-files-changed() {
 
 ps-user() {
     ps -u $USER -U $USER -o pid,cmd --forest
+}
+
+vecka() {
+    week=${1:-$(date +%V)}
+    year=${2:-$(date +%Y)}
+
+    jan1=$(date -d "$year-01-01" +%u)
+
+    # Calculate days to add to jan1 to get to the monday
+    # We subtract 1 from week number since we want to count from week 1
+    days_to_mon=$(( (week - 1) * 7 - (jan1 - 1) ))
+    days_to_sun=$(( days_to_mon + 6 ))
+
+    d_mon="$year-01-01 +$days_to_mon days"
+    d_sun="$year-01-01 +$days_to_sun days"
+    mon=$(date -d $d_mon +%Y-%m-%d)
+    sun=$(date -d $d_sun +%Y-%m-%d)
+    echo "v.$week: $mon (mån) - $sun (sön)"
 }
 
 # Init aliases
