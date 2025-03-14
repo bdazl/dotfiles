@@ -9,9 +9,12 @@ set expandtab "spaces instead of tabs
 set smarttab
 set shiftwidth=4
 set tabstop=4
-set softtabstop=0
+set softtabstop=4
 "set linebreak
 set textwidth=500
+
+" Indent <number> sets all indentation properties at once
+command! -nargs=1 Indent let &sw=<args> | let &sts=<args> | let &ts=<args>
 
 set autoindent
 set si "smart indent
