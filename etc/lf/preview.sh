@@ -11,5 +11,6 @@ mime=$(file --dereference --mime -- "$file" | awk -F': ' '{print $2}')
 case $mime in
     image/*) exit 1 ;;
     video/*) exit 1 ;;
+    application/octet-stream*) exit 1 ;;
     *) exit 0 ;;
 esac

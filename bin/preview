@@ -30,6 +30,27 @@ video_thumbnail() {
     image $thumbnail $w $h $x $y
 }
 
+hex_dump() {
+    hexdump -C "$1"
+}
+
+octet_stream() {
+    file=$1
+    if ! has-cmd ffprobe; then
+        hex_dump "$@"
+        return 0
+    fi
+
+    if ffprobe -v error \
+            -select_streams v:0 \
+            -show_entries stream=codec_name \
+            -of default=noprint_wrappers=1:nokey=1 "$file" &>/dev/null; then
+        video_thumbnail "$@"
+    else
+        hex_dump "$@"
+    fi
+}
+
 FILE=${FILE:-$1} W=$2 H=$3 X=$4 Y=$5
 
 CENTER=${CENTER:-0}
@@ -40,6 +61,7 @@ B_ARGS=("--style=$B_STYLE" "--color=always" "--pager=never" "--highlight-line=$C
 
 case $MIME in
     application/x-tar* | application/gzip*) tar tf "$FILE" | tree -C --fromfile . | bat "${B_ARGS[@]}" ;;
+    application/octet-stream*) octet_stream "$@" ;;
     inode/directory*) tree -C "$FILE" | bat "${B_ARGS[@]}" ;;
     image/*) image "$FILE" $W $H $X $Y ;;
     video/*) video_thumbnail "$FILE" $W $H $X $Y ;;
