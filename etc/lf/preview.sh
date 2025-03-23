@@ -4,7 +4,7 @@ set -e
 file=${FILE:-$1}
 
 # Actual preview
-~/.etc/bin/preview $@
+~/.etc/bin/preview "$@"
 
 # Add the special exit code requirements for images
 mime=$(file --dereference --mime -- "$file" | awk -F': ' '{print $2}')
