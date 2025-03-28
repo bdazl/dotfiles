@@ -33,7 +33,7 @@ vnoremap <silent> <C-l> <ESC>:<C-U>TmuxNavigateRight<cr>
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
-vnoremap <leader>y :w !wl-copy<cr>
+vnoremap <leader>y :w !wl-copy<cr><cr>
 
 " In M$ terminals ctrl-v may be difficult
 nnoremap <leader>v <c-v>
