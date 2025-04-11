@@ -17,6 +17,11 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" When pasting, keep the previous copy-buffer,
+" i.e. send the new one to the black hole register.
+vnoremap p "_dP
+vnoremap P "_dP
+
 " Use vim-tmux-navigator for insert and visual modes as well
 inoremap <silent> <C-h> <ESC>:<C-U>TmuxNavigateLeft<cr>
 inoremap <silent> <C-j> <ESC>:<C-U>TmuxNavigateDown<cr>
