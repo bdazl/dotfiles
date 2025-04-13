@@ -6,3 +6,5 @@ gen/active.env
 etc/assets
 
 __pycache__
+
+*.swp
