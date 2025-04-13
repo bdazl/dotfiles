@@ -33,4 +33,4 @@ function gs { git status @args }
 function gpp { git pull --prune @args }
 
 # Fonts
-oh-my-posh init pwsh | Invoke-Expression
+oh-my-posh init pwsh --config "$HOME/.config/oh-my-posh/theme.json" | Invoke-Expression

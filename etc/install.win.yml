@@ -8,6 +8,7 @@
   - ~/bin
   - ~/.config/Code/User
   - ~/.config/cheat/sheets
+  - ~/.config/oh-my-posh
   - ~/.local/share/zsh
   - ~/.cargo/bin
   - ~/.vim/backup
@@ -31,6 +32,7 @@
     ~/.config/ranger: etc/ranger
     ~/.config/task: etc/task
     ~/.config/zsh: etc/zsh/conf.d
+    ~/.config/oh-my-posh/theme.json: etc/oh-my-posh/theme.json
     ~/.ctags: etc/ctags/ctags
     ~/.git_template: etc/git/template
     ~/.gitconfig: gen/out/gitconfig
