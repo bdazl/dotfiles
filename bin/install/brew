@@ -8,4 +8,5 @@ fi
 brew install \
     bash zsh vim tmux fzf lf \
     the_silver_searcher \
-    python 
+    python \
+    zoxide
