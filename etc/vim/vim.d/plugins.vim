@@ -32,6 +32,7 @@ Plugin 'dense-analysis/ale'         " python linting
 Plugin 'neovimhaskell/haskell-vim'  " haskell
 Plugin 'hashivim/vim-terraform'     " terraform
 
+Plugin 'junegunn/fzf'     " fzf fuzzy search
 Plugin 'junegunn/fzf.vim' " fuzzy search
 Plugin 'francoiscabrol/ranger.vim' " ranger (file explorer)
 
