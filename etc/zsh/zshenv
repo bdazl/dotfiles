@@ -4,5 +4,9 @@
 
 readonly ENV_DIR=~/.config/zsh/env
 
-. $ENV_DIR/env.zsh
-. $ENV_DIR/path.zsh
+if [ "$(uname)" = "Darwin" ]; then
+    . "$ENV_DIR/macos.zsh"
+fi
+
+. "$ENV_DIR/env.zsh"
+. "$ENV_DIR/path.zsh"

@@ -15,3 +15,8 @@ readonly ZSH_DIR=$XDG_CONFIG_HOME/zsh
 . "$ZSH_DIR/prompt.zsh"
 . "$ZSH_DIR/bindkey.zsh"
 . "$ZSH_DIR/completion.zsh"
+
+if [ "$(uname)" = "Darwin" ]; then
+    # Already done in .zshenv, but on MacOS path_helper f*cks this up
+    . "$ZSH_DIR/env/path.zsh"
+fi

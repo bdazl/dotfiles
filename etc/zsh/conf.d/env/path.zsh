@@ -1,8 +1,6 @@
 #!/bin/zsh
 # Copyright (c) 2018-2025 Jacob Peyron <jacob.peyron@gmail.com>
 # Use of this source code is governed by an ICU License that can be found in the LICENSE file
-#
-# PATH manipulation
 
 echo-if-dir-exists() {
     if [ -d "${1}" ]; then
@@ -45,33 +43,37 @@ echo-path-base() {
 }
 
 echo-path-osx() {
-    BREW_BIN="/usr/local/bin/brew"
-    if [ -f "/opt/homebrew/bin/brew" ]; then
-        BREW_BIN="/opt/homebrew/bin/brew"
-    fi
+    if [[ -x "${BREW_BIN}" ]]; then
+        # If nothing is found, dont't print error messages
+        setopt local_options null_glob
 
-    if type "${BREW_BIN}" &> /dev/null; then
-        for bindir in "${BREW_PREFIX}/opt/"*"/libexec/gnubin"; do gnubin=$bindir:$gnubin; done
-        for bindir in "${BREW_PREFIX}/opt/"*"/bin"; do gnubin=$bindir:$gnubin; done
-        #export BREW_PREFIX="$("${BREW_BIN}" --prefix)"
+        for bindir in "$BREW_PREFIX/opt/"*"/libexec/gnubin"; do
+            [[ -d "$bindir" ]] && gnubin=$bindir:$gnubin
+        done
+        for bindir in "$BREW_PREFIX/opt/"*"/bin"; do
+            [[ -d "$bindir" ]] && gnubin=$bindir:$gnubin
+        done
         #for mandir in "${BREW_PREFIX}/opt/"*"/libexec/gnuman"; do export MANPATH=$mandir:$MANPATH; done
         #for mandir in "${BREW_PREFIX}/opt/"*"/share/man/man1"; do export MANPATH=$mandir:$MANPATH; done
     fi
     
-    pth=$(remove-non-existing $gnubin)
-    echo "${(j.:.)pth}"
+    echo "${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:${gnubin}"
 }
     
 echo-path() {
-    pth="$(echo-path-base)"
+    base_path="$(echo-path-base)"
 
     u_name="$(uname)"
-    case $u_name in Darwin):
-        pth=("$(echo-path-osx)" $pth)
-        ;;
+    case $u_name in
+        Darwin):
+            brew_path="$(echo-path-osx)"
+            echo "$brew_path:$base_path"
+            ;;
+        *)
+            echo "$base_path"
+            ;;
     esac
 
-    echo "${(j.:.)pth}"
 }
 
 echo-pythonpath() {
