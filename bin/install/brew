@@ -6,6 +6,7 @@ fi
 
 
 brew install \
+    coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt grep \
     bash zsh vim tmux fzf lf \
     the_silver_searcher \
     python \
