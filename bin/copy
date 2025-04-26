@@ -1,0 +1,40 @@
+#!/bin/bash
+
+has-cmd() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+error() {
+    echo "error: $1" 1>&2
+    exit 1
+}
+
+if [[ "$(uname -s)" == "Darwin" ]]; then  # MacOS
+    if has-cmd pbcopy; then
+        cat | pbcopy
+    else
+        error "pbcopy not found."
+    fi
+elif [[ -n "$WAYLAND_DISPLAY" ]]; then  # Wayland
+    if has-cmd wl-copy; then
+        cat | wl-copy
+    else
+        error "wl-copy not found." # install wl-clipboard
+    fi
+elif [[ -n "$DISPLAY" ]]; then  # X
+    if has-cmd xclip; then
+        cat | xclip -selection clipboard
+    elif has-cmd xsel; then
+        cat | xsel -ib
+    else
+        error "Neither xclip nor xsel found."
+    fi
+elif grep -q microsoft /proc/version; then  # WSL
+    if has-cmd clip.exe; then
+        cat | clip.exe
+    else
+        error "clip.exe not found. WSL2 was detected but clipboard access isn't working."
+    fi
+else
+    error "Unsupported environment or clipboard mechanism not found."
+fi
