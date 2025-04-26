@@ -45,11 +45,20 @@ echo-path-base() {
 }
 
 echo-path-osx() {
-    gnucore="/usr/local/opt/coreutils/libexec/gnubin"
-    gnugrep="/usr/local/opt/grep/bin"
-    gnufind="/usr/local/opt/findutils/bin"
+    BREW_BIN="/usr/local/bin/brew"
+    if [ -f "/opt/homebrew/bin/brew" ]; then
+        BREW_BIN="/opt/homebrew/bin/brew"
+    fi
+
+    if type "${BREW_BIN}" &> /dev/null; then
+        for bindir in "${BREW_PREFIX}/opt/"*"/libexec/gnubin"; do gnubin=$bindir:$gnubin; done
+        for bindir in "${BREW_PREFIX}/opt/"*"/bin"; do gnubin=$bindir:$gnubin; done
+        #export BREW_PREFIX="$("${BREW_BIN}" --prefix)"
+        #for mandir in "${BREW_PREFIX}/opt/"*"/libexec/gnuman"; do export MANPATH=$mandir:$MANPATH; done
+        #for mandir in "${BREW_PREFIX}/opt/"*"/share/man/man1"; do export MANPATH=$mandir:$MANPATH; done
+    fi
     
-    pth=$(remove-non-existing $gnucore $gnugrep $gnufind)
+    pth=$(remove-non-existing $gnubin)
     echo "${(j.:.)pth}"
 }
     
