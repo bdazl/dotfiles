@@ -6,20 +6,10 @@
 
 function config_aliases() 
 {
-    if [ "$(uname)" = "Darwin" ]; then
-        alias ls='ls -G'
-        alias ll='ls -G -l'
-        alias la='ls -G -la'
-        alias grep='grep --color=auto'
-        alias lsblk='sudo diskutil list'
-    else
-        alias ls='ls --color=auto --group-directories-first'
-        alias la='ls -lha --time-style=long-iso'
-        alias ll='ls -lh --time-style=+%Y-%m-%d'
-        alias lll='ls -lhaZ --time-style=long-iso'
-        alias grep='grep --color=auto'
-        alias tl='tree -C | bat'
-    fi
+    alias ls='ls --color=auto --group-directories-first'
+    alias la='ls -lha --time-style=long-iso'
+    alias ll='ls -lh --time-style=+%Y-%m-%d'
+    alias lll='ls -lhaZ --time-style=long-iso'
 
     alias agh='ag --hidden --ignore .git'
 
@@ -43,6 +33,8 @@ function config_aliases()
 
     alias gdiff='diff --color -u'
 
+    alias grep='grep --color=auto'
+
     alias hexit='hyprctl dispatch exit'
 
     alias nvi='nvim -u ~/.vimrc'
@@ -56,6 +48,8 @@ function config_aliases()
     alias td='tmux detach'
 
     alias trn='tr -d "\n"'
+
+    alias tl='tree -C | bat'
 
     alias sss='ss -ltpn'
 
@@ -99,6 +93,15 @@ function config_aliases()
     alias kl='date +%H:%M'
     alias idag='date +"%d %b %Y"'
     alias nu='kl; today; vecka'
+
+    if [ "$(uname)" = "Darwin" ]; then
+        # These are useful when gnu coreutils is not installed
+        # alias ls='ls -G'
+        # alias ll='ls -G -l'
+        # alias la='ls -G -la'
+        # alias grep='grep --color=auto'
+        alias lsblk='sudo diskutil list'
+    fi
 }
 
 #----  Aliases as functions (because aliases can't have params)
