@@ -111,8 +111,9 @@ nmap <leader>d :YcmCompleter GoToDefinitionElseDeclaration<cr>
 nmap <leader>f :YcmCompleter GoToReferences<cr>
 
 """" GOLANG
-autocmd FileType go nmap <leader>R :GoRename<cr>
-autocmd FileType go nmap <leader>gr :w <bar> :GoRun<cr>
+autocmd FileType go nmap <leader>gr :GoRename<cr>
+autocmd FileType go nmap <leader>gd :GoDoc<cr>
+autocmd FileType go nmap <leader>gR :w <bar> :GoRun<cr>
 autocmd FileType go nmap <leader>gb :w <bar> :GoBuild<cr>
 autocmd FileType go nmap <leader>gg :w <bar> :GoTest<cr>
 autocmd FileType go nmap <leader>go :GoDocBrowser<cr>
