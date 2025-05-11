@@ -1,0 +1,8 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/Library/Application Support/com.mitchellh.ghostty: etc/ghostty.mac
