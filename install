@@ -14,3 +14,8 @@ git submodule update --init --recursive
 
 CONFIG="$REPO_ROOT/etc/install.yml"
 "${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${REPO_ROOT}" -c "${CONFIG}" "${@}"
+
+if [ "$(uname)" = "Darwin" ]; then
+    CONFIG_MAC="$REPO_ROOT/etc/install.mac.extra.yml"
+    "${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${REPO_ROOT}" -c "${CONFIG_MAC}" "${@}"
+fi

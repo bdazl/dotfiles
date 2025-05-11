@@ -1,0 +1,11 @@
+theme = ayu
+font-family = "JetBrains Mono SemiBold"
+font-size = 13
+background = 000000
+foreground = ffffff
+fullscreen = false
+window-decoration = true
+confirm-close-surface = true
+command = /opt/homebrew/bin/tmux
+background-opacity = 0.6
+background-blur = 20
