@@ -55,10 +55,12 @@ if [ -f "$path" ]; then
     fi
 
     ln-exe $path
-elif [ -d "$path"]; then
+elif [ -d "$path" ]; then
     for file in "$path"/*; do
         if [ -x "$file"]; then
             ln-exe $file
         fi
     done
+else
+    error "Can't find file/folder: $path"
 fi
