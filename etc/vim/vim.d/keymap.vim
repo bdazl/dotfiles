@@ -63,6 +63,9 @@ map <leader>te :tabedit <c-r>=expand("%:p:h") . "/"<cr>
 nmap <TAB> :tabnext<cr>
 nmap <S-TAB> :tabprev<cr>
 
+" Toggle between relative and absolute line numbers
+nnoremap <leader>l :execute 'set number ' . (&relativenumber ? 'norelativenumber' : 'relativenumber')<cr>
+
 " Quickfix (or YcmCompleter GoToReferences for instance)
 nmap <leader>n :cn<cr>
 nmap <leader>p :cp<cr>
