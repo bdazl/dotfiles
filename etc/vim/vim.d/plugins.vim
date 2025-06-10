@@ -70,6 +70,7 @@ let g:ale_python_flake8_options = '--max-line-length=88'
 " Ranger defaults to:
 " map <leader>f :Ranger<CR>
 let g:ranger_map_keys = 0
+let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
 
 " fzf
 let g:fzf_preview_window = ['right,50%', 'ctrl-p']
