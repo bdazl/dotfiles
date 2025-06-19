@@ -20,8 +20,9 @@ function config_aliases()
     alias eop='eval $(op signin)'
 
     alias ga='git add'
-    alias gb='git branch'
-    alias gcb='git branch --show-current'
+    alias gb='git branch --show-current'
+    alias gbb='git branch'
+    alias gba='git branch --all'
     alias gcf='git-files-changed'
     alias gc='git commit --verbose'
     alias gd='git diff'
