@@ -2,7 +2,7 @@
 set -e
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "${REPO_ROOT}"
+cd "${REPO_ROOT}" || exit 1
 
 # Common functions (like error)
 . "bin/common"
@@ -22,5 +22,5 @@ for src in "${!targets[@]}"; do
     echo "$src -> $dst"
 
     # Substitution
-    cat $src | envsubst > $dst
+    envsubst < "$src" > "$dst"
 done

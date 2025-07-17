@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-REPO_ROOT=$(realpath $(dirname "${BASH_SOURCE[0]}"))
-cd "${REPO_ROOT}"
+REPO_ROOT=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+cd "${REPO_ROOT}" || exit 1
 
 DOTBOT_DIR="$REPO_ROOT/ext/dotbot"
 DOTBOT_BIN="bin/dotbot"
