@@ -8,7 +8,7 @@ if [ -z "$file" ]; then
 fi
 
 # embed watermark
-steghide embed -ef watermark.txt -p "$(cat waterpass.txt)" -cf $file
+steghide embed -ef watermark.txt -p "$(cat waterpass.txt)" -cf "$file"
 
 # add copyright to exif
-exiftool -copyright="$(date +%Y) Jacob Peyron" $file
+exiftool -copyright="$(date +%Y) Jacob Peyron" "$file"

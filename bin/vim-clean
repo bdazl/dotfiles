@@ -2,7 +2,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source $SCRIPT_DIR/common
+source "$SCRIPT_DIR/common"
 
 if prompt_user "Clean vim swap files?"; then
     echo deleting swap files...

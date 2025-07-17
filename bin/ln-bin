@@ -9,7 +9,7 @@ error() {
 }
 
 ln-exe() {
-    file=$(realpath $1)
+    file=$(realpath "$1")
     if [ ! -x "$file" ]; then
         error "$file not executable"
     fi
@@ -50,15 +50,15 @@ if [ ! -d "$BIN" ]; then
 fi
 
 if [ -f "$path" ]; then
-    if [ ! -x "$file"]; then
+    if [ ! -x "$path" ]; then
         error "File is not executable"
     fi
 
-    ln-exe $path
+    ln-exe "$path"
 elif [ -d "$path" ]; then
     for file in "$path"/*; do
-        if [ -x "$file"]; then
-            ln-exe $file
+        if [ -x "$file" ]; then
+            ln-exe "$file"
         fi
     done
 else
