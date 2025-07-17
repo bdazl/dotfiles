@@ -1,7 +1,7 @@
 #!/bin/bash
 
 has-cmd() {
-    command -v $1 > /dev/null 2>&1
+    command -v "$1" > /dev/null 2>&1
 }
 
 image() {
@@ -27,7 +27,7 @@ video_thumbnail() {
     fi
 
     ffmpeg -y -i "$file" -vf "thumbnail,scale=800:-1" -vframes 1 "$thumbnail" > /dev/null 2>&1
-    image $thumbnail $w $h $x $y
+    image "$thumbnail" "$w" "$h" "$x" "$y"
 }
 
 hex_dump() {
@@ -63,7 +63,7 @@ case $MIME in
     application/x-tar* | application/gzip*) tar tf "$FILE" | tree -C --fromfile . | bat "${B_ARGS[@]}" ;;
     application/octet-stream*) octet_stream "$@" ;;
     inode/directory*) tree -C "$FILE" | bat "${B_ARGS[@]}" ;;
-    image/*) image "$FILE" $W $H $X $Y ;;
-    video/*) video_thumbnail "$FILE" $W $H $X $Y ;;
+    image/*) image "$FILE" "$W" "$H" "$X" "$Y" ;;
+    video/*) video_thumbnail "$FILE" "$W" "$H" "$X" "$Y" ;;
     *) bat "${B_ARGS[@]}" -- "$FILE" ;;
 esac

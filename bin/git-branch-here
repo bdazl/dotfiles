@@ -7,7 +7,7 @@ error() {
 
 current=$(git branch --show-current)
 if [ -n "$current" ]; then
-    echo $current
+    echo "$current"
     exit 0
 fi
 
@@ -29,10 +29,10 @@ for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/ refs/re
         # may have a local master (for instance) and a remote master (origin/master).
         # If the user setup a local branch that is unrelated to the origin branch with the
         # same name, this will not work.
-        short_branch=$(echo $branch | sed 's:origin/::')
+        short_branch=${branch#origin/}
         if [ -n "${candidates[$short_branch]}" ]; then
             # Take the shortest distance of the "conflicting" branch
-            if [ $distance -lt ${candidates[$short_branch]} ]; then
+            if [ "$distance" -lt "${candidates[$short_branch]}" ]; then
                 candidates["$short_branch"]=$distance
             fi
         else
@@ -52,18 +52,18 @@ min_distance=-1
 for branch in "${!candidates[@]}"; do
     distance=${candidates[$branch]}
 
-    if [ $min_distance -eq -1 ] || [ $distance -lt $min_distance ]; then
+    if [ "$min_distance" -eq -1 ] || [ "$distance" -lt "$min_distance" ]; then
         # If we found a better match, reset closest_branches to this branch
         closest_branches=("$branch")
         min_distance=$distance
-    elif [ $distance -eq $min_distance ]; then
+    elif [ "$distance" -eq "$min_distance" ]; then
         # Another branch with the same minimum distance, add it to the list
         closest_branches+=("$branch")
     fi
 done
 
 if [ ${#closest_branches[@]} -gt 0 ]; then
-    echo $closest_branches
+    echo "${closest_branches[@]}"
     exit 0
 fi
 

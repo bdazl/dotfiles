@@ -44,10 +44,10 @@ sudo pacman -Syu --needed \
 # yay
 EXT=$HOME/src/ext
 YAY=$EXT/yay.git
-mkdir -p $EXT
+mkdir -p "$EXT"
 if [[ ! -d "$YAY" ]]; then
-    git clone https://aur.archlinux.org/yay.git $YAY
-    cd $YAY
+    git clone https://aur.archlinux.org/yay.git "$YAY"
+    cd "$YAY" || exit 1
     makepkg -si
 fi
 
