@@ -4,4 +4,4 @@
 # 1.5 seem to work well for the large monitor
 scale=$1
 
-gsettings set org.gnome.desktop.interface text-scaling-factor $scale
+gsettings set org.gnome.desktop.interface text-scaling-factor "$scale"

@@ -23,5 +23,5 @@ sudo yum update
 #   - terminal -> zsh
 
 echo Change shell by:
-printf "\tsudo usermod -s $(which zsh) $(whoami)\n"
+printf "\tsudo usermod -s %s %s\n" "$(which zsh)" "$(whoami)"
 # sudo usermod -s $(which zsh) $(whoami)
