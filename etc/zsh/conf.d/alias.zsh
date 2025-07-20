@@ -51,7 +51,7 @@ function config_aliases()
 
     alias trn='tr -d "\n"'
 
-    alias tl='tree -C | bat'
+    alias tp='tree-pager'
 
     alias sss='ss -ltpn'
 
@@ -141,6 +141,11 @@ vecka() {
     mon=$(date -d $d_mon +%Y-%m-%d)
     sun=$(date -d $d_sun +%Y-%m-%d)
     echo "v.$week: $mon (mån) - $sun (sön)"
+}
+
+tree-pager() {
+    p="${1:-.}"
+    tree -C "$p" | bat -p
 }
 
 # Init aliases
