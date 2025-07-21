@@ -44,7 +44,7 @@ function config_aliases()
     alias pst='ps -e -o pid,user,cmd --forest'
     alias psu='ps-user'
 
-    alias rs='rsync --progress'
+    alias rs='rsync -av --info=progress2'
 
     alias ta='tmux attach'
     alias td='tmux detach'
