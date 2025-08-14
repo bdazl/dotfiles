@@ -1,0 +1,2 @@
+# List all subtitle streams within the $mov file
+ffprobe -v quiet -select_streams s -show_entries stream=index:stream_tags=language -of csv=p=0 $mov
