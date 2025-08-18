@@ -1,0 +1,3 @@
+
+# List the 40 biggest file in the root filesystem (-x)
+sudo du -xaBM / | sort -nr | head -n 40
