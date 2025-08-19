@@ -3,6 +3,7 @@
 	email = $EMAIL
 [init]
 	templatedir = ~/.git_template
+	defaultBranch = main
 [alias]
 	ctags = !~/.git_template/hooks/ctags
 	dropbox = !git-dropbox-manage
