@@ -17,6 +17,9 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" Make '-' right-indent, in visual mode
+vmap - >
+
 " When pasting, keep the previous copy-buffer,
 " i.e. send the new one to the black hole register.
 vnoremap p "_dP
