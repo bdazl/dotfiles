@@ -1,4 +1,4 @@
-theme = ayu
+theme = dark:ayu,light:farmhouse-light
 font-family = "JetBrains Mono SemiBold"
 font-size = 13
 background = 000000
