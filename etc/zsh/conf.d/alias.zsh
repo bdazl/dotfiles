@@ -89,6 +89,7 @@ function config_aliases()
 
     alias signin='eval $(op signin)'
 
+    alias datum='date +%Y%m%d'
     alias today='date +"%Y-%m-%d  (%d %b)"'
     alias now='date -Iseconds'
 
