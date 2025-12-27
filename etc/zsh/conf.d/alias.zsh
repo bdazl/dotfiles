@@ -19,6 +19,8 @@ function config_aliases()
 
     alias eop='eval $(op signin)'
 
+    alias fdh='fd --no-ignore-vcs -H'
+
     alias ga='git add'
     alias gb='git branch --show-current'
     alias gbb='git branch'
