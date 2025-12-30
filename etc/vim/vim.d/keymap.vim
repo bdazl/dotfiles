@@ -25,6 +25,18 @@ vmap - >
 vnoremap p "_dP
 vnoremap P "_dP
 
+" Useful mappings for managing tabs and windows
+map <leader>q :quit<cr>
+map <leader>tn :tabnew<cr>
+map <leader>to :tabonly<cr>
+map <leader>tc :tabclose<cr>
+
+" Set tabs/spaces with certain numbers of spaces
+nnoremap <leader>§ :set list!<CR>
+nnoremap <leader>1 :set tabstop=4 shiftwidth=4 softtabstop=0 noexpandtab<CR>
+nnoremap <leader>2 :set tabstop=2 shiftwidth=2 softtabstop=2 expandtab<CR>
+nnoremap <leader>4 :set tabstop=4 shiftwidth=4 softtabstop=4 expandtab<CR>
+
 " Use vim-tmux-navigator for insert and visual modes as well
 inoremap <silent> <C-h> <ESC>:<C-U>TmuxNavigateLeft<cr>
 inoremap <silent> <C-j> <ESC>:<C-U>TmuxNavigateDown<cr>
@@ -52,12 +64,6 @@ nnoremap Q <nop>
 " Jumping big chunks always centers the cursor mid screen
 nnoremap <C-u> <C-u>zz
 nnoremap <C-d> <C-d>zz
-
-" Useful mappings for managing tabs and windows
-map <leader>q :quit<cr>
-map <leader>tn :tabnew<cr>
-map <leader>to :tabonly<cr>
-map <leader>tc :tabclose<cr>
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
