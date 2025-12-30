@@ -13,8 +13,8 @@ set softtabstop=4
 "set linebreak
 set textwidth=500
 
-" Indent <number> sets all indentation properties at once
-command! -nargs=1 Indent let &sw=<args> | let &sts=<args> | let &ts=<args>
+" How are listed characters displayed
+set listchars=tab:→·,eol:¶,trail:·,nbsp:␣,extends:»,precedes:«
 
 set autoindent
 set si "smart indent
