@@ -3,7 +3,7 @@
 # .zlogin
 # login -> desktop
 
-readonly desktop=Hyprland
+readonly desktop=start-hyprland
 #readonly desktop=tmux
 
 start_tmux() {
