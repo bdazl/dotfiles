@@ -10,6 +10,9 @@ export SUDO_EDITOR=vim
 export HISTSIZE=10000000  # maximum history size in terminal's memory
 export SAVEHIST=10000000  # maximum size of history file
 
+# Set other writable (drwxrwxrwx) color to blue on gray
+export LS_COLORS="ow=01;34;100"
+
 # freedesktop.org
 export XDG_DATA_HOME=$HOME/.local/share
 export XDG_STATE_HOME=$HOME/.local/state
