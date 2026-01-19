@@ -1,0 +1,2 @@
+# Inspect all labels for an image
+docker inspect -f '{{range \$k, \$v := .Config.Labels}}{{\$k}}={{\$v}}{{println}}{{end}}' <img>
