@@ -7,4 +7,5 @@
     "editor.trimAutoWhitespace": true,
     "go.useLanguageServer": true,
     "redhat.telemetry.enabled": false,
+    "security.workspace.trust.untrustedFiles": "open",
 }
