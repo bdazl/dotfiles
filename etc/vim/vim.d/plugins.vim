@@ -94,7 +94,7 @@ function! MyFZFFiles(dir, bang)
     " * Full screen, not windowed
     " * Always open results/files in new tab
     " * Preview using my script
-    let options = {'options': ['--info=inline', '--preview', '~/.etc/bin/preview.sh {}']}
+    let options = {'options': ['--info=inline', '--preview', '~/.etc/bin/preview {}']}
     call fzf#vim#files(dir, options, a:bang)
 
     " Restore
