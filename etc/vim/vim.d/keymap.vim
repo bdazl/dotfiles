@@ -152,7 +152,6 @@ nmap <leader>sr :.,$s///gI<left><left><left><left>
 " current selection and then make an interactive search and replace
 " ,$ -> .,$ (current position to end)
 " % -> 1,$ (the whole file from start)
-" TODO: Fix so that we wrap around the file and back to current position
 vmap a y<esc>:<c-r>=GetSearchFromYanked(",$s", "gc")<cr><left><left><left>
 " 'A' searches and replaces all occurrences in the file
 vmap A y<esc>:<c-r>=GetSearchFromYanked("%s", "gi")<cr><left><left><left>
