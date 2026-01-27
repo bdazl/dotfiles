@@ -32,3 +32,29 @@ The `generate` script uses `envsubst` to substitute variables from `gen/active.e
 - Linux: Standard `install.yml`
 - macOS: Additional `install.mac.extra.yml` loaded automatically on Darwin
 - Windows: Separate `install.win.yml` manifest
+
+## Language
+
+- Conversation: Swedish is preferred
+- Code, comments, commit messages, documentation: Formal English
+
+## Git Conventions
+
+### Commit Style
+- Lowercase, no trailing period
+- Format: `component: brief description`
+- Examples:
+  - `vim: fix fzf preview script path`
+  - `zsh: alias gsv (git status --verbose)`
+  - `remove unused configs: conan registry, i3status`
+
+### Workflow
+- Atomic commits: one logical change per commit
+- Never amend unless explicitly requested
+
+## Code Style
+
+### Shell (zsh/bash)
+- Aliases grouped by tool/purpose in `etc/zsh/conf.d/alias.zsh`
+- Git aliases as shell aliases (not git config aliases) for consistency
+- Use functions when parameters are needed
