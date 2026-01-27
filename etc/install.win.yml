@@ -21,10 +21,8 @@
 - link:
     ~/.dotfiles: ''
     ~/.conan/conan.conf: etc/conan/conan.conf
-    ~/.conan/conan.conf: etc/conan/registry.txt
     ~/.config/cheat/conf.yml: etc/cheat/conf.yml
     ~/.config/cheat/sheets/personal: etc/cheat/sheets
-    ~/.config/Code/User/keybindings.json: etc/code/settings.json 
     ~/.config/Code/User/settings.json: etc/code/settings.json
     ~/.config/kitty: etc/kitty
     ~/.config/lf/lfrc: etc/lf/lfrc

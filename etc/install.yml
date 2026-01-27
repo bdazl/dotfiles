@@ -15,7 +15,6 @@
   - ~/.local/bin
   - ~/.local/share/zsh
   - ~/.local/share/qutebrowser
-  - ~/.urxvt/ext
   - ~/.cargo/bin
   - ~/.vim/backup
   - ~/.vim/swap
@@ -25,17 +24,12 @@
 # Everything that is sourced from ./gen/out/* is generated with ./generate
 - link:
     ~/.etc: ''
-    ~/.Xdefaults: etc/xorg/Xdefaults
-    ~/.Xresources: etc/xorg/Xdefaults
     ~/.conan/conan.conf: etc/conan/conan.conf
-    ~/.conan/registry.txt: etc/conan/registry.txt
     ~/.config/cheat/conf.yml: etc/cheat/conf.yml
     ~/.config/cheat/sheets/personal: etc/cheat/sheets
-    ~/.config/Code/User/keybindings.json: etc/code/keybindings.json 
     ~/.config/Code/User/settings.json: etc/code/settings.json
     ~/.config/ghostty: etc/ghostty
     ~/.config/hypr: etc/hypr
-    ~/.config/i3status: etc/i3status
     ~/.config/kitty: etc/kitty
     ~/.config/lf/lfrc: etc/lf/lfrc
     ~/.config/nvim: etc/nvim
@@ -52,9 +46,7 @@
     ~/.gitconfig: gen/out/gitconfig
     ~/.ideavimrc: etc/vim/vimrc
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
-    ~/.sift.conf: etc/sift/sift.conf
     ~/.tmux.conf: etc/tmux/tmux.conf
-    ~/.urxvt/ext/resize-font: etc/xorg/plugins/urxvt-resize-font/resize-font
     ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
     ~/.vimrc: etc/vim/vimrc
     ~/.zlogin: etc/zsh/zlogin
