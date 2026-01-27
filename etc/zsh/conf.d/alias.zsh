@@ -29,6 +29,7 @@ function config_aliases()
     alias gc='git commit --verbose'
     alias gd='git diff'
     alias gs='git status'
+    alias gsv='git status --verbose'
     alias gsh='git show'
     alias gpp='git pull --prune'
     alias gl='git log --graph --date=short --pretty=format:"%C(yellow)%h %C(blue)%ad %C(green)%an %C(auto)%d %n %s"'
