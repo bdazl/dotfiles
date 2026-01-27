@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+set -ex
 
 REPO_ROOT=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
 
