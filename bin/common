@@ -6,12 +6,16 @@ error() {
 }
 
 prompt_user() {
-    # TODO: handle input default values
     prompt="$1"
+    default="${2:-N}"
 
-    read -p "$prompt [y/N] " -n 1 -r
-    echo # TODO: don't echo if reply was \n
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
+    if [[ "$default" =~ ^[Yy]$ ]]; then
+        read -p "$prompt [Y/n] " -n 1 -r
+    else
+        read -p "$prompt [y/N] " -n 1 -r
+    fi
+    [[ -n "$REPLY" ]] && echo
+    if [[ "$REPLY" =~ ^[Yy]$ ]] || { [[ -z "$REPLY" ]] && [[ "$default" =~ ^[Yy]$ ]]; }; then
         return 0
     fi
     return 1
