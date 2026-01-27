@@ -161,9 +161,8 @@ vmap A y<esc>:<c-r>=GetSearchFromYanked("%s", "gi")<cr><left><left><left>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Copy to X CLIPBOARD
-" TODO: Make this portable and better
-map <leader>c :call SaveToXClip()<cr>
+" Copy to system clipboard (works on Wayland, macOS, X11)
+map <leader>c :call SaveToClipboard()<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions for keymaps
@@ -210,7 +209,15 @@ function! GetVisualSelection()
     return join(lines, "\n")
 endfunction
 
-function! SaveToXClip()
+function! SaveToClipboard()
     let selection = GetVisualSelection()
-    execute "!" . "echo " . selection . "|" . "xsel -i -b"
+    if executable('wl-copy')
+        call system('wl-copy', selection)
+    elseif executable('pbcopy')
+        call system('pbcopy', selection)
+    elseif executable('xsel')
+        call system('xsel -i -b', selection)
+    else
+        echoerr "No clipboard tool found (wl-copy, pbcopy, xsel)"
+    endif
 endfunction
