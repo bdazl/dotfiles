@@ -10,11 +10,9 @@
   - ~/.vim/bundle
   - ~/.config/Code/User
   - ~/.config/cheat/sheets
-  - ~/.config/qutebrowser
   - ~/.config/lf
   - ~/.local/bin
   - ~/.local/share/zsh
-  - ~/.local/share/qutebrowser
   - ~/.cargo/bin
   - ~/.vim/backup
   - ~/.vim/swap
@@ -30,16 +28,11 @@
     ~/.config/Code/User/settings.json: etc/code/settings.json
     ~/.config/ghostty: etc/ghostty
     ~/.config/hypr: etc/hypr
-    ~/.config/kitty: etc/kitty
     ~/.config/lf/lfrc: etc/lf/lfrc
     ~/.config/nvim: etc/nvim
-    ~/.config/qutebrowser/config.py: etc/qutebrowser/config.py
     ~/.config/ranger: etc/ranger
-    ~/.config/redshift.conf: etc/redshift/redshift.conf
     ~/.config/task: etc/task
-    ~/.config/sway: etc/sway
     ~/.config/systemd: etc/systemd
-    ~/.config/waybar: etc/waybar
     ~/.config/zsh: etc/zsh/conf.d
     ~/.ctags: etc/ctags/ctags
     ~/.git_template: etc/git/template
