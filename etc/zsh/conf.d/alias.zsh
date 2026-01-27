@@ -31,6 +31,7 @@ function config_aliases()
     alias gs='git status'
     alias gsv='git status --verbose'
     alias gsh='git show'
+    alias ggrep='git grep -nI --heading --break'
     alias gpp='git pull --prune'
     alias gl='git log --graph --date=short --pretty=format:"%C(yellow)%h %C(blue)%ad %C(green)%an %C(auto)%d %n %s"'
     alias gla='git log --oneline --all --graph --decorate'
