@@ -94,11 +94,13 @@ function config_aliases()
     alias signin='eval $(op signin)'
 
     alias datum='date +%Y%m%d'
+    alias datumm='date +%Y-%m-%d'
     alias today='date +"%Y-%m-%d  (%d %b)"'
+
     alias now='date -Iseconds'
+    alias noww='date +%Y-%m-%d_%H%M%S'
 
     alias kl='date +%H:%M'
-    alias idag='date +"%d %b %Y"'
     alias nu='kl; today; vecka'
 
     if [ "$(uname)" = "Darwin" ]; then
