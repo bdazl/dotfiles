@@ -1,19 +1,13 @@
-/*
 * {
     border: none;
     border-radius: 0;
-    font-family: "Ubuntu Nerd Font";
+    font-family: "Ubuntu Nerd Font", "Symbols Nerd Font", monospace;
     font-size: 13px;
     min-height: 0;
 }
 
-#window {
-    font-weight: bold;
-    font-family: "Ubuntu";
-}
-*/
 window#waybar {
-    background: black;
+    background: rgba(0, 0, 0, 0.9);
     color: white;
     border-radius: 20px;
 }
@@ -38,7 +32,10 @@ window#waybar {
     border-top: 2px solid rgb(102, 220, 105);
 }
 
-#hyprland-workspaces, #hyprland-window, #clock, #cpu, #pulseaudio, #custom-spotify {
+#clock,
+#cpu,
+#pulseaudio,
+#custom-spotify {
     padding: 0 3px;
     margin: 0 5px;
 }
@@ -47,27 +44,12 @@ window#waybar {
     font-weight: bold;
 }
 
-/*@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: black;
-    }
-}*/
-
-#cpu {
-}
-
 #pulseaudio {
     color: rgb(102, 220, 105);
 }
 
 #pulseaudio.muted {
-}
-
-#hyprland-workspaces {
-}
-
-#hyprland-window {
+    color: #888;
 }
 
 #custom-spotify {
