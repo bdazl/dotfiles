@@ -28,6 +28,7 @@
     ~/.config/Code/User/settings.json: etc/code/settings.json
     ~/.config/ghostty: etc/ghostty
     ~/.config/hypr: etc/hypr
+    ~/.config/waybar: etc/waybar
     ~/.config/lf/lfrc: etc/lf/lfrc
     ~/.config/nvim: etc/nvim
     ~/.config/ranger: etc/ranger

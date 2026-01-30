@@ -1,0 +1,55 @@
+{
+    "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar at the bottom of your screen
+    "height": 28, // Waybar height
+    "width": 1500, // Waybar width
+    // Choose the order of the modules
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": ["clock"],
+    "modules-right": ["custom/spotify", "cpu", "pulseaudio"],
+    "clock": {
+        "timezone": "Europe/Stockholm",
+        "tooltip": true,
+        "tooltip-format": "<big>{:%Y %B %d %A}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%Y-%m-%d}",
+        "calendar": {
+            "mode"          : "year",
+            "mode-mon-col"  : 3,
+            "weeks-pos"     : "right",
+            "on-scroll"     : 1,
+            "on-click-right": "mode",
+            "format": {
+                "months":     "<span color='#ffead3'><b>{}</b></span>",
+                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        }, 
+    },
+    "cpu": {
+        "format": "cpu: {usage}%"
+    },
+    "pulseaudio": {
+        //"scroll-step": 1,
+        "format": "vol: {volume:2}%",
+        "format-bluetooth": "vol(BT): {volume:2}%",
+        "on-click": "pavucontrol"
+    },
+	"hyprland/workspaces": {
+		 //"format": "{icon}",
+		 //"on-scroll-up": "hyprctl dispatch workspace e+1",
+		 //"on-scroll-down": "hyprctl dispatch workspace e-1"
+	},
+    "hyprland/window": {
+        "max-length": 200,
+        "separate-outputs": true
+    },
+    "custom/spotify": {
+        "format": "{}",
+        "max-length": 40,
+        "interval": 3, // Remove this if your script is endless and write in loop
+        "exec": "$HOME/.config/waybar/mediaplayer.sh 2> /dev/null", // Script in resources folder
+        "exec-if": "pgrep spotify"
+    },
+}
