@@ -33,6 +33,9 @@ The `generate` script uses `envsubst` to substitute variables from `gen/active.e
 - macOS: Additional `install.mac.extra.yml` loaded automatically on Darwin
 - Windows: Separate `install.win.yml` manifest
 
+### Package Management
+- Arch Linux: Use `yay` (AUR helper) for installing packages, not `pacman` directly
+
 ## Language
 
 - Conversation: Swedish is preferred
