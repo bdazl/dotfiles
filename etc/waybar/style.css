@@ -1,7 +1,7 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: "Ubuntu Nerd Font", "Symbols Nerd Font", monospace;
+    font-family: monospace, "Symbols Nerd Font";
     font-size: 13px;
     min-height: 0;
 }
