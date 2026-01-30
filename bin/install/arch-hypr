@@ -21,6 +21,7 @@ yay -Su --needed \
     pipewire-pulse \
     pavucontrol \
     noto-fonts \
+    ttf-nerd-fonts-symbols \
     libnotify \
     firefox \
     ghostty \
