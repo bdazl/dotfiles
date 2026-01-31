@@ -29,6 +29,8 @@ yay -Su --needed \
     rofi-lbonn-wayland-git \
     bluez \
     bluez-utils \
+    blueman \
+    playerctl \
     1password \
     mupdf \
     feh \

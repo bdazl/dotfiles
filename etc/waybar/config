@@ -1,11 +1,12 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 28,
-    "width": 1500,
+    "height": 36,
+    "margin-top": 1,
+    "width": 1800,
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["mpris", "cpu", "memory", "network", "pulseaudio"],
+    "modules-right": ["mpris", "bluetooth", "cpu", "memory", "network", "pulseaudio", "custom/power"],
     "hyprland/workspaces": {
     },
     "hyprland/window": {
@@ -14,7 +15,7 @@
     },
     "clock": {
         "timezone": "Europe/Stockholm",
-        "format": " {:%H:%M}",
+        "format": "{:%H:%M}",
         "format-alt": " {:%Y-%m-%d}",
         "tooltip": true,
         "tooltip-format": "<big>{:%Y %B %d %A}</big>\n<tt><small>{calendar}</small></tt>",
@@ -34,11 +35,19 @@
         }
     },
     "cpu": {
-        "format": " {usage}%"
+        "format": "󰻠 {usage}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
     },
     "memory": {
         "format": "󰍛 {percentage}%",
-        "tooltip-format": "{used:0.1f}G / {total:0.1f}G"
+        "tooltip-format": "{used:0.1f}G / {total:0.1f}G",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
     },
     "network": {
         "format-wifi": "󰖩 {essid}",
@@ -53,7 +62,10 @@
         "format-icons": {
             "default": ["󰕿", "󰖀", "󰕾"]
         },
-        "on-click": "pavucontrol"
+        "on-click": "pavucontrol",
+        "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%"
     },
     "mpris": {
         "format": "{player_icon} {artist} - {title}",
@@ -63,6 +75,30 @@
             "default": "󰎈",
             "spotify": "",
             "firefox": "󰈹"
-        }
+        },
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous"
+    },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    },
+    "bluetooth": {
+        "format": "󰂯",
+        "format-connected": "󰂱 {device_alias}",
+        "format-connected-battery": "󰂱 {device_alias} {device_battery_percentage}%",
+        "format-disabled": "󰂲",
+        "format-off": "󰂲",
+        "tooltip-format": "{controller_alias}\n{num_connections} connected",
+        "tooltip-format-connected": "{controller_alias}\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}",
+        "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_battery_percentage}%",
+        "on-click": "blueman-manager"
+    },
+    "custom/power": {
+        "format": "⏻",
+        "tooltip": false,
+        "on-click": "~/.config/waybar/power-menu.sh"
     }
 }
