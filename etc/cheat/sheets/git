@@ -1,2 +1,12 @@
 # Update submodules to latest commit
 git submodule foreach --recursive git pull --prune
+
+# Rename default branch master -> main (local + remote)
+git branch -m master main
+git push -u origin main
+
+# Switch other clones to main
+git fetch origin
+git branch -m master main
+git branch -u origin/main main
+git remote set-head origin -a
