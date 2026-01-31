@@ -9,7 +9,7 @@
 window#waybar {
     background: linear-gradient(90deg, rgba(30,30,46,0.95), rgba(24,24,37,0.95));
     color: white;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-top: 10px;
 }
 
