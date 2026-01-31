@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+See [AGENTS.md](AGENTS.md) for automation agent guidance and keep overlapping guidance in sync.
+
 ## Repository Overview
 
 This is a personal dotfiles repository using [Dotbot](https://github.com/anishathalye/dotbot) for cross-platform configuration management (Linux, macOS, Windows/WSL).
@@ -54,6 +56,7 @@ The `generate` script uses `envsubst` to substitute variables from `gen/active.e
 ### Workflow
 - Atomic commits: one logical change per commit
 - Never amend unless explicitly requested
+ - Default branch: `main`
 
 ## Code Style
 
