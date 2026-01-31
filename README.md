@@ -2,6 +2,8 @@
 This is a collection of my personal dotfiles. I have machines running various flavors of Linux, MacOS and Win/WSL
 and I try to make all settings agnostic to the underlying OS. All configuration files are exist under [etc/](env).
 
+Automation agent guidance lives in [AGENTS.md](AGENTS.md). Claude Code instructions are in [CLAUDE.md](CLAUDE.md).
+
 ## Prerequisites
 
 > [!NOTE]

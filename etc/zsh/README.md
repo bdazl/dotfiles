@@ -1,5 +1,7 @@
 # Configuration for ZSH
 
+Automation agent guidance lives in [AGENTS.md](../../AGENTS.md). Claude Code instructions are in [CLAUDE.md](../../CLAUDE.md).
+
 ## Overview
 
 The zshrc is run for each new shell and the zshenv is
