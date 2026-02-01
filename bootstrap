@@ -10,3 +10,11 @@ if [[ ! -e "gen/active.env" ]]; then
 else
     echo "active.env already configured"
 fi
+
+git_local="$HOME/.config/git/local"
+git_template="$REPO_ROOT/etc/git/gitconfig.local.template"
+if [[ ! -e "$git_local" && -e "$git_template" ]]; then
+    echo "gitconfig.local.template -> $git_local"
+    mkdir -p "$(dirname "$git_local")"
+    cp "$git_template" "$git_local"
+fi
