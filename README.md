@@ -35,6 +35,7 @@ Main installation:
 ## Symlinks
 Dotbot uses `etc/install.yml` to define which files are symlinked into `$HOME`.
 Static files come from `etc/`, while generated files are placed in `gen/out/` by `./generate`.
+Platform-specific manifests are applied via `etc/install.mac.extra.yml` (Darwin) and `etc/install.win.yml` (Windows/WSL).
 
 ## Filesystem
 * [bin](bin): scripts and binaries used in repo (or commonly by me)
