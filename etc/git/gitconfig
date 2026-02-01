@@ -1,6 +1,7 @@
 [user]
 	name = Jacob Peyron
-	email = $EMAIL
+[include]
+	path = ~/.config/git/local
 [init]
 	templatedir = ~/.git_template
 	defaultBranch = main
