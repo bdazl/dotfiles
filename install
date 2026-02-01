@@ -4,18 +4,29 @@ set -e
 REPO_ROOT=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
 cd "${REPO_ROOT}" || exit 1
 
+. "bin/common"
+
+log_info "install: repo root: $REPO_ROOT"
+
 DOTBOT_DIR="$REPO_ROOT/ext/dotbot"
 DOTBOT_BIN="bin/dotbot"
 
+log_info "install: updating submodules"
 git submodule update --init --recursive 
 
+log_info "install: running bootstrap"
 ./bootstrap
+log_info "install: running generate"
 ./generate
 
 CONFIG="$REPO_ROOT/etc/install.yml"
+log_info "install: applying $CONFIG"
 "${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${REPO_ROOT}" -c "${CONFIG}" "${@}"
 
 if [ "$(uname)" = "Darwin" ]; then
     CONFIG_MAC="$REPO_ROOT/etc/install.mac.extra.yml"
+    log_info "install: applying $CONFIG_MAC"
     "${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${REPO_ROOT}" -c "${CONFIG_MAC}" "${@}"
 fi
+
+log_ok "install: done"

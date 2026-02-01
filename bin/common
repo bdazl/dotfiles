@@ -5,6 +5,34 @@ error() {
     exit 1
 }
 
+use_color() {
+    [[ -t 1 ]]
+}
+
+color() {
+    if use_color; then
+        printf '%b' "$1"
+    fi
+}
+
+log_info() {
+    color "\033[34m"
+    echo "$1"
+    color "\033[0m"
+}
+
+log_ok() {
+    color "\033[32m"
+    echo "$1"
+    color "\033[0m"
+}
+
+log_warn() {
+    color "\033[33m"
+    echo "$1"
+    color "\033[0m"
+}
+
 prompt_user() {
     prompt="$1"
     default="${2:-N}"
