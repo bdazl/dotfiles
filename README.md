@@ -32,6 +32,10 @@ Main installation:
 * [generate](generate): populate the `gen/out/` directory, based on `gen/active.env` values substituting `etc/` files
 * [update](update): update git submodules to latest commits
 
+## Symlinks
+Dotbot uses `etc/install.yml` to define which files are symlinked into `$HOME`.
+Static files come from `etc/`, while generated files are placed in `gen/out/` by `./generate`.
+
 ## Filesystem
 * [bin](bin): scripts and binaries used in repo (or commonly by me)
 * [cfg](cfg): supporting configuration assets referenced by scripts/configs
