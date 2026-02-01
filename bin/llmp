@@ -268,8 +268,8 @@ def main():
     if not args.name:
         raise PromptError("Missing prompt name")
 
-    repo_root = repo_root()
-    prompt_path = resolve_prompt_path(repo_root, args.name)
+    root_path = repo_root()
+    prompt_path = resolve_prompt_path(root_path, args.name)
     prompt_text = read_prompt(prompt_path)
 
     if args.list_free_vars:
@@ -277,7 +277,7 @@ def main():
             print(var)
         return 0
 
-    strings_path = repo_root / "ai" / "strings.yml"
+    strings_path = root_path / "ai" / "strings.yml"
     free_vars = build_free_vars(args.s, args.f)
 
     result = render_prompt(prompt_text, strings_path, free_vars, args.S)
