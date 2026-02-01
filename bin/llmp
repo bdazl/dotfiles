@@ -137,6 +137,34 @@ def list_free_vars(text: str) -> list[str]:
     return sorted(set(FREE_VAR_PATTERN.findall(text)))
 
 
+def list_templates(llm_root: Path) -> list[str]:
+    """List prompt templates under llm_root/prompt, without .md suffix."""
+    prompt_root = llm_root / "prompt"
+    if not prompt_root.exists():
+        return []
+    templates = []
+    for path in prompt_root.rglob("*.md"):
+        rel_path = path.relative_to(prompt_root).as_posix()
+        templates.append(rel_path[:-3])
+    return sorted(templates)
+
+
+def list_strings(strings_path: Path) -> list[str]:
+    """List defined string keys in llm/strings.yml."""
+    strings = load_strings_map(strings_path)
+    return sorted(strings.keys())
+
+
+def list_string_items(strings_path: Path, expand: bool) -> list[tuple[str, str]]:
+    """Return (key, value) items, optionally expanding ${ENV} and $()."""
+    strings = load_strings_map(strings_path)
+    items = []
+    for key in sorted(strings.keys()):
+        value = strings[key]
+        items.append((key, expand_value(value) if expand else value))
+    return items
+
+
 def expand_value(value: str) -> str:
     """Expand $(command) and ${ENV} in a string value.
 
@@ -251,31 +279,9 @@ def run_doctests() -> int:
     return 0
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str]) -> argparse.Namespace:
     """Return parsed CLI arguments."""
     parser = argparse.ArgumentParser(description="Render prompt templates.")
-    parser.add_argument("name", nargs="?", help="Prompt name or path under llm/prompt")
-    parser.add_argument(
-        "-s",
-        action="append",
-        default=[],
-        metavar="VAR:VALUE",
-        help="Substitute [[VAR]] with VALUE",
-    )
-    parser.add_argument(
-        "-f",
-        action="append",
-        default=[],
-        metavar="VAR:FILE",
-        help="Substitute [[VAR]] with file contents",
-    )
-    parser.add_argument("-S", action="store_true", help="Strict mode for free variables")
-    parser.add_argument(
-        "-l",
-        "--list-free-vars",
-        action="store_true",
-        help="List free variables and exit",
-    )
     parser.add_argument(
         "--doctest",
         action="store_true",
@@ -286,35 +292,115 @@ def parse_args() -> argparse.Namespace:
         "--root",
         help="Override LLM root directory (defaults to <repo>/llm)",
     )
-    return parser.parse_args()
+
+    subparsers = parser.add_subparsers(dest="command")
+
+    render_parser = subparsers.add_parser("render", help="Render a prompt template")
+    render_parser.add_argument("name", help="Prompt name or path under llm/prompt")
+    render_parser.add_argument(
+        "-s",
+        action="append",
+        default=[],
+        metavar="VAR:VALUE",
+        help="Substitute [[VAR]] with VALUE",
+    )
+    render_parser.add_argument(
+        "-f",
+        action="append",
+        default=[],
+        metavar="VAR:FILE",
+        help="Substitute [[VAR]] with file contents",
+    )
+    render_parser.add_argument(
+        "-S",
+        action="store_true",
+        help="Strict mode for free variables",
+    )
+
+    subparsers.add_parser("list", aliases=["ls"], help="List available templates")
+
+    strings_parser = subparsers.add_parser("strings", help="List defined strings")
+    strings_parser.add_argument(
+        "-v",
+        "--values",
+        action="store_true",
+        help="Show values only",
+    )
+    strings_parser.add_argument(
+        "-k",
+        "--keys",
+        action="store_true",
+        help="Show keys only",
+    )
+    strings_parser.add_argument(
+        "-e",
+        "--expand",
+        action="store_true",
+        help="Expand ${ENV} and $() in values",
+    )
+
+    vars_parser = subparsers.add_parser(
+        "vars",
+        aliases=["free"],
+        help="List free variables in a template",
+    )
+    vars_parser.add_argument("target", help="Target prompt")
+
+    return parser.parse_args(argv)
 
 
 def main():
     """CLI entrypoint."""
-    args = parse_args()
+    argv = sys.argv[1:]
+    commands = {"render", "list", "ls", "strings", "vars", "free"}
+    if argv and not argv[0].startswith("-") and argv[0] not in commands:
+        argv = ["render", *argv]
+    args = parse_args(argv)
 
     if args.doctest:
         return run_doctests()
 
-    if not args.name:
-        raise PromptError("Missing prompt name")
-
     repo_path = repo_root()
     llm_root = Path(args.root).expanduser() if args.root else repo_path / "llm"
-    prompt_path = resolve_prompt_path(llm_root, args.name)
-    prompt_text = read_prompt(prompt_path)
+    strings_path = llm_root / "strings.yml"
 
-    if args.list_free_vars:
+    if args.command in ("list", "ls"):
+        for template in list_templates(llm_root):
+            print(template)
+        return 0
+
+    if args.command == "strings":
+        items = list_string_items(strings_path, args.expand)
+        if args.keys and args.values:
+            raise PromptError("Use either --keys or --values, not both")
+        if args.keys:
+            for key, _ in items:
+                print(key)
+        elif args.values:
+            for _, value in items:
+                print(value)
+        else:
+            for key, value in items:
+                print(f"{key}: {value}")
+        return 0
+
+    if args.command in ("vars", "free"):
+        prompt_path = resolve_prompt_path(llm_root, args.target)
+        prompt_text = read_prompt(prompt_path)
         for var in list_free_vars(prompt_text):
             print(var)
         return 0
 
-    strings_path = llm_root / "strings.yml"
-    free_vars = build_free_vars(args.s, args.f)
+    if args.command == "render":
+        prompt_path = resolve_prompt_path(llm_root, args.name)
+        prompt_text = read_prompt(prompt_path)
+        free_vars = build_free_vars(args.s, args.f)
 
-    result = render_prompt(prompt_text, strings_path, free_vars, args.S)
-    sys.stdout.write(result)
-    return 0
+        result = render_prompt(prompt_text, strings_path, free_vars, args.S)
+        sys.stdout.write(result)
+        return 0
+
+    raise PromptError("Missing command")
 
 
 if __name__ == "__main__":
