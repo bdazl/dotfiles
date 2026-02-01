@@ -1,7 +1,7 @@
 # AGENTS.md
 
 Guidance for automation agents working in this repository.
-See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping guidance in sync.
+See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping guidance consistent to avoid drift.
 
 ## Language
 - Conversation: Swedish preferred
@@ -9,6 +9,7 @@ See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping gui
 
 ## Repository Overview
 - Personal dotfiles repo using Dotbot for cross‑platform config management (Linux, macOS, Windows/WSL).
+- Configs are mostly declarative under `etc/` and wired together via `etc/install.yml`.
 
 ## Commands
 - `./install` - Main install: init submodules, run bootstrap/generate, symlink configs to `$HOME`
@@ -20,8 +21,12 @@ See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping gui
 - `etc/` - Static configs by app (vim, zsh, hypr, etc.)
 - `gen/` - Template system: `default.env`, `active.env`, `out/` for generated files
 - `ext/` - Git submodules (Dotbot, plugins)
-- `bin/` - Scripts, platform installers in `bin/install/`
+- `bin/` - Scripts and helpers; platform installers live in `bin/install/`
 - `sys/` - System files intended for `/etc`
+- `cfg/` - Supporting configuration assets referenced by scripts/configs
+- `lib/` - Helper libraries used by scripts
+- `win/` - Windows/WSL specific assets and config
+- `llm/` - Prompt templates and shared string mappings for LLM tooling
 
 ## Symlink Configuration
 - `etc/install.yml` defines symlink mappings.
@@ -39,8 +44,10 @@ See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping gui
 - Default branch: `main`
 - Commit style: lowercase, no trailing period
 - Format: `component: brief description`
+- Use scoped prefixes that mirror existing log style (e.g., `docs:`, `cheat:`); keep messages concise and action‑oriented
 - Atomic commits (one logical change per commit)
 - Never amend unless explicitly requested
+ - Keep `AGENTS.md` and `CLAUDE.md` aligned when updating shared guidance
 
 ## Shell Style (zsh/bash)
 - Aliases grouped by tool/purpose in `etc/zsh/conf.d/alias.zsh`

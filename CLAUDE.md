@@ -22,6 +22,10 @@ This is a personal dotfiles repository using [Dotbot](https://github.com/anishat
 - **gen/** - Template system: `default.env` defines variables, `active.env` stores local values, `out/` contains generated files
 - **ext/** - Git submodules (Dotbot, urxvt plugins)
 - **bin/** - Scripts including platform-specific installers in `bin/install/`
+- **cfg/** - Supporting configuration assets referenced by scripts/configs
+- **lib/** - Helper libraries used by scripts
+- **win/** - Windows/WSL-specific assets and config
+- **llm/** - Prompt templates and shared string mappings for LLM tooling
 - **sys/** - System-level files (for /etc, not home)
 
 ### Symlink Configuration
