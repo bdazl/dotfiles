@@ -32,7 +32,11 @@ This is a personal dotfiles repository using [Dotbot](https://github.com/anishat
 `etc/install.yml` defines all symlink mappings. Dotbot uses this to link configs from this repo into `$HOME`. Static files come from `etc/`, generated files from `gen/out/`.
 
 ### Generation System
-The `generate` script uses `envsubst` to substitute variables from `gen/active.env` into template files. Currently used for gitconfig (EMAIL variable). Add new generated files by extending the `targets` associative array in `generate`.
+The `generate` script uses `envsubst` to substitute variables from `gen/active.env` into template files. Add new generated files by extending the `targets` associative array in `generate`.
+
+### Git Identity
+The shared gitconfig includes a local-only file at `~/.config/git/local` to keep user identity off-repo.
+Use `etc/git/gitconfig.local.template` as a starting point when setting up new machines.
 
 ### Platform Handling
 - Linux: Standard `install.yml`
