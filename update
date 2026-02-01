@@ -17,4 +17,4 @@ curl -fLo "$REPO_ROOT/etc/zsh/conf.d/fzf/completion.zsh" \
 curl -fLo "$REPO_ROOT/etc/zsh/conf.d/fzf/key-bindings.zsh" \
     https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
 
-log_ok "update: done"
+log_ok "✅ update: done"
