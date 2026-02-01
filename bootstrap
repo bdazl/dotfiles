@@ -27,3 +27,5 @@ else
     mkdir -p "$(dirname "$git_local")"
     cp "$git_template" "$git_local"
 fi
+
+log_ok "✅ bootstrap: done"

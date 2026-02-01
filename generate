@@ -47,4 +47,4 @@ for src in "${!targets[@]}"; do
     fi
 done
 
-log_info "generate: done"
+log_ok "✅ generate: done"
