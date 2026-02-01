@@ -1,0 +1,265 @@
+#!/usr/bin/env python3
+
+"""Render prompt templates with basic variable substitution."""
+
+import argparse
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+
+VAR_PATTERN = re.compile(r"\{\{([A-Za-z0-9_-]+)\}\}")
+FREE_VAR_PATTERN = re.compile(r"\[\[([A-Za-z0-9_-]+)\]\]")
+
+
+class PromptError(Exception):
+    """Raised when prompt rendering fails due to invalid input or missing data."""
+
+
+def _strip_quotes(value: str) -> str:
+    """Remove one layer of YAML-style quotes from a scalar.
+
+    This is intentionally conservative and only supports basic quoting.
+
+    >>> _strip_quotes('"hello"')
+    'hello'
+    >>> _strip_quotes("'hello'")
+    'hello'
+    >>> _strip_quotes("plain")
+    'plain'
+    """
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        quote = value[0]
+        inner = value[1:-1]
+        if quote == '"':
+            return (
+                inner.replace(r"\\", "\\")
+                .replace(r"\n", "\n")
+                .replace(r"\t", "\t")
+                .replace(r"\"", '"')
+            )
+        return inner.replace("''", "'")
+    return value
+
+
+def _parse_yaml_mapping(lines):
+    """Parse a minimal YAML mapping into a nested dict."""
+    data = {}
+    stack = [(0, data)]
+
+    for raw in lines:
+        line = raw.split("#", 1)[0].rstrip("\n")
+        if not line.strip():
+            continue
+        indent = len(line) - len(line.lstrip(" "))
+        key_value = line.strip()
+        if ":" not in key_value:
+            raise PromptError(f"Invalid YAML line: {raw.rstrip()}")
+        key, value = key_value.split(":", 1)
+        key = key.strip()
+        value = value.strip()
+
+        while stack and indent < stack[-1][0]:
+            stack.pop()
+        if not stack:
+            raise PromptError(f"Invalid indentation: {raw.rstrip()}")
+
+        target = stack[-1][1]
+        if value == "":
+            target[key] = {}
+            stack.append((indent + 2, target[key]))
+        else:
+            target[key] = _strip_quotes(value)
+
+    return data
+
+
+def _load_strings_map(path: Path):
+    """Load strings and commands from ai/strings.yml if present."""
+    if not path.exists():
+        return {}, {}
+    content = path.read_text(encoding="utf-8")
+    data = _parse_yaml_mapping(content.splitlines())
+
+    strings = {}
+    commands = {}
+
+    if isinstance(data.get("strings"), dict):
+        strings.update(data["strings"])
+    if isinstance(data.get("commands"), dict):
+        commands.update(data["commands"])
+
+    for key, value in data.items():
+        if key in ("strings", "commands"):
+            continue
+        if isinstance(value, str) and value.startswith("$(") and value.endswith(")"):
+            commands[key] = value[2:-1].strip()
+        elif isinstance(value, str):
+            strings[key] = value
+
+    return strings, commands
+
+
+def _run_command(cmd: str) -> str:
+    """Execute a shell command and return stdout without the final newline."""
+    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    if result.returncode != 0:
+        raise PromptError(f"Command failed: {cmd}\n{result.stderr.strip()}")
+    return result.stdout.rstrip("\n")
+
+
+def _parse_kv(arg: str) -> tuple[str, str]:
+    """Parse a KEY:VALUE pair.
+
+    >>> _parse_kv("name:value")
+    ('name', 'value')
+    """
+    if ":" not in arg:
+        raise PromptError(f"Invalid key/value: {arg}")
+    key, value = arg.split(":", 1)
+    key = key.strip()
+    if not key:
+        raise PromptError(f"Invalid key/value: {arg}")
+    return key, value
+
+
+def _load_file_value(path: str) -> str:
+    """Read a UTF-8 file and return its contents."""
+    file_path = Path(path)
+    if not file_path.exists():
+        raise PromptError(f"File not found: {path}")
+    return file_path.read_text(encoding="utf-8")
+
+
+def _list_free_vars(text: str) -> list[str]:
+    """Return unique free variables found in a prompt template.
+
+    >>> _list_free_vars("[[a]] and [[b]] and [[a]]")
+    ['a', 'b']
+    """
+    return sorted(set(FREE_VAR_PATTERN.findall(text)))
+
+
+def _substitute_prompt(text: str, strings, commands, free_vars, strict: bool) -> str:
+    """Apply {{var}} and [[var]] substitutions to template text."""
+    def replace_var(match):
+        key = match.group(1)
+        if key in strings:
+            return strings[key]
+        if key in commands:
+            return _run_command(commands[key])
+        raise PromptError(f"Missing mapping for variable: {key}")
+
+    def replace_free(match):
+        key = match.group(1)
+        if key in free_vars:
+            return free_vars[key]
+        if strict:
+            raise PromptError(f"Missing free variable: {key}")
+        return match.group(0)
+
+    text = VAR_PATTERN.sub(replace_var, text)
+    text = FREE_VAR_PATTERN.sub(replace_free, text)
+    return text
+
+
+def _parse_args() -> argparse.Namespace:
+    """Return parsed CLI arguments."""
+    parser = argparse.ArgumentParser(description="Render prompt templates.")
+    parser.add_argument("name", help="Prompt name or path under ai/prompt")
+    parser.add_argument(
+        "-s",
+        action="append",
+        default=[],
+        metavar="VAR:VALUE",
+        help="Substitute [[VAR]] with VALUE",
+    )
+    parser.add_argument(
+        "-f",
+        action="append",
+        default=[],
+        metavar="VAR:FILE",
+        help="Substitute [[VAR]] with file contents",
+    )
+    parser.add_argument("-S", action="store_true", help="Strict mode for free variables")
+    parser.add_argument(
+        "-l",
+        "--list-free-vars",
+        action="store_true",
+        help="List free variables and exit",
+    )
+    return parser.parse_args()
+
+
+def _repo_root() -> Path:
+    """Return the repository root based on this script's location."""
+    return Path(__file__).resolve().parent.parent
+
+
+def _resolve_prompt_path(repo_root: Path, name: str) -> Path:
+    """Resolve a prompt file under ai/prompt, adding .md when missing."""
+    prompt_root = repo_root / "ai" / "prompt"
+    prompt_path = prompt_root / name
+    if prompt_path.suffix == "":
+        prompt_path = prompt_path.with_suffix(".md")
+    return prompt_path
+
+
+def _read_prompt(path: Path) -> str:
+    """Read prompt file contents as UTF-8."""
+    if not path.exists():
+        raise PromptError(f"Prompt not found: {path}")
+    return path.read_text(encoding="utf-8")
+
+
+def _build_free_vars(kv_pairs, file_pairs) -> dict[str, str]:
+    """Combine -s and -f inputs into a single mapping."""
+    free_vars = {}
+    for item in kv_pairs:
+        key, value = _parse_kv(item)
+        free_vars[key] = value
+    for item in file_pairs:
+        key, path = _parse_kv(item)
+        free_vars[key] = _load_file_value(path)
+    return free_vars
+
+
+def _render_prompt(
+    prompt_text: str,
+    strings_path: Path,
+    free_vars: dict[str, str],
+    strict: bool,
+) -> str:
+    """Render a prompt with substitutions."""
+    strings, commands = _load_strings_map(strings_path)
+    return _substitute_prompt(prompt_text, strings, commands, free_vars, strict)
+
+
+def main():
+    """CLI entrypoint."""
+    args = _parse_args()
+
+    repo_root = _repo_root()
+    prompt_path = _resolve_prompt_path(repo_root, args.name)
+    prompt_text = _read_prompt(prompt_path)
+
+    if args.list_free_vars:
+        for var in _list_free_vars(prompt_text):
+            print(var)
+        return 0
+
+    strings_path = repo_root / "ai" / "strings.yml"
+    free_vars = _build_free_vars(args.s, args.f)
+
+    result = _render_prompt(prompt_text, strings_path, free_vars, args.S)
+    sys.stdout.write(result)
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except PromptError as exc:
+        print(f"prompt: {exc}", file=sys.stderr)
+        sys.exit(1)
