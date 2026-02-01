@@ -1,6 +1,6 @@
 # Jacob's dotfiles
 This is a collection of my personal dotfiles. I have machines running various flavors of Linux, MacOS and Win/WSL
-and I try to make all settings agnostic to the underlying OS. All configuration files are exist under [etc/](env).
+and I try to make all settings agnostic to the underlying OS. Configuration files live under [etc/](etc).
 
 Automation agent guidance lives in [AGENTS.md](AGENTS.md). Claude Code instructions are in [CLAUDE.md](CLAUDE.md).
 
@@ -34,10 +34,14 @@ Main installation:
 
 ## Filesystem
 * [bin](bin): scripts and binaries used in repo (or commonly by me)
+* [cfg](cfg): supporting configuration assets referenced by scripts/configs
 * [etc](etc): configuration files
 * [ext](ext): external files and folders (submodules like `Dotbot`, for instance)
-* [gen](gen): generated files (gen/out) and substition variables (gen/active.env)
+* [gen](gen): generated files (gen/out) and substitution variables (gen/active.env)
+* [lib](lib): helper libraries used by scripts
+* [llm](llm): prompt templates and shared string mappings for LLM tooling
 * [sys](sys): files to be installed on the system (not home folder)
+* [win](win): Windows/WSL specific assets and config
 
 ## License
 [ICU License](LICENSE)
