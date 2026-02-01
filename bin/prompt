@@ -43,19 +43,24 @@ def _strip_quotes(value: str) -> str:
     return value
 
 
-def _parse_yaml_mapping(lines):
-    """Parse a minimal YAML mapping into a nested dict."""
+def _parse_yaml_mapping(lines, source_label: str):
+    """Parse a minimal YAML mapping into a nested dict.
+
+    Errors include file context and line numbers for easier debugging.
+    """
     data = {}
     stack = [(0, data)]
 
-    for raw in lines:
+    for idx, raw in enumerate(lines, start=1):
         line = raw.split("#", 1)[0].rstrip("\n")
         if not line.strip():
             continue
         indent = len(line) - len(line.lstrip(" "))
         key_value = line.strip()
         if ":" not in key_value:
-            raise PromptError(f"Invalid YAML line: {raw.rstrip()}")
+            raise PromptError(
+                f"Invalid YAML line at {source_label}:{idx}: {raw.rstrip()}"
+            )
         key, value = key_value.split(":", 1)
         key = key.strip()
         value = value.strip()
@@ -63,7 +68,9 @@ def _parse_yaml_mapping(lines):
         while stack and indent < stack[-1][0]:
             stack.pop()
         if not stack:
-            raise PromptError(f"Invalid indentation: {raw.rstrip()}")
+            raise PromptError(
+                f"Invalid indentation at {source_label}:{idx}: {raw.rstrip()}"
+            )
 
         target = stack[-1][1]
         if value == "":
@@ -80,7 +87,7 @@ def _load_strings_map(path: Path):
     if not path.exists():
         return {}, {}
     content = path.read_text(encoding="utf-8")
-    data = _parse_yaml_mapping(content.splitlines())
+    data = _parse_yaml_mapping(content.splitlines(), str(path))
 
     strings = {}
     commands = {}
@@ -164,34 +171,6 @@ def _substitute_prompt(text: str, strings, commands, free_vars, strict: bool) ->
     return text
 
 
-def _parse_args() -> argparse.Namespace:
-    """Return parsed CLI arguments."""
-    parser = argparse.ArgumentParser(description="Render prompt templates.")
-    parser.add_argument("name", help="Prompt name or path under ai/prompt")
-    parser.add_argument(
-        "-s",
-        action="append",
-        default=[],
-        metavar="VAR:VALUE",
-        help="Substitute [[VAR]] with VALUE",
-    )
-    parser.add_argument(
-        "-f",
-        action="append",
-        default=[],
-        metavar="VAR:FILE",
-        help="Substitute [[VAR]] with file contents",
-    )
-    parser.add_argument("-S", action="store_true", help="Strict mode for free variables")
-    parser.add_argument(
-        "-l",
-        "--list-free-vars",
-        action="store_true",
-        help="List free variables and exit",
-    )
-    return parser.parse_args()
-
-
 def _repo_root() -> Path:
     """Return the repository root based on this script's location."""
     return Path(__file__).resolve().parent.parent
@@ -236,9 +215,58 @@ def _render_prompt(
     return _substitute_prompt(prompt_text, strings, commands, free_vars, strict)
 
 
+def _run_doctests() -> int:
+    """Run doctests for this module."""
+    import doctest
+
+    result = doctest.testmod()
+    if result.failed:
+        return 1
+    return 0
+
+
+def _parse_args() -> argparse.Namespace:
+    """Return parsed CLI arguments."""
+    parser = argparse.ArgumentParser(description="Render prompt templates.")
+    parser.add_argument("name", nargs="?", help="Prompt name or path under ai/prompt")
+    parser.add_argument(
+        "-s",
+        action="append",
+        default=[],
+        metavar="VAR:VALUE",
+        help="Substitute [[VAR]] with VALUE",
+    )
+    parser.add_argument(
+        "-f",
+        action="append",
+        default=[],
+        metavar="VAR:FILE",
+        help="Substitute [[VAR]] with file contents",
+    )
+    parser.add_argument("-S", action="store_true", help="Strict mode for free variables")
+    parser.add_argument(
+        "-l",
+        "--list-free-vars",
+        action="store_true",
+        help="List free variables and exit",
+    )
+    parser.add_argument(
+        "--doctest",
+        action="store_true",
+        help="Run doctests and exit",
+    )
+    return parser.parse_args()
+
+
 def main():
     """CLI entrypoint."""
     args = _parse_args()
+
+    if args.doctest:
+        return _run_doctests()
+
+    if not args.name:
+        raise PromptError("Missing prompt name")
 
     repo_root = _repo_root()
     prompt_path = _resolve_prompt_path(repo_root, args.name)
