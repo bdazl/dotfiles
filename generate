@@ -4,12 +4,17 @@ set -e
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${REPO_ROOT}" || exit 1
 
+. "bin/common"
+
+log_info "generate: repo root: $REPO_ROOT"
+
 # Common functions (like error)
 . "bin/common"
 
 # Source active environment (specific to this machine, not version controlled)
 # This file includes all variables that will later be expanded for each file below
 # This should explicitly fail if the repo has not yet been bootstrapped
+log_info "generate: loading gen/active.env"
 . "gen/active.env" || error "fix this by running ./bootstrap"
 
 # Dictionary from source -> target files
@@ -19,8 +24,27 @@ targets['etc/git/gitconfig']='gen/out/gitconfig'
 # For each source (key), make environment substitution to destination (value)
 for src in "${!targets[@]}"; do
     dst=${targets[$src]}
-    echo "$src -> $dst"
+    log_info "generate: $src -> $dst"
 
-    # Substitution
-    envsubst < "$src" > "$dst"
+    tmp="$(mktemp)"
+    existed=false
+    if [[ -e "$dst" ]]; then
+        existed=true
+    fi
+    envsubst < "$src" > "$tmp"
+    if [[ -e "$dst" ]] && cmp -s "$tmp" "$dst"; then
+        rm "$tmp"
+        log_info "generate: unchanged: $dst"
+        continue
+    fi
+
+    mkdir -p "$(dirname "$dst")"
+    mv "$tmp" "$dst"
+    if $existed; then
+        log_ok "generate: updated: $dst"
+    else
+        log_ok "generate: created: $dst"
+    fi
 done
+
+log_info "generate: done"

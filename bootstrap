@@ -4,17 +4,26 @@ set -e
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${REPO_ROOT}" || exit 1
 
+. "bin/common"
+
+log_info "bootstrap: repo root: $REPO_ROOT"
+
 if [[ ! -e "gen/active.env" ]]; then
-    echo "default.env -> active.env"
+    log_info "bootstrap: gen/active.env missing"
+    log_ok "bootstrap: copying gen/default.env -> gen/active.env"
     cp gen/default.env gen/active.env
 else
-    echo "active.env already configured"
+    log_info "bootstrap: gen/active.env already present"
 fi
 
 git_local="$HOME/.config/git/local"
 git_template="$REPO_ROOT/etc/git/gitconfig.local.template"
-if [[ ! -e "$git_local" && -e "$git_template" ]]; then
-    echo "gitconfig.local.template -> $git_local"
+if [[ ! -e "$git_template" ]]; then
+    log_warn "bootstrap: git template missing: $git_template"
+elif [[ -e "$git_local" ]]; then
+    log_info "bootstrap: git local config already present: $git_local"
+else
+    log_ok "bootstrap: creating git local config: $git_local"
     mkdir -p "$(dirname "$git_local")"
     cp "$git_template" "$git_local"
 fi
