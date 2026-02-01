@@ -153,6 +153,9 @@ tree-pager() {
     tree -C "$p" | bat -p
 }
 
+load-common() {
+    . "$ETC/bin/common"
+}
+
 # Init aliases
 config_aliases
-
