@@ -1,0 +1,64 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-keybindings.json",
+  "$docs": "https://code.claude.com/docs/en/keybindings",
+  "bindings": [
+    {
+      "context": "Global",
+      "bindings": {
+        "ctrl+k ctrl+t": "app:toggleTodos",
+        "ctrl+k ctrl+o": "app:toggleTranscript"
+      }
+    },
+    {
+      "context": "Chat",
+      "bindings": {
+        "ctrl+s": null,
+        "ctrl+k ctrl+s": "chat:stash",
+        "ctrl+k ctrl+w": "chat:submit",
+        "ctrl+k ctrl+u": "chat:undo",
+        "ctrl+k ctrl+e": "chat:externalEditor",
+        "ctrl+/": "chat:thinkingToggle"
+      }
+    },
+    {
+      "context": "MessageSelector",
+      "bindings": {
+        "shift+g": "messageSelector:bottom",
+        "g g": "messageSelector:top"
+      }
+    },
+    {
+      "context": "Confirmation",
+      "bindings": {
+        "ctrl+k": "confirm:nextField",
+        "ctrl+j": "confirm:next",
+        "ctrl+e": "confirm:toggleExplanation"
+      }
+    },
+    {
+      "context": "Settings",
+      "bindings": {
+        "ctrl+k": "select:previous",
+        "ctrl+j": "select:next",
+        "q": "confirm:no"
+      }
+    },
+    {
+      "context": "DiffDialog",
+      "bindings": {
+        "h": "diff:previousSource",
+        "l": "diff:nextSource",
+        "j": "diff:nextFile",
+        "k": "diff:previousFile",
+        "q": "diff:dismiss"
+      }
+    },
+    {
+      "context": "Autocomplete",
+      "bindings": {
+        "ctrl+j": "autocomplete:next",
+        "ctrl+k": "autocomplete:previous"
+      }
+    }
+  ]
+}
