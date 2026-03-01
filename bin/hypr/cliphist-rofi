@@ -1,0 +1,34 @@
+#!/bin/sh
+# Clipboard history with rofi
+# Enter: copy to clipboard
+# Shift+Enter: preview full content
+
+theme="$HOME/.config/rofi/catppuccin.rasi"
+
+while true; do
+    selected=$(cliphist list | rofi -dmenu -i -p " Clipboard" -theme "$theme" \
+        -kb-accept-alt "" -kb-custom-1 "Shift+Return" \
+        -mesg "Enter: copy  |  Shift+Enter: preview")
+
+    status=$?
+
+    [ -z "$selected" ] && exit 0
+
+    case $status in
+        0)  echo "$selected" | cliphist decode | wl-copy
+            exit 0 ;;
+        10) content=$(echo "$selected" | cliphist decode)
+            echo "$content" | rofi -dmenu -i -p " Preview" -theme "$theme" \
+                -kb-accept-alt "" -kb-custom-1 "Shift+Return" \
+                -theme-str 'listview { lines: 20; }' \
+                -mesg "Enter: copy  |  Shift+Enter: back"
+            pstatus=$?
+            case $pstatus in
+                0)  echo "$selected" | cliphist decode | wl-copy
+                    exit 0 ;;
+                10) continue ;;
+                *)  exit 0 ;;
+            esac ;;
+        *)  exit 0 ;;
+    esac
+done
