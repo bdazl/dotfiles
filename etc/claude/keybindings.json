@@ -13,7 +13,6 @@
       "context": "Chat",
       "bindings": {
         "ctrl+s": null,
-        "ctrl+k ctrl+s": "chat:stash",
         "ctrl+k ctrl+w": "chat:submit",
         "ctrl+k ctrl+u": "chat:undo",
         "ctrl+k ctrl+e": "chat:externalEditor",
