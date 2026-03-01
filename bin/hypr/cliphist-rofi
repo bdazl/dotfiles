@@ -18,13 +18,13 @@ while true; do
         0)  echo "$selected" | cliphist decode | wl-copy
             exit 0 ;;
         10) content=$(echo "$selected" | cliphist decode)
-            echo "$content" | rofi -dmenu -i -p " Preview" -theme "$theme" \
+            line=$(echo "$content" | rofi -dmenu -i -p " Preview" -theme "$theme" \
                 -kb-accept-alt "" -kb-custom-1 "Shift+Return" \
                 -theme-str 'listview { lines: 20; }' \
-                -mesg "Enter: copy  |  Shift+Enter: back"
+                -mesg "Enter: copy line  |  Shift+Enter: back")
             pstatus=$?
             case $pstatus in
-                0)  echo "$selected" | cliphist decode | wl-copy
+                0)  printf '%s' "$line" | wl-copy
                     exit 0 ;;
                 10) continue ;;
                 *)  exit 0 ;;
