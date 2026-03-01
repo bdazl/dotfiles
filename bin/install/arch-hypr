@@ -6,7 +6,7 @@
 
 # TODO: NO ROOT PLS
 
-yay -Su --needed \
+yay -S --needed \
     linux-headers \
     hyprland \
     wireplumber \
@@ -35,4 +35,10 @@ yay -Su --needed \
     mupdf \
     feh \
     grim \
+    slurp \
+    jq \
+    dunst \
+    gammastep \
+    cliphist \
+    hyprpaper \
     vlc
