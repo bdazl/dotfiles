@@ -8,7 +8,7 @@
 
 yay -Su --needed \
     linux-headers \
-    hyprland-nvidia \
+    hyprland \
     wireplumber \
     pipewire \
     wl-clipboard \
