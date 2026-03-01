@@ -29,6 +29,7 @@
     ~/.config/cheat/conf.yml: etc/cheat/conf.yml
     ~/.config/cheat/sheets/personal: etc/cheat/sheets
     ~/.config/Code/User/settings.json: etc/code/settings.json
+    ~/.config/dunst: etc/dunst
     ~/.config/ghostty: etc/ghostty
     ~/.config/hypr: etc/hypr
     ~/.config/waybar: etc/waybar
