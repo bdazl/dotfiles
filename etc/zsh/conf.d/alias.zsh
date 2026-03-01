@@ -62,10 +62,6 @@ function config_aliases()
     alias h='hyprctl'
     alias k='kubectl'
 
-    alias dima='gammastep -O 3000'
-    alias dimb='gammastep -O 2500'
-    alias dimmörk='gammastep -O 1900'
-
     alias lb='lsblk -o name,size,fstype,uuid,model,mountpoints'
     alias lba='lsblk -o name,label,size,fstype,uuid,model,mountpoints'
 
