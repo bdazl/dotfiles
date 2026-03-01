@@ -26,7 +26,6 @@ See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping gui
 - `cfg/` - Supporting configuration assets referenced by scripts/configs
 - `lib/` - Helper libraries used by scripts
 - `win/` - Windows/WSL specific assets and config
-- `llm/` - Prompt templates and shared string mappings for LLM tooling
 
 ## Symlink Configuration
 - `etc/install.yml` defines symlink mappings.

@@ -1,5 +1,0 @@
-filesys-datetime: "$(date +%Y%m%d_%H%M%S)"
-etc: "${HOME}/etc"
-cwd: "$(pwd)"
-home: "${HOME}"
-today: "$(date +%Y-%m-%d)"
