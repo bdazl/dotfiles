@@ -4,8 +4,8 @@
 
     width = 350
     height = 120
-    origin = top-right
-    offset = 12x12
+    origin = top-center
+    offset = 0x12
 
     progress_bar = true
     progress_bar_height = 8
@@ -27,7 +27,7 @@
     font = monospace 11
     line_height = 0
     markup = full
-    format = "<b>%s</b>\n%b"
+    format = "<b><u>%s</u></b>\n%b"
     alignment = left
     vertical_alignment = center
     show_age_threshold = 60
@@ -60,7 +60,8 @@
     timeout = 8
 
 [urgency_critical]
-    background = "#1e1e2e"
-    foreground = "#cdd6f4"
+    background = "#2a1520"
+    foreground = "#f38ba8"
     frame_color = "#f38ba8"
+    frame_width = 3
     timeout = 0
