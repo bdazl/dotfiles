@@ -1,0 +1,101 @@
+* {
+    bg: #1e1e2e;
+    bg-alt: #181825;
+    bg-selected: #313244;
+    fg: #cdd6f4;
+    fg-muted: #a6adc8;
+    fg-disabled: #6c7086;
+    accent: #89b4fa;
+
+    background-color: transparent;
+    text-color: @fg;
+}
+
+window {
+    width: 50%;
+    border: 2px;
+    border-color: @accent;
+    border-radius: 10px;
+    background-color: @bg;
+}
+
+mainbox {
+    background-color: transparent;
+}
+
+inputbar {
+    padding: 8px 12px;
+    background-color: @bg-alt;
+    border-radius: 10px 10px 0 0;
+    text-color: @fg;
+    children: [ "prompt", "textbox-prompt-colon", "entry" ];
+}
+
+prompt {
+    text-color: @accent;
+}
+
+textbox-prompt-colon {
+    expand: false;
+    str: " ";
+    text-color: @fg-disabled;
+}
+
+entry {
+    text-color: @fg;
+    placeholder-color: @fg-disabled;
+}
+
+listview {
+    scrollbar: false;
+    spacing: 4px;
+    padding: 4px;
+}
+
+element {
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: transparent;
+    text-color: @fg-muted;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color: @accent;
+}
+
+element-text {
+    text-color: inherit;
+}
+
+element-icon {
+    size: 1.2em;
+    text-color: inherit;
+}
+
+message {
+    padding: 8px 12px;
+    border: 0;
+}
+
+textbox {
+    text-color: @fg;
+}
+
+mode-switcher {
+    spacing: 0;
+}
+
+button {
+    padding: 8px;
+    text-color: @fg-muted;
+}
+
+button selected {
+    background-color: @bg-selected;
+    text-color: @accent;
+}

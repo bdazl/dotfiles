@@ -9,45 +9,6 @@ if [ -z "$history" ]; then
 fi
 
 lines=$(echo "$history" | wc -l)
-echo "$history" | rofi -dmenu -i -p " Notifications" -lines "$lines" -no-custom -theme /dev/null -theme-str '
-window {
-    width: 50%;
-    border: 2px;
-    border-color: #89b4fa;
-    border-radius: 10px;
-    background-color: #1e1e2e;
-}
-listview {
-    lines: '"$lines"';
-    scrollbar: false;
-    spacing: 4px;
-}
-element {
-    padding: 8px 12px;
-    border-radius: 4px;
-    background-color: transparent;
-    text-color: #a6adc8;
-}
-element selected.normal {
-    background-color: #313244;
-    text-color: #89b4fa;
-}
-element normal.normal,
-element alternate.normal {
-    background-color: transparent;
-    text-color: #a6adc8;
-}
-inputbar {
-    padding: 8px 12px;
-    background-color: #181825;
-    border-radius: 10px 10px 0 0;
-    text-color: #cdd6f4;
-}
-prompt {
-    text-color: #89b4fa;
-}
-entry {
-    text-color: #cdd6f4;
-    placeholder-color: #6c7086;
-}
-'
+echo "$history" | rofi -dmenu -i -p " Notifications" -no-custom \
+    -theme ~/.config/rofi/catppuccin.rasi \
+    -theme-str 'listview { lines: '"$lines"'; }'
