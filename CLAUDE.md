@@ -25,7 +25,6 @@ This is a personal dotfiles repository using [Dotbot](https://github.com/anishat
 - **cfg/** - Supporting configuration assets referenced by scripts/configs
 - **lib/** - Helper libraries used by scripts
 - **win/** - Windows/WSL-specific assets and config
-- **llm/** - Prompt templates and shared string mappings for LLM tooling
 - **sys/** - System-level files (for /etc, not home)
 
 ### Symlink Configuration
