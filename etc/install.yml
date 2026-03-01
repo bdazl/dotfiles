@@ -30,6 +30,7 @@
     ~/.config/cheat/sheets/personal: etc/cheat/sheets
     ~/.config/Code/User/settings.json: etc/code/settings.json
     ~/.config/dunst: etc/dunst
+    ~/.config/rofi: etc/rofi
     ~/.config/ghostty: etc/ghostty
     ~/.config/hypr: etc/hypr
     ~/.config/waybar: etc/waybar
