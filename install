@@ -29,4 +29,10 @@ if [ "$(uname)" = "Darwin" ]; then
     "${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${REPO_ROOT}" -c "${CONFIG_MAC}" "${@}"
 fi
 
+LOCAL_CONFIG="$REPO_ROOT/local/install.yml"
+if [ -f "$LOCAL_CONFIG" ]; then
+    log_info "install: applying $LOCAL_CONFIG"
+    "${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${REPO_ROOT}" -c "${LOCAL_CONFIG}" "${@}"
+fi
+
 log_ok "✅ install: done"
