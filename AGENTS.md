@@ -13,7 +13,7 @@ See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping gui
 
 ## Commands
 - `./install` - Main install: init submodules, run bootstrap, symlink configs to `$HOME`
-- `./bootstrap` - Create `~/.config/git/local` from template if missing
+- `./bootstrap` - Create `local/gitconfig` from template if missing
 - `./update` - Update submodules and fetch latest FZF shell bindings
 
 ## Architecture

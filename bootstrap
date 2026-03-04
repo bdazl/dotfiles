@@ -8,7 +8,7 @@ cd "${REPO_ROOT}" || exit 1
 
 log_info "bootstrap: repo root: $REPO_ROOT"
 
-git_local="$HOME/.config/git/local"
+git_local="$REPO_ROOT/local/gitconfig"
 git_template="$REPO_ROOT/etc/git/gitconfig.local.template"
 if [[ ! -e "$git_template" ]]; then
     log_warn "bootstrap: git template missing: $git_template"
