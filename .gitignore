@@ -1,8 +1,5 @@
 *~
 
-gen/out
-gen/active.env
-
 local/
 
 etc/assets

@@ -8,14 +8,6 @@ cd "${REPO_ROOT}" || exit 1
 
 log_info "bootstrap: repo root: $REPO_ROOT"
 
-if [[ ! -e "gen/active.env" ]]; then
-    log_info "bootstrap: gen/active.env missing"
-    log_ok "bootstrap: copying gen/default.env -> gen/active.env"
-    cp gen/default.env gen/active.env
-else
-    log_info "bootstrap: gen/active.env already present"
-fi
-
 git_local="$HOME/.config/git/local"
 git_template="$REPO_ROOT/etc/git/gitconfig.local.template"
 if [[ ! -e "$git_template" ]]; then
