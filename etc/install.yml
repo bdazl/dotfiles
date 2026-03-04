@@ -19,8 +19,6 @@
   - ~/.vim/swap
 
 # All paths are relative the repo-root (./)
-# Everything that is sourced from ./etc/* can be assumed to be "static"
-# Everything that is sourced from ./gen/out/* is generated with ./generate
 - link:
     ~/.etc: ''
     ~/.claude/keybindings.json: etc/claude/keybindings.json
@@ -42,7 +40,7 @@
     ~/.config/zsh: etc/zsh/conf.d
     ~/.ctags: etc/ctags/ctags
     ~/.git_template: etc/git/template
-    ~/.gitconfig: gen/out/gitconfig
+    ~/.gitconfig: etc/git/gitconfig
     ~/.ideavimrc: etc/vim/vimrc
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
     ~/.tmux.conf: etc/tmux/tmux.conf

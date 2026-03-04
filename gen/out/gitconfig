@@ -1,0 +1,18 @@
+[user]
+	name = Jacob Peyron
+[include]
+	path = ~/.config/git/local
+[init]
+	templatedir = ~/.git_template
+	defaultBranch = main
+[alias]
+	ctags = !~/.git_template/hooks/ctags
+	dropbox = !git-dropbox-manage
+	conflicted = !vim +Conflicted
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+[mergetool]
+	prompt = false
+[push]
+	autoSetupRemote = true

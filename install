@@ -16,8 +16,6 @@ git submodule update --init --recursive
 
 log_info "install: running bootstrap"
 ./bootstrap
-log_info "install: running generate"
-./generate
 
 CONFIG="$REPO_ROOT/etc/install.yml"
 log_info "install: applying $CONFIG"

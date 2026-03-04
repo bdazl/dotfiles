@@ -12,14 +12,13 @@ See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping gui
 - Configs are mostly declarative under `etc/` and wired together via `etc/install.yml`.
 
 ## Commands
-- `./install` - Main install: init submodules, run bootstrap/generate, symlink configs to `$HOME`
-- `./bootstrap` - Create `gen/active.env` from `gen/default.env` if missing
-- `./generate` - `envsubst` templates (e.g., gitconfig with EMAIL variable)
+- `./install` - Main install: init submodules, run bootstrap, symlink configs to `$HOME`
+- `./bootstrap` - Create `~/.config/git/local` from template if missing
 - `./update` - Update submodules and fetch latest FZF shell bindings
 
 ## Architecture
 - `etc/` - Static configs by app (vim, zsh, hypr, etc.)
-- `gen/` - Template system: `default.env`, `active.env`, `out/` for generated files
+- `local/` - Machine-local overrides (not tracked): `zsh.zsh` and `install.yml`
 - `ext/` - Git submodules (Dotbot, plugins)
 - `bin/` - Scripts and helpers; platform installers live in `bin/install/`
 - `sys/` - System files intended for `/etc`

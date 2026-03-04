@@ -10,16 +10,15 @@ This is a personal dotfiles repository using [Dotbot](https://github.com/anishat
 
 ## Commands
 
-- `./install` - Main installation: initializes submodules, runs bootstrap/generate, symlinks configs to `$HOME`
-- `./bootstrap` - Creates `gen/active.env` from `gen/default.env` if it doesn't exist
-- `./generate` - Performs envsubst on templated files (e.g., gitconfig with EMAIL variable)
+- `./install` - Main installation: initializes submodules, runs bootstrap, symlinks configs to `$HOME`
+- `./bootstrap` - Creates `~/.config/git/local` from template if missing
 - `./update` - Updates git submodules and fetches latest FZF shell bindings
 
 ## Architecture
 
 ### Directory Structure
 - **etc/** - Static configuration files, organized by application (vim, zsh, hypr, etc.)
-- **gen/** - Template system: `default.env` defines variables, `active.env` stores local values, `out/` contains generated files
+- **local/** - Machine-local overrides (not tracked): `zsh.zsh` sourced by zshrc, `install.yml` applied by install
 - **ext/** - Git submodules (Dotbot, urxvt plugins)
 - **bin/** - Scripts including platform-specific installers in `bin/install/`
 - **cfg/** - Supporting configuration assets referenced by scripts/configs
@@ -28,10 +27,7 @@ This is a personal dotfiles repository using [Dotbot](https://github.com/anishat
 - **sys/** - System-level files (for /etc, not home)
 
 ### Symlink Configuration
-`etc/install.yml` defines all symlink mappings. Dotbot uses this to link configs from this repo into `$HOME`. Static files come from `etc/`, generated files from `gen/out/`.
-
-### Generation System
-The `generate` script uses `envsubst` to substitute variables from `gen/active.env` into template files. Add new generated files by extending the `targets` associative array in `generate`.
+`etc/install.yml` defines all symlink mappings. Dotbot uses this to link configs from this repo into `$HOME`. All symlinked files come from `etc/`.
 
 ### Git Identity
 The shared gitconfig includes a local-only file at `~/.config/git/local` to keep user identity off-repo.
