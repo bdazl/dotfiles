@@ -28,12 +28,21 @@ Main installation:
 
 ## Scripts
 * [install](install): ensure git submodules are initialized and link all configuration files to `$HOME`
-* [bootstrap](bootstrap): creates `~/.config/git/local` from template if missing
+* [bootstrap](bootstrap): creates `local/gitconfig` from template if missing
 * [update](update): update git submodules to latest commits
 
 ## Symlinks
 Dotbot uses `etc/install.yml` to define which files are symlinked into `$HOME`.
 All symlinked files come from `etc/`. Platform-specific manifests are applied via `etc/install.mac.extra.yml` (Darwin) and `etc/install.win.yml` (Windows/WSL). Machine-local overrides live in `local/` (not tracked).
+
+## Machine-local overrides
+The `local/` directory (not tracked) holds machine-specific config that is never checked in:
+
+| File | Purpose |
+|------|---------|
+| `local/gitconfig` | Git identity (name, email); created by `bootstrap` from template |
+| `local/zsh.zsh` | Extra zsh config, aliases, etc.; sourced at end of `.zshrc` |
+| `local/install.yml` | Extra dotbot symlinks; applied at end of `./install` |
 
 ## Filesystem
 * [bin](bin): scripts and binaries used in repo (or commonly by me)
@@ -41,6 +50,7 @@ All symlinked files come from `etc/`. Platform-specific manifests are applied vi
 * [etc](etc): configuration files
 * [ext](ext): external files and folders (submodules like `Dotbot`, for instance)
 * [lib](lib): helper libraries used by scripts
+* [local](local): machine-local overrides (not tracked, see above)
 * [llm](llm): prompt templates and shared string mappings for LLM tooling
 * [sys](sys): files to be installed on the system (not home folder)
 * [win](win): Windows/WSL specific assets and config
