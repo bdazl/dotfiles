@@ -3,6 +3,8 @@
 gen/out
 gen/active.env
 
+local/
+
 etc/assets
 
 __pycache__
