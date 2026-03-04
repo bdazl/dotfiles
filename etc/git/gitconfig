@@ -1,7 +1,7 @@
 [user]
 	name = Jacob Peyron
 [include]
-	path = ~/.config/git/local
+	path = ~/.etc/local/gitconfig
 [init]
 	templatedir = ~/.git_template
 	defaultBranch = main

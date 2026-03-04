@@ -11,7 +11,7 @@ This is a personal dotfiles repository using [Dotbot](https://github.com/anishat
 ## Commands
 
 - `./install` - Main installation: initializes submodules, runs bootstrap, symlinks configs to `$HOME`
-- `./bootstrap` - Creates `~/.config/git/local` from template if missing
+- `./bootstrap` - Creates `local/gitconfig` from template if missing
 - `./update` - Updates git submodules and fetches latest FZF shell bindings
 
 ## Architecture
@@ -30,8 +30,8 @@ This is a personal dotfiles repository using [Dotbot](https://github.com/anishat
 `etc/install.yml` defines all symlink mappings. Dotbot uses this to link configs from this repo into `$HOME`. All symlinked files come from `etc/`.
 
 ### Git Identity
-The shared gitconfig includes a local-only file at `~/.config/git/local` to keep user identity off-repo.
-Use `etc/git/gitconfig.local.template` as a starting point when setting up new machines.
+The shared gitconfig includes `~/.etc/local/gitconfig` (i.e. `local/gitconfig` in the repo root).
+Bootstrap creates it from `etc/git/gitconfig.local.template` if missing, defaulting to `jacob@peyron.io`.
 
 ### Platform Handling
 - Linux: Standard `install.yml`
