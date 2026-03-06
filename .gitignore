@@ -7,3 +7,5 @@ etc/assets
 __pycache__
 
 *.swp
+
+etc/nvim/lazy-lock.json
