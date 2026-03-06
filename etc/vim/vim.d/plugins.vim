@@ -18,6 +18,7 @@ if !has('nvim')
     Plug 'francoiscabrol/ranger.vim'       " ranger (file explorer)
 
     Plug 'tpope/vim-fugitive'              " git
+    Plug 'tpope/vim-surround'              " surround motions
 
     call plug#end()
 
