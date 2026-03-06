@@ -21,6 +21,15 @@ return {
             },
         },
     },
+    { 'tpope/vim-surround' },
     { 'junegunn/fzf', build = ':call fzf#install()' },
     { 'junegunn/fzf.vim' },
+    {
+        'nvim-treesitter/nvim-treesitter',
+        build = ':TSUpdate',
+        opts = {
+            ensure_installed = { 'python', 'go', 'haskell', 'terraform', 'lua', 'bash', 'vim', 'vimdoc', 'yaml', 'json', 'markdown' },
+            highlight = { enable = true },
+        },
+    },
 }
