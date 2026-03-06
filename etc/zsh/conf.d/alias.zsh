@@ -43,7 +43,6 @@ function config_aliases()
 
     alias hexit='hyprctl dispatch exit'
 
-    alias nvi='nvim -u ~/.vimrc'
 
     alias pst='ps -e -o pid,user,cmd --forest'
     alias psu='ps-user'
@@ -224,7 +223,6 @@ halp() {
   gdiff     diff --color -u        coloured unified diff
   rs        rsync -av              rsync with progress
   trn       tr -d "\n"             strip newlines
-  nvi       nvim -u ~/.vimrc       neovim with vim config
   h         hyprctl                hyprland control
   hexit     hyprctl dispatch exit  exit hyprland
   k         kubectl                kubernetes shorthand
