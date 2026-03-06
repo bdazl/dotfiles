@@ -1,36 +1,26 @@
 if !has('nvim')
-    set nocompatible              " be iMproved, required
-    filetype off                  " required
+    call plug#begin('~/.vim/plugged')
 
-    " set the runtime path to include Vundle and initialize
-    set rtp+=~/.vim/bundle/Vundle.vim
-    call vundle#begin()
+    Plug 'Valloric/YouCompleteMe', { 'do': './install.py --go-completer' }
 
-    " let Vundle manage Vundle, required
-    Plugin 'VundleVim/Vundle.vim'   " plugin management
-    Plugin 'Valloric/YouCompleteMe' " completion
+    Plug 'simnalamburt/vim-mundo'          " undo tree
+    Plug 'vim-airline/vim-airline'         " status bar
+    Plug 'vim-airline/vim-airline-themes'  " status bar themes
+    Plug 'christoomey/vim-tmux-navigator'  " awareness of tmux-panes
 
-    Plugin 'simnalamburt/vim-mundo.git'     " undo tree
-    Plugin 'vim-airline/vim-airline'        " status bar
-    Plugin 'vim-airline/vim-airline-themes' " status bar themes
-    Plugin 'christoomey/vim-tmux-navigator' " awareness of tmux-panes
+    Plug 'fatih/vim-go'                    " golang
+    Plug 'dense-analysis/ale'              " python linting
+    Plug 'neovimhaskell/haskell-vim'       " haskell
+    Plug 'hashivim/vim-terraform'          " terraform
 
-    Plugin 'fatih/vim-go'               " golang
-    Plugin 'dense-analysis/ale'         " python linting
-    Plugin 'neovimhaskell/haskell-vim'  " haskell
-    Plugin 'hashivim/vim-terraform'     " terraform
+    Plug 'junegunn/fzf'                    " fzf fuzzy search
+    Plug 'junegunn/fzf.vim'                " fuzzy search
+    Plug 'francoiscabrol/ranger.vim'       " ranger (file explorer)
 
-    Plugin 'junegunn/fzf'     " fzf fuzzy search
-    Plugin 'junegunn/fzf.vim' " fuzzy search
-    Plugin 'francoiscabrol/ranger.vim' " ranger (file explorer)
+    Plug 'tpope/vim-fugitive'              " git
 
-    Plugin 'tpope/vim-fugitive' " git
+    call plug#end()
 
-    " All of your Plugins must be added before the following line
-    call vundle#end()            " required
-    filetype plugin indent on    " required
-
-    " let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
     let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
     let g:ycm_goto_buffer_command = 'same-buffer'
     let g:ycm_collect_identifiers_from_tags_files = 1
