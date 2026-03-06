@@ -167,6 +167,89 @@ vmap A y<esc>:<c-r>=GetSearchFromYanked("%s", "gi")<cr><left><left><left>
 " Copy to system clipboard (works on Wayland, macOS, X11)
 map <leader>c :call SaveToClipboard()<cr>
 
+" Quick reference for custom keymaps and plugins
+command! Halp call ShowHalp()
+nmap <leader>? :Halp<cr>
+
+function! ShowHalp()
+    let l:lines = [
+        \ '── navigation ─────────────────────────────────────────────',
+        \ '  ö / ä           ^ / $              line begin / end',
+        \ '  C-h/j/k/l       window/tmux-pane   navigate splits',
+        \ '  Tab / S-Tab     :tabnext/prev       cycle tabs',
+        \ '  ,te             :tabedit %:p:h      new tab, same dir',
+        \ '  ,tl             last tab             toggle last tab',
+        \ '  ,tn / ,tc       :tabnew / :tabclose  manage tabs',
+        \ '  ,q              :quit',
+        \ '  ,w              :w!                 quick save',
+        \ '  ,cd             :cd %:p:h           cd to buffer dir',
+        \ '',
+        \ '── search & replace ───────────────────────────────────────',
+        \ '  ,<cr>           :noh                clear highlights',
+        \ '  * / #           visual search       fwd / back',
+        \ '  ,sr             :.,$s///gI          search-replace to EOF',
+        \ '  v:a / v:A       visual s&r          to EOF / whole file',
+        \ '',
+        \ '── display ────────────────────────────────────────────────',
+        \ '  ,§              :set list!          toggle invisibles',
+        \ '  ,l              toggle              relative line numbers',
+        \ '  ,1 / ,2 / ,4    set indent          tabs / 2-space / 4-space',
+        \ '',
+        \ '── plugins ────────────────────────────────────────────────',
+        \ '  ,o              :Files!             fzf file picker',
+        \ '  ,s              :BTags              fzf ctags (buffer)',
+        \ '  ,S              :BLines             fzf lines (buffer)',
+        \ '  ,r              :Ranger             file explorer',
+        \ '  U               :MundoToggle        undo tree',
+        \ '  ,n / ,p         :cn / :cp           quickfix next/prev',
+        \ '',
+        \ ]
+    if has('nvim')
+        let l:lines += [
+            \ '── lsp (nvim) ─────────────────────────────────────────────',
+            \ '  ,d              definition          go to definition',
+            \ '  ,t              hover               show type/docs',
+            \ '  ,f              references           find references',
+            \ '  ,rn             rename              rename symbol',
+            \ '  ,ca             code action          code actions',
+            \ '  K               hover               show type/docs',
+            \ '  gd / gD         definition/decl      go to def/decl',
+            \ '  gi              implementation       go to impl',
+            \ '  [d / ]d         diagnostics          prev/next diagnostic',
+            \ '',
+            \ ]
+    else
+        let l:lines += [
+            \ '── ycm (vim) ──────────────────────────────────────────────',
+            \ '  ,d              GoToDefinition       go to definition',
+            \ '  ,t              GetType              show type',
+            \ '  ,f              GoToReferences       find references',
+            \ '',
+            \ ]
+    endif
+    let l:lines += [
+        \ '── golang ─────────────────────────────────────────────────',
+        \ '  ,gr             :GoRename            rename',
+        \ '  ,gd             :GoDoc               show docs',
+        \ '  ,gR             :GoRun               save & run',
+        \ '  ,gb             :GoBuild             save & build',
+        \ '  ,gg             :GoTest              save & test',
+        \ '  ,go             :GoDocBrowser        docs in browser',
+        \ '',
+        \ '── python ─────────────────────────────────────────────────',
+        \ '  F9              run file              python3 %',
+        \ '  F10             run with args          python3 % ...',
+        \ '',
+        \ '── misc ───────────────────────────────────────────────────',
+        \ '  ,c              clipboard             copy selection',
+        \ '  ,v              C-v                   visual block',
+        \ '  ,y              copy via bin/copy      copy to system clip',
+        \ '  -               >  (visual)           indent right',
+        \ '  W               :w !sudo tee          sudo save',
+        \ ]
+    echo join(l:lines, "\n")
+endfunction
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions for keymaps
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
