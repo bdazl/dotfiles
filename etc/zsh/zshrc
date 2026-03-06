@@ -8,7 +8,7 @@
 # Author: Jacob Peyron
 #
 
-readonly ZSH_DIR=$XDG_CONFIG_HOME/zsh
+(( ${+ZSH_DIR} )) || readonly ZSH_DIR=$XDG_CONFIG_HOME/zsh
 
 . "$ZSH_DIR/init.zsh"
 . "$ZSH_DIR/alias.zsh"
@@ -21,4 +21,4 @@ if [ "$(uname)" = "Darwin" ]; then
     . "$ZSH_DIR/env/path.zsh"
 fi
 
-[ -f "$ETC/local/zsh.zsh" ] && . "$ETC/local/zsh.zsh"
+[ -f "$ETC/local/zsh.zsh" ] && . "$ETC/local/zsh.zsh" || true
