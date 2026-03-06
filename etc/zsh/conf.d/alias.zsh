@@ -63,7 +63,7 @@ function config_aliases()
     alias k='kubectl'
 
     alias lb='lsblk -o name,size,fstype,uuid,model,mountpoints'
-    alias lba='lsblk -o name,label,size,fstype,uuid,model,mountpoints'
+    alias lba='lsblk -o name,label,size,fsavail,fstype,uuid,model,mountpoints'
 
     local list='ls'
     if command -v eza >/dev/null 2>&1; then
@@ -153,6 +153,85 @@ tree-pager() {
 
 load-common() {
     . "$ETC/bin/common"
+}
+
+halp() {
+    cat <<'HALP'
+── files ──────────────────────────────────────────────────────
+  la        ls -lha                long listing, all files
+  ll        ls -lh                 long listing
+  lll       ls -lhaZ               long listing with SELinux context
+  lz        eza -1                 one-per-line (eza)
+  lza       eza -1a                one-per-line, all files
+  lzz       eza -loM --git         detailed listing with git status
+  lzl       eza -liaoMH --git      full detail with inode/header
+  lt        eza --sort=size        recursive, sorted by size
+  ltt       lt --tree | bat        recursive tree, sorted by size
+  ldi       find dirs              list directories (names only)
+  ldir      find dirs + ls -ld     list directories with details
+  lbin      ls ~/bin               list personal scripts
+  tp        tree | bat             tree with pager
+
+── disk ───────────────────────────────────────────────────────
+  dff       df -h                  disk free (no virtual fs)
+  lb        lsblk                  block devices
+  lba       lsblk +label/avail     block devices with labels & free space
+
+── git ────────────────────────────────────────────────────────
+  gs        git status
+  gsv       git status --verbose
+  ga        git add
+  gb        git branch             current branch name
+  gbb       git branch             list branches
+  gba       git branch --all       list all branches (incl. remote)
+  gc        git commit --verbose
+  gd        git diff
+  gsh       git show
+  gl        git log --graph        short decorated log
+  gla       git log --oneline      one-line log, all branches
+  gll       gl --patch             log with diffs
+  gpp       git pull --prune       pull and prune dead remotes
+  gcf       git-files-changed      files changed vs main
+  ggrep     git grep -nI           search tracked files
+
+── search ─────────────────────────────────────────────────────
+  agh       ag --hidden            silver searcher, include dotfiles
+  fdh       fd -H --no-ignore-vcs  fd, include hidden/ignored files
+
+── process ────────────────────────────────────────────────────
+  pst       ps --forest            process tree (all users)
+  psu       ps-user                process tree (current user)
+
+── network ────────────────────────────────────────────────────
+  sss       ss -ltpn               listening TCP sockets
+
+── tmux ───────────────────────────────────────────────────────
+  ta        tmux attach
+  td        tmux detach
+
+── date/time ──────────────────────────────────────────────────
+  datum     20260306               compact date
+  datumm    2026-03-06             iso date
+  today     2026-03-06 (06 Mar)    date with short month
+  now       iso-8601 timestamp     date -Iseconds
+  noww      2026-03-06_143021      file-safe timestamp
+  kl        14:30                  current time
+  nu        time + date + week     quick overview
+  vecka     v.10: mon - sun        week number to date range
+
+── misc ───────────────────────────────────────────────────────
+  c         clear
+  gdiff     diff --color -u        coloured unified diff
+  rs        rsync -av              rsync with progress
+  trn       tr -d "\n"             strip newlines
+  nvi       nvim -u ~/.vimrc       neovim with vim config
+  h         hyprctl                hyprland control
+  hexit     hyprctl dispatch exit  exit hyprland
+  k         kubectl                kubernetes shorthand
+  ys        yay -Syu               system upgrade (Arch)
+  eop       eval $(op signin)      sign in to 1Password CLI
+  nargs     xargs per line         run command for each stdin line
+HALP
 }
 
 # Init aliases
