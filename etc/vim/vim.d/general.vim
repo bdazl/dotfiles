@@ -80,6 +80,15 @@ function! AdaptColorscheme()
     highlight SpecialKey ctermbg=none
     highlight VertSplit ctermbg=none
     highlight SignColumn ctermbg=none
+    if has('nvim')
+        highlight Normal guibg=NONE
+        highlight LineNr guibg=NONE
+        highlight Folded guibg=NONE
+        highlight NonText guibg=NONE
+        highlight SpecialKey guibg=NONE
+        highlight VertSplit guibg=NONE
+        highlight SignColumn guibg=NONE
+    endif
 endfunction
 autocmd ColorScheme * call AdaptColorscheme()
 

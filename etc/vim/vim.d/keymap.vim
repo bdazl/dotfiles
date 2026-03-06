@@ -11,11 +11,13 @@ map <silent> <leader><cr> :noh<cr>
 map ö ^
 map ä $
 
-" Smart way to move between windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+" Smart way to move between windows (fallback when vim-tmux-navigator is absent)
+if !exists(':TmuxNavigateLeft')
+    map <C-j> <C-W>j
+    map <C-k> <C-W>k
+    map <C-h> <C-W>h
+    map <C-l> <C-W>l
+endif
 
 " Make '-' right-indent, in visual mode
 vmap - >
@@ -117,10 +119,12 @@ nmap <leader>S :BLines<cr>
 nmap <leader>s :BTags<cr>
 nmap <leader>o :Files!<cr>
 
-" YouCompleteMe
-nmap <leader>t :YcmCompleter GetType<cr>
-nmap <leader>d :YcmCompleter GoToDefinitionElseDeclaration<cr>
-nmap <leader>f :YcmCompleter GoToReferences<cr>
+" YouCompleteMe (vim only, neovim uses LSP keymaps)
+if !has('nvim')
+    nmap <leader>t :YcmCompleter GetType<cr>
+    nmap <leader>d :YcmCompleter GoToDefinitionElseDeclaration<cr>
+    nmap <leader>f :YcmCompleter GoToReferences<cr>
+endif
 
 """" GOLANG
 autocmd FileType go nmap <leader>gr :GoRename<cr>

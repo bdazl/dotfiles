@@ -1,62 +1,40 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+if !has('nvim')
+    set nocompatible              " be iMproved, required
+    filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+    " set the runtime path to include Vundle and initialize
+    set rtp+=~/.vim/bundle/Vundle.vim
+    call vundle#begin()
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'   " plugin management
-
-if has('nvim')
-    " Lean with dependencies
-    Plugin 'Julian/lean.nvim'
-    Plugin 'neovim/nvim-lspconfig'
-    Plugin 'nvim-lua/plenary.nvim'
-
-    " optional
-    Plugin 'hrsh7th/nvim-cmp'        " For LSP completion
-    Plugin 'hrsh7th/cmp-nvim-lsp'
-    Plugin 'hrsh7th/cmp-buffer'
-else
+    " let Vundle manage Vundle, required
+    Plugin 'VundleVim/Vundle.vim'   " plugin management
     Plugin 'Valloric/YouCompleteMe' " completion
+
+    Plugin 'simnalamburt/vim-mundo.git'     " undo tree
+    Plugin 'vim-airline/vim-airline'        " status bar
+    Plugin 'vim-airline/vim-airline-themes' " status bar themes
+    Plugin 'christoomey/vim-tmux-navigator' " awareness of tmux-panes
+
+    Plugin 'fatih/vim-go'               " golang
+    Plugin 'dense-analysis/ale'         " python linting
+    Plugin 'neovimhaskell/haskell-vim'  " haskell
+    Plugin 'hashivim/vim-terraform'     " terraform
+
+    Plugin 'junegunn/fzf'     " fzf fuzzy search
+    Plugin 'junegunn/fzf.vim' " fuzzy search
+    Plugin 'francoiscabrol/ranger.vim' " ranger (file explorer)
+
+    Plugin 'tpope/vim-fugitive' " git
+
+    " All of your Plugins must be added before the following line
+    call vundle#end()            " required
+    filetype plugin indent on    " required
+
+    " let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+    let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+    let g:ycm_goto_buffer_command = 'same-buffer'
+    let g:ycm_collect_identifiers_from_tags_files = 1
 endif
-
-Plugin 'simnalamburt/vim-mundo.git'     " undo tree
-Plugin 'vim-airline/vim-airline'        " status bar
-Plugin 'vim-airline/vim-airline-themes' " status bar themes
-Plugin 'christoomey/vim-tmux-navigator' " awareness of tmux-panes
-
-Plugin 'fatih/vim-go'               " golang
-Plugin 'dense-analysis/ale'         " python linting
-Plugin 'neovimhaskell/haskell-vim'  " haskell
-Plugin 'hashivim/vim-terraform'     " terraform
-
-Plugin 'junegunn/fzf'     " fzf fuzzy search
-Plugin 'junegunn/fzf.vim' " fuzzy search
-Plugin 'francoiscabrol/ranger.vim' " ranger (file explorer)
-
-Plugin 'tpope/vim-fugitive' " git
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-"
-" let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
-let g:ycm_goto_buffer_command = 'same-buffer'
-let g:ycm_collect_identifiers_from_tags_files = 1
 
 " Airline status bar
 let g:airline_theme = 'simple'
