@@ -37,8 +37,17 @@ if !has('nvim')
 endif
 
 " Airline status bar
-let g:airline_theme = 'simple'
-let g:airline_powerline_fonts = !g:wsl
+set rtp+=~/.etc/etc/vim
+let g:airline_theme = 'quiet'
+let g:airline_powerline_fonts = 0
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline#extensions#whitespace#enabled = 0
+if !has('nvim')
+    let g:airline_section_z = '%p%% %l:%c'
+    let g:airline_section_warning = ''
+    let g:airline_section_error = ''
+endif
 
 " :help ale-python-options
 let b:ale_fixers = ['black', 'autoimport', 'isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']
