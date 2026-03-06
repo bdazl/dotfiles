@@ -4,11 +4,15 @@
 
 # Central exports
 export LANG=en_US.UTF-8
-export EDITOR=vim
+if (( $+commands[nvim] )); then
+    export EDITOR=nvim
+else
+    export EDITOR=vim
+fi
 export PAGER="less -FRS"
 export BAT_PAGER="less -FRS"
 export LESS="-FRS"
-export SUDO_EDITOR=vim
+export SUDO_EDITOR=$EDITOR
 export HISTSIZE=10000000  # maximum history size in terminal's memory
 export SAVEHIST=10000000  # maximum size of history file
 
