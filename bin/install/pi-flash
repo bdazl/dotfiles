@@ -1,0 +1,585 @@
+#!/usr/bin/env python3
+"""Download and flash Arch Linux ARM (AArch64) to an SD card for Raspberry Pi.
+
+Creates a bootable SD card with:
+- Partitioned and formatted card (boot: FAT32, root: ext4)
+- Dotfiles installed for both root and a named user
+- SSH daemon enabled with optional authorized keys
+
+Supports resuming after failure — completed steps are tracked on the
+target filesystem and skipped on re-run.
+"""
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+import textwrap
+from pathlib import Path
+from typing import Any
+
+ALARM_URL = "http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-aarch64-latest.tar.gz"
+TARBALL_CACHE = "/tmp/alarm-aarch64-latest.tar.gz"
+STATE_FILE = ".pi-flash-state"
+MOUNT_ROOT = "/tmp/pi-flash-mnt"
+
+REQUIRED_TOOLS = ["sgdisk", "mkfs.vfat", "mkfs.ext4", "bsdtar", "partprobe", "curl"]
+
+STEPS = [
+    "extract",
+    "user",
+    "hostname",
+    "dotfiles",
+    "packages",
+    "ssh",
+    "lock_root",
+]
+
+
+# -- Utilities ----------------------------------------------------------------
+
+def run(cmd: str | list[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:
+    """Execute a shell command, printing it before running."""
+    check = kwargs.pop("check", True)
+    print(f"  -> {cmd if isinstance(cmd, str) else ' '.join(cmd)}")
+    return subprocess.run(cmd, check=check, shell=isinstance(cmd, str), **kwargs)
+
+
+def die(msg: str) -> None:
+    """Print error message and exit."""
+    print(f"ERROR: {msg}")
+    sys.exit(1)
+
+
+def require_root() -> None:
+    """Exit if not running as root."""
+    if os.geteuid() != 0:
+        die("this script must be run as root (use sudo)")
+
+
+def partition_names(device: str) -> tuple[str, str]:
+    """Return (boot_partition, root_partition) device paths."""
+    if "nvme" in device or "mmcblk" in device:
+        return f"{device}p1", f"{device}p2"
+    return f"{device}1", f"{device}2"
+
+
+# -- State tracking -----------------------------------------------------------
+
+def load_state(root_mp: Path) -> set[str]:
+    """Load completed steps from the state file on the target filesystem."""
+    state_path = root_mp / STATE_FILE
+    if state_path.exists():
+        return set(json.loads(state_path.read_text()))
+    return set()
+
+
+def save_state(root_mp: Path, completed: set[str]) -> None:
+    """Write completed steps to the state file on the target filesystem."""
+    state_path = root_mp / STATE_FILE
+    state_path.write_text(json.dumps(sorted(completed)))
+
+
+def step_done(root_mp: Path, completed: set[str], step: str) -> None:
+    """Mark a step as completed and persist state."""
+    completed.add(step)
+    save_state(root_mp, completed)
+    print(f"  [ok] step '{step}' completed")
+
+
+# -- Preflight checks ---------------------------------------------------------
+
+def check_required_tools(need_packages: bool) -> None:
+    """Verify that all required host tools are available."""
+    print("\n== Checking dependencies ==")
+    tools = list(REQUIRED_TOOLS)
+    if need_packages:
+        tools.append("arch-chroot")
+    missing: list[str] = []
+    for tool in tools:
+        if shutil.which(tool) is None:
+            missing.append(tool)
+    if missing:
+        die(
+            f"missing required tools: {', '.join(missing)}\n"
+            "  Install with: yay -S gptfdisk dosfstools e2fsprogs "
+            "libarchive parted curl arch-install-scripts"
+        )
+    if need_packages:
+        binfmt = Path("/proc/sys/fs/binfmt_misc/qemu-aarch64")
+        if not binfmt.exists():
+            die(
+                "qemu-user-static-binfmt is required for --packages\n"
+                "  Install with: yay -S qemu-user-static-binfmt"
+            )
+    print("  All dependencies found")
+
+
+def check_device_safety(device: str) -> None:
+    """Verify the device is removable and not currently mounted."""
+    block_name = Path(device).name
+
+    removable_path = Path(f"/sys/block/{block_name}/removable")
+    if removable_path.exists():
+        if removable_path.read_text().strip() != "1":
+            die(
+                f"{device} is not a removable device.\n"
+                "  Use --force to override."
+            )
+    else:
+        print(f"  WARNING: could not determine if {device} is removable")
+
+    result = subprocess.run(
+        ["findmnt", "-rno", "SOURCE,TARGET", "--list"],
+        capture_output=True, text=True,
+    )
+    for line in result.stdout.splitlines():
+        parts = line.split(" ", 1)
+        if len(parts) == 2 and parts[0].startswith(device):
+            die(f"{parts[0]} is mounted at {parts[1]}. Unmount first.")
+
+
+def format_size(size_bytes: float) -> str:
+    """Format a byte count as a human-readable string."""
+    for unit in ("B", "KB", "MB", "GB", "TB"):
+        if size_bytes < 1024:
+            return f"{size_bytes:.1f} {unit}"
+        size_bytes /= 1024
+    return f"{size_bytes:.1f} PB"
+
+
+# -- Filesystem detection -----------------------------------------------------
+
+def blkid_type(dev: str) -> str | None:
+    """Return the filesystem TYPE for a device, or None."""
+    result = subprocess.run(
+        ["blkid", "-o", "value", "-s", "TYPE", dev],
+        capture_output=True, text=True,
+    )
+    val = result.stdout.strip()
+    return val if val else None
+
+
+def partitions_ready(device: str) -> bool:
+    """Check if the device already has boot (vfat) and root (ext4) partitions."""
+    boot_dev, root_dev = partition_names(device)
+    if not Path(boot_dev).exists() or not Path(root_dev).exists():
+        return False
+    return blkid_type(boot_dev) == "vfat" and blkid_type(root_dev) == "ext4"
+
+
+def rootfs_populated(root_mp: Path) -> bool:
+    """Check if the root filesystem looks like an extracted ALARM image."""
+    return (root_mp / "etc" / "os-release").exists()
+
+
+# -- Download ------------------------------------------------------------------
+
+def download_tarball(tarball: str | None) -> str:
+    """Ensure the tarball is available locally. Returns path to tarball."""
+    if tarball and Path(tarball).exists():
+        print(f"  Using provided tarball: {tarball}")
+        return tarball
+    src = TARBALL_CACHE
+    if Path(src).exists():
+        print(f"  Using cached download: {src}")
+    else:
+        print("\n== Downloading Arch Linux ARM ==")
+        run(f"curl -L -o {src} {ALARM_URL}")
+    return src
+
+
+# -- Device operations ---------------------------------------------------------
+
+def confirm_device(device: str, force: bool = False) -> None:
+    """Show device info and prompt for destructive confirmation."""
+    if not force:
+        check_device_safety(device)
+
+    block_name = Path(device).name
+    size_path = Path(f"/sys/block/{block_name}/size")
+    if size_path.exists():
+        sectors = int(size_path.read_text().strip())
+        size = format_size(sectors * 512)
+    else:
+        size = "unknown"
+
+    print(f"\nTarget device: {device} ({size})")
+    run(f"lsblk {device}")
+    answer = input("\nALL DATA on this device will be destroyed. Continue? [y/N] ")
+    if answer.lower() != "y":
+        print("Aborted.")
+        sys.exit(0)
+
+
+def partition_device(device: str) -> tuple[str, str]:
+    """Partition and format the device. Returns (boot_dev, root_dev) paths."""
+    print("\n== Partitioning ==")
+    unmount_device(device)
+    run(f"sgdisk --zap-all {device}")
+    run(f"sgdisk -n 1:0:+512M -t 1:0700 {device}")  # boot
+    run(f"sgdisk -n 2:0:0 -t 2:8300 {device}")       # root
+    run(f"partprobe {device}")
+
+    boot_dev, root_dev = partition_names(device)
+    run(f"mkfs.vfat -F 32 {boot_dev}")
+    print("  Formatting root partition (this may take a moment)...")
+    run(f"mkfs.ext4 -F {root_dev}")
+    return boot_dev, root_dev
+
+
+def mount_partitions(boot_dev: str, root_dev: str) -> tuple[Path, Path]:
+    """Mount root and boot partitions. Returns (root_mountpoint, boot_mountpoint)."""
+    print("\n== Mounting ==")
+    root_mp = Path(MOUNT_ROOT)
+    boot_mp = root_mp / "boot"
+    root_mp.mkdir(parents=True, exist_ok=True)
+    run(f"mount {root_dev} {root_mp}")
+    boot_mp.mkdir(parents=True, exist_ok=True)
+    run(f"mount {boot_dev} {boot_mp}")
+    return root_mp, boot_mp
+
+
+def unmount(root_mp: Path) -> None:
+    """Recursively unmount the target filesystem, ignoring errors."""
+    print("\n== Unmounting ==")
+    # try clean unmount first, then lazy as fallback
+    result = subprocess.run(f"umount -R {root_mp}", shell=True)
+    if result.returncode != 0:
+        print("  Clean unmount failed, trying lazy unmount...")
+        subprocess.run(f"umount -Rl {root_mp}", shell=True)
+
+
+def unmount_device(device: str) -> None:
+    """Unmount all partitions of a device, ignoring errors if not mounted."""
+    boot_dev, root_dev = partition_names(device)
+    # boot is nested inside root, so unmount it first
+    for dev in (boot_dev, root_dev, device):
+        result = subprocess.run(["umount", "-R", dev], capture_output=True, text=True)
+        if result.returncode == 0:
+            print(f"  Unmounted {dev}")
+        elif result.returncode != 0 and "not mounted" not in result.stderr:
+            # real error (not just "not mounted")
+            print(f"  WARNING: umount {dev}: {result.stderr.strip()}")
+
+
+def cleanup_stale_mounts(device: str) -> None:
+    """Unmount any leftover mounts from previous runs."""
+    root_mp = Path(MOUNT_ROOT)
+    if root_mp.is_mount():
+        print(f"\n== Cleaning up stale mount at {MOUNT_ROOT} ==")
+        unmount(root_mp)
+
+    # unmount any device partitions mounted elsewhere
+    unmount_device(device)
+
+
+# -- Configuration steps ------------------------------------------------------
+
+def step_extract(root_mp: Path, tarball_path: str) -> None:
+    """Extract the ALARM tarball to the root filesystem."""
+    print("\n== Extracting Arch Linux ARM ==")
+    run(f"bsdtar -xpf {tarball_path} -C {root_mp}")
+
+
+def step_user(root_mp: Path, username: str, shell: str) -> None:
+    """Create a user with sudo access by writing to passwd/shadow/group files."""
+    print(f"\n== Creating user: {username} ==")
+    home = root_mp / "home" / username
+    home.mkdir(parents=True, exist_ok=True)
+
+    passwd = root_mp / "etc" / "passwd"
+    shadow = root_mp / "etc" / "shadow"
+    group = root_mp / "etc" / "group"
+
+    uid = 1000
+    gid = 1000
+
+    # remove default alarm user
+    for f in (passwd, shadow, group):
+        content = f.read_text()
+        content = "\n".join(l for l in content.splitlines() if not l.startswith("alarm:")) + "\n"
+        f.write_text(content)
+
+    with open(group, "a") as f:
+        f.write(f"{username}:x:{gid}:\n")
+    with open(passwd, "a") as f:
+        f.write(f"{username}:x:{uid}:{gid}::{'/home/' + username}:{shell}\n")
+    with open(shadow, "a") as f:
+        f.write(f"{username}:!:{19700}:0:99999:7:::\n")
+
+    # add to wheel for sudo
+    with open(group, "r") as f:
+        content = f.read()
+    content = content.replace("wheel:x:10:", f"wheel:x:10:{username}")
+    with open(group, "w") as f:
+        f.write(content)
+
+    # enable passwordless sudo for wheel
+    sudoers_d = root_mp / "etc" / "sudoers.d"
+    sudoers_d.mkdir(exist_ok=True)
+    with open(sudoers_d / "wheel", "w") as f:
+        f.write("%wheel ALL=(ALL:ALL) NOPASSWD: ALL\n")
+    os.chmod(sudoers_d / "wheel", 0o440)
+
+    run(f"chown -R {uid}:{gid} {home}")
+
+
+def step_hostname(root_mp: Path, hostname: str) -> None:
+    """Write /etc/hostname on the target filesystem."""
+    print(f"\n== Setting hostname: {hostname} ==")
+    (root_mp / "etc" / "hostname").write_text(hostname + "\n")
+
+
+def step_dotfiles(root_mp: Path, username: str) -> None:
+    """Copy dotfiles repo and run Dotbot for root and the named user."""
+    dotfiles_src = Path(__file__).resolve().parents[2]
+    dotbot_bin = dotfiles_src / "ext" / "dotbot" / "bin" / "dotbot"
+    host_python = sys.executable
+
+    for target_home, uid, gid in [
+        (root_mp / "root", 0, 0),
+        (root_mp / "home" / username, 1000, 1000),
+    ]:
+        print(f"\n== Installing dotfiles -> {target_home} ==")
+
+        # copy repo to ~/etc (not ~/.etc) — Dotbot creates the ~/.etc symlink
+        dest = target_home / "etc"
+        if dest.exists():
+            shutil.rmtree(dest)
+        shutil.copytree(dotfiles_src, dest, symlinks=True, dirs_exist_ok=True)
+
+        # run bootstrap to create local/gitconfig if missing
+        bootstrap = dest / "bootstrap"
+        if bootstrap.exists():
+            run(f"bash {bootstrap}", cwd=str(dest))
+
+        # run Dotbot with the host Python to avoid aarch64 shebang issues
+        config = dest / "etc" / "install.yml"
+        env = {**os.environ, "HOME": str(target_home)}
+        run(f"{host_python} {dotbot_bin} -d {dest} -c {config}", env=env)
+
+        run(f"chown -R {uid}:{gid} {target_home}")
+
+
+def step_packages(root_mp: Path) -> None:
+    """Initialize pacman keyring and run pi-arch install script via arch-chroot."""
+    print("\n== Installing packages (via arch-chroot + qemu) ==")
+    print("  Generating pacman keyring (this takes a while under emulation)...")
+    run(f"arch-chroot {root_mp} pacman-key --init")
+    run(f"arch-chroot {root_mp} pacman-key --populate archlinuxarm")
+    run(f"arch-chroot {root_mp} /root/etc/bin/install/pi-arch")
+
+
+def step_pacman_init_service(root_mp: Path) -> None:
+    """Enable pacman key initialization on first boot."""
+    link = (root_mp / "etc" / "systemd" / "system" /
+            "multi-user.target.wants" / "pacman-init.service")
+    if not link.exists():
+        service = root_mp / "etc" / "systemd" / "system" / "pacman-init.service"
+        service.write_text(textwrap.dedent("""\
+            [Unit]
+            Description=Initialize pacman keyring
+            ConditionFirstBoot=yes
+            After=network-online.target
+
+            [Service]
+            Type=oneshot
+            RemainAfterExit=yes
+            ExecStart=/usr/bin/pacman-key --init
+            ExecStart=/usr/bin/pacman-key --populate archlinuxarm
+
+            [Install]
+            WantedBy=multi-user.target
+        """))
+        link.parent.mkdir(parents=True, exist_ok=True)
+        link.symlink_to("/etc/systemd/system/pacman-init.service")
+
+
+def step_ssh(root_mp: Path, authorized_keys_files: list[str], username: str) -> None:
+    """Enable sshd and install authorized keys for root and the named user."""
+    print("\n== Configuring SSH ==")
+    sshd_link = root_mp / "etc" / "systemd" / "system" / "multi-user.target.wants" / "sshd.service"
+    sshd_link.parent.mkdir(parents=True, exist_ok=True)
+    if not sshd_link.exists():
+        sshd_link.symlink_to("/usr/lib/systemd/system/sshd.service")
+
+    if not authorized_keys_files:
+        print("  SSH enabled (no keys added — use --ssh-key to add)")
+        return
+
+    for home_base, owner_uid, owner_gid in [
+        (root_mp / "root", 0, 0),
+        (root_mp / "home" / username, 1000, 1000),
+    ]:
+        ssh_dir = home_base / ".ssh"
+        ssh_dir.mkdir(parents=True, exist_ok=True)
+        os.chmod(ssh_dir, 0o700)
+
+        ak_file = ssh_dir / "authorized_keys"
+        keys: list[str] = []
+        for kf in authorized_keys_files:
+            kf_path = Path(kf).expanduser()
+            if kf_path.exists():
+                keys.append(kf_path.read_text().strip())
+            else:
+                print(f"  WARNING: key file not found: {kf}")
+
+        if keys:
+            ak_file.write_text("\n".join(keys) + "\n")
+            os.chmod(ak_file, 0o600)
+            run(f"chown -R {owner_uid}:{owner_gid} {ssh_dir}")
+            print(f"  Added {len(keys)} key(s) to {ak_file.relative_to(root_mp)}")
+
+
+def step_lock_root(root_mp: Path) -> None:
+    """Lock the root password to enforce key-based authentication."""
+    print("\n== Locking root password ==")
+    shadow = root_mp / "etc" / "shadow"
+    content = shadow.read_text()
+    lines: list[str] = []
+    for line in content.splitlines():
+        if line.startswith("root:"):
+            parts = line.split(":")
+            parts[1] = "!"
+            lines.append(":".join(parts))
+        else:
+            lines.append(line)
+    shadow.write_text("\n".join(lines) + "\n")
+
+
+# -- Main ----------------------------------------------------------------------
+
+def main() -> None:
+    """Parse arguments and orchestrate the full flash process."""
+    parser = argparse.ArgumentParser(
+        description="Flash Arch Linux ARM (AArch64) to an SD card for Raspberry Pi",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=textwrap.dedent("""\
+            examples:
+              sudo %(prog)s /dev/sdb --user jacob
+              sudo %(prog)s /dev/mmcblk0 --user jacob --ssh-key ~/.ssh/id_ed25519.pub
+              sudo %(prog)s /dev/sdb --user jacob --ssh-key ~/.ssh/id_ed25519.pub --hostname pihole
+              sudo %(prog)s /dev/sdb --user jacob --tarball /tmp/alarm.tar.gz
+              sudo %(prog)s /dev/sdb --user jacob --packages
+        """),
+    )
+    parser.add_argument("device", help="SD card block device (e.g. /dev/sdb, /dev/mmcblk0)")
+    parser.add_argument("--user", "-u", required=True, help="username to create")
+    parser.add_argument("--ssh-key", "-k", action="append", default=[],
+                        help="path to SSH public key file (repeatable)")
+    parser.add_argument("--hostname", "-n", default="alarm",
+                        help="hostname for the Pi (default: alarm)")
+    parser.add_argument("--tarball", "-t", default=None,
+                        help="path to pre-downloaded ALARM tarball")
+    parser.add_argument("--no-dotfiles", action="store_true",
+                        help="skip dotfiles installation")
+    parser.add_argument("--shell", default="/usr/bin/zsh",
+                        help="login shell for the new user (default: /usr/bin/zsh)")
+    parser.add_argument("--packages", "-p", action="store_true",
+                        help="install packages via arch-chroot using bin/install/pi-arch "
+                             "(requires qemu-user-static-binfmt)")
+    parser.add_argument("--force", "-f", action="store_true",
+                        help="skip removable device check")
+    parser.add_argument("--fresh", action="store_true",
+                        help="ignore existing partitions and state, start from scratch")
+    args = parser.parse_args()
+
+    require_root()
+
+    if not Path(args.device).exists():
+        die(f"device not found: {args.device}")
+
+    if args.packages and args.no_dotfiles:
+        die("--packages requires dotfiles (pi-arch is in the repo). Remove --no-dotfiles.")
+
+    # -- preflight --
+    check_required_tools(need_packages=args.packages)
+
+    # clean up stale mounts from previous runs
+    cleanup_stale_mounts(args.device)
+
+    tarball_path = download_tarball(args.tarball)
+
+    # -- partitioning --
+    boot_dev, root_dev = partition_names(args.device)
+
+    if not args.fresh and partitions_ready(args.device):
+        print(f"\n== Partitions already exist on {args.device}, reusing ==")
+        run(f"lsblk {args.device}")
+        answer = input("\nReuse existing partitions? [Y/n] ")
+        if answer.lower() == "n":
+            confirm_device(args.device, force=args.force)
+            boot_dev, root_dev = partition_device(args.device)
+    else:
+        confirm_device(args.device, force=args.force)
+        boot_dev, root_dev = partition_device(args.device)
+
+    # -- mount & configure --
+    root_mp, boot_mp = mount_partitions(boot_dev, root_dev)
+
+    try:
+        completed = load_state(root_mp)
+        if completed:
+            print(f"  Resuming — already completed: {', '.join(sorted(completed))}")
+
+        # extract
+        if "extract" not in completed:
+            if rootfs_populated(root_mp):
+                print("\n== Root filesystem already populated, skipping extraction ==")
+            else:
+                step_extract(root_mp, tarball_path)
+            step_done(root_mp, completed, "extract")
+
+        # user
+        if "user" not in completed:
+            step_user(root_mp, args.user, shell=args.shell)
+            step_done(root_mp, completed, "user")
+
+        # hostname
+        if "hostname" not in completed:
+            step_hostname(root_mp, args.hostname)
+            step_done(root_mp, completed, "hostname")
+
+        # dotfiles
+        if "dotfiles" not in completed:
+            if not args.no_dotfiles:
+                step_dotfiles(root_mp, args.user)
+            step_done(root_mp, completed, "dotfiles")
+
+        # packages
+        if "packages" not in completed:
+            if args.packages:
+                step_packages(root_mp)
+            else:
+                step_pacman_init_service(root_mp)
+            step_done(root_mp, completed, "packages")
+
+        # ssh
+        if "ssh" not in completed:
+            step_ssh(root_mp, args.ssh_key, args.user)
+            step_done(root_mp, completed, "ssh")
+
+        # lock root
+        if "lock_root" not in completed:
+            step_lock_root(root_mp)
+            step_done(root_mp, completed, "lock_root")
+
+        # clean up state file before final unmount
+        state_path = root_mp / STATE_FILE
+        if state_path.exists():
+            state_path.unlink()
+
+        unmount(root_mp)
+        print("\nDone! Insert the SD card into your Raspberry Pi and boot.")
+
+    except Exception:
+        print("\nError occurred, attempting cleanup...")
+        unmount(root_mp)
+        raise
+
+
+if __name__ == "__main__":
+    main()

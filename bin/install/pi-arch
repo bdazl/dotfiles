@@ -1,0 +1,76 @@
+#!/bin/bash
+# Install packages for Arch Linux ARM on Raspberry Pi.
+# Run directly on the Pi, or via arch-chroot from pi-flash.
+set -e
+
+REPO_ROOT=$(realpath "$(dirname "${BASH_SOURCE[0]}")/../..")
+. "$REPO_ROOT/bin/common"
+
+# use sudo only if not already root
+if [[ "$EUID" -eq 0 ]]; then
+    SUDO=""
+else
+    SUDO="sudo"
+fi
+
+# --- pacman packages ---
+PACKAGES=(
+    base-devel
+    man-db
+    dhcpcd
+    openssh
+    sudo
+    neovim
+    vim
+    tmux
+    zsh
+    git
+    make
+    less
+    tldr
+    lf
+    ranger
+    python
+    python-pip
+    tree
+    fzf
+    eza
+    fd
+    bat
+    rsync
+    sshfs
+    ntp
+    task
+    zoxide
+    jq
+    yq
+    the_silver_searcher
+)
+
+log_info "pi-arch: installing pacman packages"
+$SUDO pacman -Syu --needed --noconfirm --disable-sandbox "${PACKAGES[@]}"
+
+# --- yay (AUR helper) ---
+# makepkg refuses to run as root, so skip in chroot
+if [[ "$EUID" -ne 0 ]] && ! command -v yay &>/dev/null; then
+    log_info "pi-arch: installing yay"
+    EXT="$HOME/src/ext"
+    YAY="$EXT/yay.git"
+    mkdir -p "$EXT"
+    if [[ ! -d "$YAY" ]]; then
+        git clone https://aur.archlinux.org/yay.git "$YAY"
+    fi
+    cd "$YAY"
+    makepkg -si --noconfirm
+fi
+
+# --- AUR packages ---
+# AUR_PACKAGES=(
+#     # add AUR packages here
+# )
+# if [[ ${#AUR_PACKAGES[@]} -gt 0 ]]; then
+#     log_info "pi-arch: installing AUR packages"
+#     yay -Su --needed --noconfirm "${AUR_PACKAGES[@]}"
+# fi
+
+log_ok "pi-arch: done"
