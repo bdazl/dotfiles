@@ -13,8 +13,8 @@
       "context": "Chat",
       "bindings": {
         "ctrl+s": null,
-        "ctrl+k ctrl+w": "chat:submit",
-        "ctrl+k ctrl+u": "chat:undo",
+        "ctrl+k ctrl+s": "chat:submit",
+        "ctrl+k ctrl+z": "chat:undo",
         "ctrl+k ctrl+e": "chat:externalEditor",
         "ctrl+/": "chat:thinkingToggle"
       }
@@ -49,7 +49,9 @@
         "l": "diff:nextSource",
         "j": "diff:nextFile",
         "k": "diff:previousFile",
-        "q": "diff:dismiss"
+        "q": "diff:dismiss",
+        "y": "diff:accept",
+        "n": "diff:reject"
       }
     },
     {
