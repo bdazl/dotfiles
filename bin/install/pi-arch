@@ -39,6 +39,7 @@ PACKAGES=(
     bat
     rsync
     sshfs
+    unzip
     ntp
     task
     zoxide
