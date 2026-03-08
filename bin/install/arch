@@ -15,6 +15,7 @@ sudo pacman -Syu --needed \
     vim \
     tmux \
     sshfs \
+    unzip \
     ntp \
     zsh \
     git \
