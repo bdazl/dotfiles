@@ -25,7 +25,7 @@ TARBALL_CACHE = "/tmp/alarm-aarch64-latest.tar.gz"
 STATE_FILE = ".pi-flash-state"
 MOUNT_ROOT = Path("/tmp/pi-flash-mnt")
 
-REQUIRED_TOOLS = ["sgdisk", "mkfs.vfat", "mkfs.ext4", "bsdtar", "partprobe", "curl"]
+REQUIRED_TOOLS = ["sfdisk", "mkfs.vfat", "mkfs.ext4", "bsdtar", "partprobe", "curl"]
 
 
 # -- Utilities ----------------------------------------------------------------
@@ -137,7 +137,7 @@ def check_required_tools(need_packages: bool) -> None:
     if missing:
         die(
             f"missing required tools: {', '.join(missing)}\n"
-            "  Install with: yay -S gptfdisk dosfstools e2fsprogs "
+            "  Install with: yay -S util-linux dosfstools e2fsprogs "
             "libarchive parted curl arch-install-scripts"
         )
 
@@ -273,9 +273,11 @@ def partition_device(device: str) -> tuple[str, str]:
     """Partition and format the device. Returns (boot_dev, root_dev) paths."""
     print("\n== Partitioning ==")
     unmount_device(device)
-    run(f"sgdisk --zap-all {device}")
-    run(f"sgdisk -n 1:0:+512M -t 1:0700 {device}")  # boot
-    run(f"sgdisk -n 2:0:0 -t 2:8300 {device}")       # root
+    run(f"sfdisk {device}", input=textwrap.dedent("""\
+        label: dos
+        ,512M,c
+        ,,L
+    """), text=True)
     run(f"partprobe {device}")
 
     boot_dev, root_dev = partition_names(device)
