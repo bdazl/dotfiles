@@ -478,8 +478,8 @@ def main() -> None:
     parser.add_argument("--user", "-u", required=True, help="username to create")
     parser.add_argument("--ssh-key", "-k", action="append", default=[],
                         help="path to SSH public key file (repeatable)")
-    parser.add_argument("--hostname", "-n", default="alarm",
-                        help="hostname for the Pi (default: alarm)")
+    parser.add_argument("--hostname", "-n", default="paj",
+                        help="hostname for the Pi (default: paj)")
     parser.add_argument("--tarball", "-t", default=None,
                         help="path to pre-downloaded ALARM tarball")
     parser.add_argument("--no-dotfiles", action="store_true",
