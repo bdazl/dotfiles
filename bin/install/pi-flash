@@ -317,10 +317,10 @@ def step_user(root_mp: Path, username: str, shell: str) -> None:
     # add to wheel for sudo
     replace_in_file(group, "wheel:x:10:", f"wheel:x:10:{username}")
 
-    # enable passwordless sudo for wheel
-    sudoers_wheel = root_mp / "etc/sudoers.d/wheel"
-    sudoers_wheel.parent.mkdir(exist_ok=True)
-    write_file(sudoers_wheel, "%wheel ALL=(ALL:ALL) NOPASSWD: ALL\n", mode=0o440)
+    # enable passwordless sudo for wheel (edit main sudoers to avoid ordering issues)
+    sudoers = root_mp / "etc/sudoers"
+    replace_in_file(sudoers, "# %wheel ALL=(ALL:ALL) NOPASSWD: ALL",
+                    "%wheel ALL=(ALL:ALL) NOPASSWD: ALL")
 
     run(f"chown -R 1000:1000 {home}")
 
