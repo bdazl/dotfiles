@@ -13,6 +13,7 @@ target filesystem and skipped on re-run.
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -307,22 +308,22 @@ def step_user(root_mp: Path, username: str, shell: str) -> None:
     shadow = root_mp / "etc/shadow"
     group = root_mp / "etc/group"
 
-    # remove default alarm user
+    # remove default alarm user and any previous run's entries
     for f in (passwd, shadow, group):
         filter_lines(f, "alarm:")
+        filter_lines(f, f"{username}:")
 
-    # add new user
+    # add new user (* = no password, but account not locked)
     append_line(group, f"{username}:x:1000:\n")
     append_line(passwd, f"{username}:x:1000:1000::/home/{username}:{shell}\n")
-    append_line(shadow, f"{username}:!:19700:0:99999:7:::\n")
+    append_line(shadow, f"{username}:*:19700:0:99999:7:::\n")
 
     # add to wheel for sudo
-    replace_in_file(group, "wheel:x:10:", f"wheel:x:10:{username}")
-
-    # enable passwordless sudo for wheel (edit main sudoers to avoid ordering issues)
-    sudoers = root_mp / "etc/sudoers"
-    replace_in_file(sudoers, "# %wheel ALL=(ALL:ALL) NOPASSWD: ALL",
-                    "%wheel ALL=(ALL:ALL) NOPASSWD: ALL")
+    group_text = group.read_text()
+    group_text = re.sub(
+        r"^(wheel:x:\d+:).*$", rf"\1{username}", group_text, count=1, flags=re.MULTILINE,
+    )
+    group.write_text(group_text)
 
     run(f"chown -R 1000:1000 {home}")
 
