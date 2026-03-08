@@ -373,8 +373,8 @@ def step_dotfiles(root_mp: Path, username: str) -> None:
         RemainAfterExit=yes
         ExecStart=/root/etc/install
         ExecStart=/bin/su - {username} -c /home/{username}/etc/install
-        ExecStart=/bin/rm /etc/systemd/system/dotfiles-install.service
-        ExecStart=/bin/systemctl daemon-reload
+        ExecStartPost=-/bin/rm /etc/systemd/system/dotfiles-install.service
+        ExecStartPost=-/bin/systemctl daemon-reload
 
         [Install]
         WantedBy=multi-user.target
