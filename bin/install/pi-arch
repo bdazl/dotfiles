@@ -40,6 +40,8 @@ PACKAGES=(
     rsync
     sshfs
     unzip
+    wireguard-tools
+    cmake
     ntp
     task
     zoxide

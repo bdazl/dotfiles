@@ -16,6 +16,8 @@ sudo pacman -Syu --needed \
     tmux \
     sshfs \
     unzip \
+    wireguard-tools \
+    cmake \
     ntp \
     zsh \
     git \
@@ -27,6 +29,7 @@ sudo pacman -Syu --needed \
     ranger \
     python \
     python-pip \
+    npm \
     python-pillow \
     go \
     tree \
