@@ -214,6 +214,8 @@ def download_tarball(tarball: str | None) -> str:
 def unmount(root_mp: Path) -> None:
     """Recursively unmount the target filesystem, with lazy fallback."""
     print("\n== Unmounting ==")
+    # kill any processes still using the mount (e.g. leftover from arch-chroot)
+    subprocess.run(f"fuser -km {root_mp} 2>/dev/null", shell=True)
     result = subprocess.run(f"umount -R {root_mp}", shell=True)
     if result.returncode != 0:
         print("  Clean unmount failed, trying lazy unmount...")
