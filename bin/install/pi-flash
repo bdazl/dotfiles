@@ -467,14 +467,14 @@ def step_ssh(root_mp: Path, authorized_keys_files: list[str], username: str) -> 
 
 
 def step_lock_root(root_mp: Path) -> None:
-    """Lock the root password to enforce key-based authentication."""
-    print("\n== Locking root password ==")
+    """Disable root password login (set to * so account is not locked)."""
+    print("\n== Disabling root password ==")
     shadow = root_mp / "etc/shadow"
     lines = shadow.read_text().splitlines()
     for i, line in enumerate(lines):
         if line.startswith("root:"):
             fields = line.split(":")
-            fields[1] = "!"
+            fields[1] = "*"
             lines[i] = ":".join(fields)
             break
     shadow.write_text("\n".join(lines) + "\n")
