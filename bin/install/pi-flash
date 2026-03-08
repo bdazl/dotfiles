@@ -332,18 +332,19 @@ def step_hostname(root_mp: Path, hostname: str) -> None:
 
 
 def step_dotfiles(root_mp: Path, username: str) -> None:
-    """Copy dotfiles repo and run Dotbot for root and the named user."""
+    """Copy dotfiles repo and create a first-boot service to run Dotbot.
+
+    Running Dotbot on the host would create symlinks with absolute paths
+    pointing to the mount directory, so we defer it to first boot.
+    """
     dotfiles_src = Path(__file__).resolve().parents[2]
-    dotbot_bin = dotfiles_src / "ext/dotbot/bin/dotbot"
-    host_python = sys.executable
 
     for target_home, uid, gid in [
         (root_mp / "root", 0, 0),
         (root_mp / "home" / username, 1000, 1000),
     ]:
-        print(f"\n== Installing dotfiles -> {target_home} ==")
+        print(f"\n== Copying dotfiles -> {target_home} ==")
 
-        # copy repo to ~/etc — Dotbot creates the ~/.etc symlink
         dest = target_home / "etc"
         if dest.exists():
             shutil.rmtree(dest)
@@ -354,12 +355,28 @@ def step_dotfiles(root_mp: Path, username: str) -> None:
         if bootstrap.exists():
             run(f"bash {bootstrap}", cwd=str(dest))
 
-        # run Dotbot with the host Python to avoid aarch64 shebang issues
-        config = dest / "etc/install.yml"
-        env = {**os.environ, "HOME": str(target_home)}
-        run(f"{host_python} {dotbot_bin} -d {dest} -c {config}", env=env)
-
         run(f"chown -R {uid}:{gid} {target_home}")
+
+    # first-boot service to run dotbot for all users with ~/etc
+    service = root_mp / "etc/systemd/system/dotfiles-install.service"
+    write_file(service, textwrap.dedent(f"""\
+        [Unit]
+        Description=Install dotfiles via Dotbot on first boot
+        ConditionPathExists=/home/{username}/etc/install
+        After=local-fs.target
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStart=/root/etc/install
+        ExecStart=/bin/su - {username} -c /home/{username}/etc/install
+        ExecStart=/bin/rm /etc/systemd/system/dotfiles-install.service
+        ExecStart=/bin/systemctl daemon-reload
+
+        [Install]
+        WantedBy=multi-user.target
+    """))
+    enable_systemd_service(root_mp, "dotfiles-install.service")
 
 
 def step_packages(root_mp: Path) -> None:
