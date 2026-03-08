@@ -413,6 +413,25 @@ def step_pacman_init_service(root_mp: Path) -> None:
     enable_systemd_service(root_mp, "pacman-init.service")
 
 
+def step_sudoers(root_mp: Path) -> None:
+    """Enable passwordless sudo for the wheel group."""
+    sudoers = root_mp / "etc/sudoers"
+    if not sudoers.exists():
+        print("\n  WARNING: /etc/sudoers not found — sudo may not be installed")
+        return
+
+    print("\n== Configuring passwordless sudo for wheel ==")
+    text = sudoers.read_text()
+    if "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" in text and \
+       "# %wheel ALL=(ALL:ALL) NOPASSWD: ALL" not in text:
+        print("  Already configured")
+    elif "# %wheel ALL=(ALL:ALL) NOPASSWD: ALL" in text:
+        replace_in_file(sudoers, "# %wheel ALL=(ALL:ALL) NOPASSWD: ALL",
+                        "%wheel ALL=(ALL:ALL) NOPASSWD: ALL")
+    else:
+        die("unexpected /etc/sudoers format — NOPASSWD line not found")
+
+
 def step_ssh(root_mp: Path, authorized_keys_files: list[str], username: str) -> None:
     """Enable sshd and install authorized keys for root and the named user."""
     print("\n== Configuring SSH ==")
