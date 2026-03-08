@@ -27,7 +27,7 @@ export XDG_CACHE_HOME=$HOME/.cache
 export XDG_DATA_DIRS=/usr/local/share/:/usr/share/
 export XDG_CONFIG_DIRS=/etc/xdg
 if [ -z "$XDG_RUNTIME_DIR" ]; then
-    echo "Warning: \$XDG_RUNTIME_DIR not set"
+    export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 fi
 
 # Keyboard environment (layout, repeat rate, etc...)
