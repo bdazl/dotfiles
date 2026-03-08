@@ -480,6 +480,42 @@ def step_lock_root(root_mp: Path) -> None:
     shadow.write_text("\n".join(lines) + "\n")
 
 
+# -- Orchestration -------------------------------------------------------------
+
+def run_step(name: str, root_mp: Path, completed: set[str], fn: Any) -> None:
+    """Run a step if not already completed, then mark it done."""
+    if name not in completed:
+        fn()
+        step_done(root_mp, completed, name)
+
+
+def configure(root_mp: Path, args: argparse.Namespace, tarball_path: str) -> None:
+    """Run all configuration steps on the mounted filesystem."""
+    completed = load_state(root_mp)
+    if completed:
+        print(f"  Resuming — already completed: {', '.join(sorted(completed))}")
+
+    def do(name: str, fn: Any) -> None:
+        run_step(name, root_mp, completed, fn)
+
+    do("extract", lambda: (
+        print("\n== Root filesystem already populated, skipping extraction ==")
+        if rootfs_populated(root_mp)
+        else step_extract(root_mp, tarball_path)
+    ))
+    do("user", lambda: step_user(root_mp, args.user, shell=args.shell))
+    do("hostname", lambda: step_hostname(root_mp, args.hostname))
+    do("dotfiles", lambda: step_dotfiles(root_mp, args.user) if not args.no_dotfiles else None)
+    do("packages", lambda: step_packages(root_mp) if args.packages else step_pacman_init_service(root_mp))
+    do("sudoers", lambda: step_sudoers(root_mp))
+    do("ssh", lambda: step_ssh(root_mp, args.ssh_key, args.user))
+    do("lock_root", lambda: step_lock_root(root_mp))
+
+    state_path = root_mp / STATE_FILE
+    if state_path.exists():
+        state_path.unlink()
+
+
 # -- Main ----------------------------------------------------------------------
 
 def main() -> None:
@@ -546,53 +582,9 @@ def main() -> None:
     root_mp, boot_mp = mount_partitions(boot_dev, root_dev)
 
     try:
-        completed = load_state(root_mp)
-        if completed:
-            print(f"  Resuming — already completed: {', '.join(sorted(completed))}")
-
-        if "extract" not in completed:
-            if rootfs_populated(root_mp):
-                print("\n== Root filesystem already populated, skipping extraction ==")
-            else:
-                step_extract(root_mp, tarball_path)
-            step_done(root_mp, completed, "extract")
-
-        if "user" not in completed:
-            step_user(root_mp, args.user, shell=args.shell)
-            step_done(root_mp, completed, "user")
-
-        if "hostname" not in completed:
-            step_hostname(root_mp, args.hostname)
-            step_done(root_mp, completed, "hostname")
-
-        if "dotfiles" not in completed:
-            if not args.no_dotfiles:
-                step_dotfiles(root_mp, args.user)
-            step_done(root_mp, completed, "dotfiles")
-
-        if "packages" not in completed:
-            if args.packages:
-                step_packages(root_mp)
-            else:
-                step_pacman_init_service(root_mp)
-            step_done(root_mp, completed, "packages")
-
-        if "ssh" not in completed:
-            step_ssh(root_mp, args.ssh_key, args.user)
-            step_done(root_mp, completed, "ssh")
-
-        if "lock_root" not in completed:
-            step_lock_root(root_mp)
-            step_done(root_mp, completed, "lock_root")
-
-        # clean up state file before final unmount
-        state_path = root_mp / STATE_FILE
-        if state_path.exists():
-            state_path.unlink()
-
+        configure(root_mp, args, tarball_path)
         unmount(root_mp)
         print("\nDone! Insert the SD card into your Raspberry Pi and boot.")
-
     except Exception:
         print("\nError occurred, attempting cleanup...")
         unmount(root_mp)
