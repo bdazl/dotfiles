@@ -1,3 +1,5 @@
+if vim.g.lite then return {} end
+
 return {
     {
         'neovim/nvim-lspconfig',

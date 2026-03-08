@@ -26,6 +26,7 @@ return {
     { 'junegunn/fzf.vim' },
     {
         'nvim-treesitter/nvim-treesitter',
+        enabled = not vim.g.lite,
         build = ':TSUpdate',
         opts = {
             ensure_installed = { 'python', 'go', 'haskell', 'terraform', 'lua', 'bash', 'vim', 'vimdoc', 'yaml', 'json', 'markdown' },
