@@ -55,6 +55,10 @@ initialize_custom_keybindings
 # set caps -> esc
 gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
 
+# key repeat rate and delay (mirrors hyprland.conf repeat_rate/repeat_delay)
+gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 22
+gsettings set org.gnome.desktop.peripherals.keyboard delay 250
+
 # Set keyboard shortcuts
 gsettings set org.gnome.desktop.wm.keybindings move-to-monitor-up "['<Super>k']"
 gsettings set org.gnome.desktop.wm.keybindings move-to-monitor-down "['<Super>j']"
