@@ -3,7 +3,7 @@
 Host pi
     HostName <address>
     RequestTTY force
-    RemoteCommand tmux new-session -As main
+    RemoteCommand tmux new-session -t main || tmux new-session -s main
 
 # Enable remote tmux overrides (on the remote host)
 cp ~/.etc/etc/tmux/tmux.remote.conf ~/.etc/local/tmux.conf
