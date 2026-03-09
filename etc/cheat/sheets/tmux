@@ -1,0 +1,20 @@
+# Remote host setup (auto-attach via SSH)
+# Add to ~/.ssh/config:
+Host pi
+    HostName <address>
+    RequestTTY force
+    RemoteCommand tmux new-session -As main
+
+# Enable remote tmux overrides (on the remote host)
+cp ~/.etc/etc/tmux/tmux.remote.conf ~/.etc/local/tmux.conf
+
+# Prefix: C-f (local), C-a (remote with override)
+
+# Attach to existing session (or create)
+tmux new-session -As main
+
+# List sessions
+tmux ls
+
+# Detach other clients from a session
+tmux attach -dt main
