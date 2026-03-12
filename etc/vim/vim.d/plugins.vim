@@ -6,15 +6,14 @@ if !has('nvim')
 
     if !g:lite
         Plug 'Valloric/YouCompleteMe', { 'do': './install.py --go-completer' }
+        Plug 'fatih/vim-go'                " golang
+        Plug 'dense-analysis/ale'          " linting
     endif
 
     Plug 'simnalamburt/vim-mundo'          " undo tree
     Plug 'vim-airline/vim-airline'         " status bar
     Plug 'vim-airline/vim-airline-themes'  " status bar themes
     Plug 'christoomey/vim-tmux-navigator'  " awareness of tmux-panes
-
-    Plug 'fatih/vim-go'                    " golang
-    Plug 'dense-analysis/ale'              " python linting
     Plug 'neovimhaskell/haskell-vim'       " haskell
     Plug 'hashivim/vim-terraform'          " terraform
 
