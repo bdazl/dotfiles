@@ -1,7 +1,12 @@
 if !has('nvim')
+    " Lite mode: VIM_LITE=1 disables heavy plugins (YouCompleteMe)
+    let g:lite = $VIM_LITE == '1'
+
     call plug#begin('~/.vim/plugged')
 
-    Plug 'Valloric/YouCompleteMe', { 'do': './install.py --go-completer' }
+    if !g:lite
+        Plug 'Valloric/YouCompleteMe', { 'do': './install.py --go-completer' }
+    endif
 
     Plug 'simnalamburt/vim-mundo'          " undo tree
     Plug 'vim-airline/vim-airline'         " status bar
@@ -22,9 +27,11 @@ if !has('nvim')
 
     call plug#end()
 
-    let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
-    let g:ycm_goto_buffer_command = 'same-buffer'
-    let g:ycm_collect_identifiers_from_tags_files = 1
+    if !g:lite
+        let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+        let g:ycm_goto_buffer_command = 'same-buffer'
+        let g:ycm_collect_identifiers_from_tags_files = 1
+    endif
 endif
 
 " Airline status bar
