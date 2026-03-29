@@ -3,4 +3,4 @@ Description=Stretch Reminder Notification
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/notify-send "Stretch Reminder" "Step away from the console!"
+ExecStart=/usr/bin/notify-send --urgency=normal --icon=appointment-soon "Stretch" "Time to stand up and stretch."
