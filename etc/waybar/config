@@ -18,19 +18,18 @@
         "format": "{:%H:%M}",
         "format-alt": " {:%Y-%m-%d}",
         "tooltip": true,
-        "tooltip-format": "<big>{:%Y %B %d %A}</big>\n<tt><small>{calendar}</small></tt>",
+        "tooltip-format": "<span font_size='15pt'><b>{:%Y %B %d %A}</b></span>\n<tt>{calendar}</tt>",
         "calendar": {
-            "mode": "year",
-            "mode-mon-col": 3,
+            "mode": "month",
             "weeks-pos": "right",
             "on-scroll": 1,
             "on-click-right": "mode",
             "format": {
-                "months": "<span color='#ffead3'><b>{}</b></span>",
-                "days": "<span color='#ecc6d9'><b>{}</b></span>",
-                "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
-                "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
-                "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
+                "months": "<span font_size='13pt' color='#ffead3'><b>{}</b></span>",
+                "days": "<span font_size='13pt' color='#ecc6d9'><b>{}</b></span>",
+                "weeks": "<span font_size='13pt' color='#99ffdd'><b>W{}</b></span>",
+                "weekdays": "<span font_size='13pt' color='#ffcc66'><b>{}</b></span>",
+                "today": "<span font_size='13pt' color='#ff6699'><b><u>{}</u></b></span>"
             }
         }
     },
