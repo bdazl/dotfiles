@@ -116,6 +116,11 @@ nargs() {
     tr '\n' '\0' | xargs -0 -I {} "${@[@]}"
 }
 
+# Remove spaces from beginning of lines
+rmspc() {
+    sed 's/^[[:space:]]*//'
+}
+
 git-files-changed() {
     local dev=${1:-$(git branch --show-current)}
     local main=${2:-$(git branch -l main master --format '%(refname:short)')}
@@ -229,6 +234,7 @@ halp() {
   ys        yay -Syu               system upgrade (Arch)
   eop       eval $(op signin)      sign in to 1Password CLI
   nargs     xargs per line         run command for each stdin line
+  rmspc     s/^[[:space:]]*//      filter spaces from beginning of line
 HALP
 }
 
