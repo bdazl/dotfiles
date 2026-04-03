@@ -33,4 +33,11 @@ if [ -f "$LOCAL_CONFIG" ]; then
     "${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${REPO_ROOT}" -c "${LOCAL_CONFIG}" "${@}"
 fi
 
+log_info "install: linking bin scripts"
+"$REPO_ROOT/bin/ln-bin" "$REPO_ROOT/bin/ln-bin"
+ln-bin "$REPO_ROOT/bin/copy"
+ln-bin "$REPO_ROOT/bin/paste"
+ln-bin "$REPO_ROOT/bin/fs-org"
+ln-bin "$REPO_ROOT/bin/toggle-stretch"
+
 log_ok "✅ install: done"
