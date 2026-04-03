@@ -54,6 +54,8 @@ function config_aliases()
 
     alias trn='tr -d "\n"'
 
+    alias recopy='paste | rmspc | copy'
+
     alias tp='tree-pager'
 
     alias sss='ss -ltpn'
@@ -235,6 +237,7 @@ halp() {
   eop       eval $(op signin)      sign in to 1Password CLI
   nargs     xargs per line         run command for each stdin line
   rmspc     s/^[[:space:]]*//      filter spaces from beginning of line
+  recopy    paste|rmspc|copy        strip leading spaces from clipboard
 HALP
 }
 
