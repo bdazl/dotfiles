@@ -21,7 +21,7 @@ autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd "v" edit-command-line
 
-# Since we use
+# <C-l> is used by tmux for pane navigation, rebind clear-screen to <C-n>
 bindkey '^n' clear-screen
 
 # Load fzf plugins
