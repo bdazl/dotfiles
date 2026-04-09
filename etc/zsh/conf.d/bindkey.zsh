@@ -16,6 +16,11 @@ bindkey -v  # VIM-mode
 bindkey -M vicmd "ö" beginning-of-line
 bindkey -M vicmd "ä" end-of-line
 
+# Edit current command line in $EDITOR (vicmd: v)
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd "v" edit-command-line
+
 # Since we use
 bindkey '^n' clear-screen
 
