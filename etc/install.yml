@@ -42,6 +42,7 @@
     ~/.git_template: etc/git/template
     ~/.gitconfig: etc/git/gitconfig
     ~/.ideavimrc: etc/vim/vimrc
+    ~/.inputrc: etc/readline/inputrc
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
     ~/.tmux.conf: etc/tmux/tmux.conf
     ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
