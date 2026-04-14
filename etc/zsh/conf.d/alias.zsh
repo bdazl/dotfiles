@@ -13,6 +13,11 @@ function config_aliases()
 
     alias agh='ag --hidden --ignore .git'
 
+    alias ..='cd ..'
+    alias ...='cd ../..'
+    alias ....='cd ../../..'
+    alias .....='cd ../../../..'
+
     alias c='clear'
 
     alias dff='df -h -x tmpfs -x devtmpfs -x efivarfs'
@@ -224,6 +229,12 @@ halp() {
   kl        14:30                  current time
   nu        time + date + week     quick overview
   vecka     v.10: mon - sun        week number to date range
+
+── navigation ─────────────────────────────────────────────────
+  ..        cd ..                  up 1 level
+  ...       cd ../..               up 2 levels
+  ....      cd ../../..            up 3 levels
+  .....     cd ../../../..         up 4 levels
 
 ── misc ───────────────────────────────────────────────────────
   c         clear
