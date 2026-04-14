@@ -1,0 +1,50 @@
+# Readline configuration
+# Vi-inspired settings, matching vim/zsh configuration in this repo
+
+$include /etc/inputrc
+
+# Encoding (required for multibyte keys like ö/ä)
+set input-meta on
+set output-meta on
+set convert-meta off
+
+# Vi editing mode
+set editing-mode vi
+
+# Cursor shape per mode: block (cmd), bar (ins)
+set show-mode-in-prompt on
+set vi-ins-mode-string \1\e[6 q\2
+set vi-cmd-mode-string \1\e[2 q\2
+
+# Minimal escape sequence timeout (match zsh KEYTIMEOUT=1)
+set keyseq-timeout 50
+
+# No bell (match vim noerrorbells + visualbell)
+set bell-style none
+
+# Completion: case-insensitive and fuzzy (match zsh compinit settings)
+set completion-ignore-case on
+set completion-map-case on
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+set menu-complete-display-prefix on
+set colored-stats on
+set visible-stats on
+set mark-symlinked-directories on
+set skip-completed-text on
+
+# Search
+set search-ignore-case on
+
+# Swedish keyboard mappings for vi command mode (match vim ö->^ ä->$)
+set keymap vi-command
+"ö": beginning-of-line
+"ä": end-of-line
+
+set keymap vi-insert
+# C-n for clear-screen (match zsh rebind, C-l used by tmux)
+"\C-n": clear-screen
+"\C-r": reverse-search-history
+"\C-a": beginning-of-line
+"\C-e": end-of-line
+"\C-w": backward-kill-word
