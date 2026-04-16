@@ -12,7 +12,9 @@ redraw() {
     fi
 }
 
-if command -v kitty > /dev/null 2>&1; then
+if command -v kitten > /dev/null 2>&1; then
+    kitten icat --clear --stdin no --transfer-mode memory < /dev/null > /dev/tty
+elif command -v kitty > /dev/null 2>&1; then
     kitty +kitten icat --clear --stdin no --transfer-mode memory < /dev/null > /dev/tty
     stty sane
     redraw
