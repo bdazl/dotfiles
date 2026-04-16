@@ -41,4 +41,5 @@ yay -S --needed \
     gammastep \
     cliphist \
     hyprpaper \
-    vlc
+    vlc \
+    kitty
