@@ -43,7 +43,8 @@ install-deps() {
     sudo dnf install \
         xsel \
         ghostty \
-        gnome-tweaks
+        gnome-tweaks \
+        kitty-kitten
 }
 
 # dnf
