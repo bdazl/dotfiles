@@ -123,6 +123,9 @@ nargs() {
     tr '\n' '\0' | xargs -0 -I {} "${@[@]}"
 }
 
+# Filter a range of lines from stdin
+lines() { sed -n "${1},${2}p;${2}q"; }
+
 # Remove spaces from beginning of lines
 rmspc() {
     sed 's/^[[:space:]]*//'
@@ -246,6 +249,7 @@ halp() {
   k         kubectl                kubernetes shorthand
   ys        yay -Syu               system upgrade (Arch)
   eop       eval $(op signin)      sign in to 1Password CLI
+  lines     sed -n 'N,Mp'          filter a range of lines from stdin
   nargs     xargs per line         run command for each stdin line
   rmspc     s/^[[:space:]]*//      filter spaces from beginning of line
   recopy    paste|rmspc|copy        strip leading spaces from clipboard
