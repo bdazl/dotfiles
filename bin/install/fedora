@@ -9,6 +9,7 @@ sudo dnf install --skip-unavailable \
     tmux \
     vim-enhanced \
     neovim \
+    python3-neovim \
     git \
     cscope \
     python \
