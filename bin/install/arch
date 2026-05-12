@@ -29,6 +29,7 @@ sudo pacman -Syu --needed \
     ranger \
     python \
     python-pip \
+    python-pynvim \
     npm \
     python-pillow \
     go \
