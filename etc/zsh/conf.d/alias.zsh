@@ -34,7 +34,7 @@ function config_aliases()
     alias gc='git commit --verbose'
     alias gd='git diff'
     alias gs='git status'
-    alias gsv='git status --verbose'
+    alias gsv='git -c color.status=always -c color.diff=always status --verbose | less'
     alias gsh='git show'
     alias ggrep='git grep -nI --heading --break'
     alias gpp='git pull --prune'
