@@ -9,7 +9,9 @@ map <silent> <leader><cr> :noh<cr>
 
 " Most important rebinds for the swedish keyboard!!
 map ö ^
-map ä $
+map Ö 0
+map ä g_
+map Ä $
 
 " Smart way to move between windows (fallback when vim-tmux-navigator is absent)
 if !exists(':TmuxNavigateLeft')
@@ -174,7 +176,8 @@ nmap <leader>? :Halp<cr>
 function! ShowHalp()
     let l:lines = [
         \ '── navigation ─────────────────────────────────────────────',
-        \ '  ö / ä           ^ / $              line begin / end',
+        \ '  ö / ä           ^ / g_             first/last non-blank',
+        \ '  Ö / Ä           0 / $              line begin / end',
         \ '  C-h/j/k/l       window/tmux-pane   navigate splits',
         \ '  Tab / S-Tab     :tabnext/prev       cycle tabs',
         \ '  ,te             :tabedit %:p:h      new tab, same dir',
