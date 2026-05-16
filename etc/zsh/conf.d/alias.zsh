@@ -256,5 +256,120 @@ halp() {
 HALP
 }
 
+hyprhalp() {
+    cat <<'HYPRHALP'
+── keybinds: windows ──────────────────────────────────────────
+  SUPER + f            fullscreen (mode 1)
+  SUPER SHIFT + f      fullscreen (mode 0, maximize)
+  SUPER + d            kill active window
+  SUPER + v            toggle floating
+  SUPER + p            pseudotile (dwindle)
+  SUPER + SPACE        toggle split direction (dwindle)
+  SUPER + LMB drag     move window
+  SUPER + RMB drag     resize window
+  SUPER + F12          exit hyprland
+
+── keybinds: focus / workspaces ───────────────────────────────
+  SUPER + h/j/k/l      move focus left/down/up/right
+  SUPER + 1..0         go to workspace 1..10
+  SUPER SHIFT + 1..0   move active window to workspace 1..10
+  SUPER SHIFT + l/h    next/previous workspace
+  SUPER SHIFT + s      move window to special workspace
+  SUPER SHIFT + v      toggle special workspace
+
+── keybinds: launch ───────────────────────────────────────────
+  SUPER + RETURN/o     ghostty terminal
+  SUPER + e            firefox
+  SUPER + r            rofi (run + drun)
+  SUPER + w            rofi window switcher
+  SUPER + c            cliphist clipboard picker (rofi)
+  SUPER + n            dunst notification history (rofi)
+  SUPER + g            toggle gammastep (night light)
+  PRINT                grim + slurp (region screenshot)
+  SUPER + PRINT        grim-active (active window screenshot)
+
+── bar: waybar ────────────────────────────────────────────────
+  config       ~/.etc/etc/waybar/config
+  style        ~/.etc/etc/waybar/style.css
+  reload       pkill -SIGUSR2 waybar
+  restart      pkill waybar; waybar &!
+  power menu   click ⏻ (runs ~/.config/waybar/power-menu.sh)
+  modules      workspaces, window | clock | mpris, bluetooth,
+               cpu, memory, network, pulseaudio, power
+
+── notifications: dunst ───────────────────────────────────────
+  config           ~/.etc/etc/dunst/dunstrc
+  history (rofi)   SUPER + n  (~/.etc/bin/hypr/dunst-history)
+  test             notify-send "title" "body"
+  close current    dunstctl close
+  close all        dunstctl close-all
+  show history     dunstctl history-pop
+  context menu     dunstctl context
+  pause/resume     dunstctl set-paused toggle
+  mouse on popup   L: close  M: action+close  R: close all
+
+── launcher: rofi ─────────────────────────────────────────────
+  theme            ~/.etc/etc/rofi/catppuccin.rasi
+  run + drun       rofi -combi-modi run,drun -show combi
+  window switcher  rofi -show window
+  ssh hosts        rofi -show ssh
+  dmenu mode       ... | rofi -dmenu -p "prompt"
+
+── clipboard: cliphist ────────────────────────────────────────
+  watcher          wl-paste --watch cliphist store  (exec-once)
+  picker           SUPER + c  (~/.etc/bin/hypr/cliphist-rofi)
+  list             cliphist list
+  wipe history     cliphist wipe
+  delete entry     cliphist list | rofi -dmenu | cliphist delete
+
+── screenshots: grim / slurp ──────────────────────────────────
+  region           grim -g "$(slurp)" - | wl-copy
+  region to file   grim -g "$(slurp)" ~/pic.png
+  active window    ~/.etc/bin/hypr/grim-active
+  full screen      grim - | wl-copy
+
+── hyprctl ────────────────────────────────────────────────────
+  h                alias for hyprctl
+  hexit            hyprctl dispatch exit
+  monitors         hyprctl monitors
+  clients          hyprctl clients         (windows)
+  workspaces       hyprctl workspaces
+  active window    hyprctl activewindow
+  reload config    hyprctl reload
+  dispatch ...     hyprctl dispatch <cmd>  (e.g. killactive)
+  binds            hyprctl binds           (active keybinds)
+  layers           hyprctl layers          (layer-shell surfaces)
+
+── audio: pulseaudio / wireplumber ────────────────────────────
+  GUI mixer        pavucontrol               (waybar L-click)
+  toggle mute      pactl set-sink-mute @DEFAULT_SINK@ toggle
+  volume +/-       pactl set-sink-volume @DEFAULT_SINK@ ±5%
+  scroll on bar    ±5% volume on pulseaudio module
+
+── media: mpris / playerctl ───────────────────────────────────
+  play/pause       playerctl play-pause      (waybar L-click)
+  next             playerctl next            (scroll up)
+  previous         playerctl previous        (scroll down)
+  status           playerctl status -a
+
+── misc autostart (exec-once) ─────────────────────────────────
+  waybar           bar
+  hyprpaper        wallpaper daemon
+  dunst            notification daemon
+  gammastep        night light (lat 59.3, lon 18.1 — Stockholm)
+  cliphist store   clipboard history watcher
+  polkit agent     /usr/lib/polkit-kde-authentication-agent-1
+  fcitx5 -d        input method (QT_IM_MODULE=fcitx)
+
+── config files ───────────────────────────────────────────────
+  hyprland         ~/.etc/etc/hypr/hyprland.conf
+  hyprpaper        ~/.etc/etc/hypr/hyprpaper.conf
+  waybar           ~/.etc/etc/waybar/{config,style.css}
+  dunst            ~/.etc/etc/dunst/dunstrc
+  rofi theme       ~/.etc/etc/rofi/catppuccin.rasi
+  hypr scripts     ~/.etc/bin/hypr/
+HYPRHALP
+}
+
 # Init aliases
 config_aliases
