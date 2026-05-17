@@ -3,4 +3,4 @@ vim.lsp.config('*', {
     root_markers = { '.git' },
 })
 
-vim.lsp.enable({ 'pyright', 'gopls', 'terraformls' })
+vim.lsp.enable({ 'pyright', 'gopls', 'terraformls', 'clangd' })
