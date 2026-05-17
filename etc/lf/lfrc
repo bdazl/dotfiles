@@ -78,6 +78,12 @@ map O $mimeopen --ask $f
 # use either file extensions and/or mime types here. Below uses an editor for
 # text files and a file opener for the rest.
 cmd open &{{
+    # C++ module units are misdetected by `file` (e.g. as application/javascript)
+    case $f in
+        *.cppm|*.ixx|*.ccm|*.cxxm)
+            lf -remote "send $id \$$EDITOR \$fx"
+            exit;;
+    esac
     case $(file --mime-type -Lb $f) in
         text/*) lf -remote "send $id \$$EDITOR \$fx";;
         image/*) feh $f ;;
