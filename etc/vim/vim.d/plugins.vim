@@ -51,6 +51,10 @@ let b:ale_fixers = ['black', 'autoimport', 'isort', 'yapf', 'remove_trailing_lin
 let g:ale_python_flake8_options = '--max-line-length=88'
 " let g:ale_fix_on_save = 1
 
+" C/C++ goes through nvim's built-in LSP (clangd); skip ALE here to avoid
+" duplicate diagnostics and bypass linters that ignore .clangd.
+let g:ale_linters = {'c': [], 'cpp': []}
+
 " Ranger defaults to:
 " map <leader>f :Ranger<CR>
 let g:ranger_map_keys = 0
