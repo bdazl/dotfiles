@@ -12,6 +12,7 @@
   - ~/.config/Code/User
   - ~/.config/cheat/sheets
   - ~/.config/lf
+  - ~/.config/pipewire
   - ~/.local/bin
   - ~/.local/share/zsh
   - ~/.cargo/bin
@@ -34,6 +35,7 @@
     ~/.config/waybar: etc/waybar
     ~/.config/lf/lfrc: etc/lf/lfrc
     ~/.config/nvim: etc/nvim
+    ~/.config/pipewire/pipewire.conf.d: etc/pipewire/pipewire.conf.d
     ~/.config/ranger: etc/ranger
     ~/.config/task: etc/task
     ~/.config/systemd: etc/systemd
