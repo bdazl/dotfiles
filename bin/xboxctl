@@ -1,0 +1,133 @@
+#!/bin/bash
+# Manage an Xbox Wireless Controller over Bluetooth.
+#
+# Subcommands: pair, connect, disconnect, status, forget
+#
+# `pair` drives a single bluetoothctl session through a stdin pipe so the
+# pairing agent stays registered across pair/trust/connect — otherwise
+# non-interactive pairing fails with AuthenticationFailed.
+
+set -uo pipefail
+
+NAME="Xbox Wireless Controller"
+
+msg()  { printf '\033[1;34m::\033[0m %s\n' "$*"; }
+ok()   { printf '\033[1;32mok\033[0m %s\n' "$*"; }
+warn() { printf '\033[1;33m!!\033[0m %s\n' "$*" >&2; }
+die()  { printf '\033[1;31mxx\033[0m %s\n' "$*" >&2; exit 1; }
+
+find_mac() {
+    bluetoothctl devices | grep -F "$NAME" | awk '{print $2}' | head -n1
+}
+
+require_mac() {
+    local mac
+    mac=$(find_mac)
+    [[ -n "$mac" ]] || die "No '$NAME' known to bluez. Run: $(basename "$0") pair"
+    echo "$mac"
+}
+
+cmd_status() {
+    local mac
+    mac=$(find_mac)
+    if [[ -z "$mac" ]]; then
+        echo "No '$NAME' paired."
+        return 1
+    fi
+    bluetoothctl info "$mac" | grep -E "Name:|Paired:|Trusted:|Connected:|Battery"
+}
+
+cmd_connect() {
+    local mac; mac=$(require_mac)
+    bluetoothctl connect "$mac"
+}
+
+cmd_disconnect() {
+    local mac; mac=$(require_mac)
+    bluetoothctl disconnect "$mac"
+}
+
+cmd_forget() {
+    local mac; mac=$(require_mac)
+    bluetoothctl remove "$mac"
+}
+
+cmd_pair() {
+    systemctl is-active --quiet bluetooth.service \
+        || die "bluetooth.service is not active"
+
+    cat <<'EOF'
+Put the controller in pairing mode:
+  1. Hold the Xbox button to power it on.
+  2. Hold the pair button (top, next to USB) ~3s until
+     the Xbox button blinks FAST.
+
+Press Enter when ready (Ctrl-C to abort).
+EOF
+    read -r
+
+    msg "Scanning 20s…"
+    local scan
+    scan=$({
+        echo "agent NoInputNoOutput"
+        echo "default-agent"
+        echo "scan on"
+        sleep 20
+        echo "scan off"
+        sleep 1
+        echo "quit"
+    } | bluetoothctl 2>&1)
+
+    local mac
+    mac=$(printf '%s\n' "$scan" \
+        | grep -oE '([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}'" $NAME" \
+        | awk '{print $1}' | head -n1)
+    [[ -n "$mac" ]] || die "Controller not found. Make sure the Xbox button is blinking fast."
+    ok "Found $mac"
+
+    msg "Pairing, trusting, connecting…"
+    local out
+    out=$({
+        echo "agent NoInputNoOutput"
+        echo "default-agent"
+        echo "pair $mac"
+        sleep 12
+        echo "trust $mac"
+        sleep 1
+        echo "connect $mac"
+        sleep 4
+        echo "quit"
+    } | bluetoothctl 2>&1)
+
+    grep -q "Pairing successful" <<<"$out"     && ok "Paired"    || warn "Pair did not report success"
+    grep -q "trust succeeded"    <<<"$out"     && ok "Trusted"   || warn "Trust did not report success"
+    if grep -q "Connection successful" <<<"$out"; then
+        ok "Connected $mac"
+    else
+        printf '%s\n' "$out" | tail -20 >&2
+        die "Connect failed"
+    fi
+}
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") <command>
+
+Commands:
+  pair         Put controller in pair mode, then run this to pair + connect
+  connect      Connect to the already-paired controller
+  disconnect   Disconnect
+  status       Show pair/connect/battery state
+  forget       Remove the pairing
+EOF
+}
+
+case "${1:-status}" in
+    pair)       cmd_pair ;;
+    connect)    cmd_connect ;;
+    disconnect|disc) cmd_disconnect ;;
+    status)     cmd_status ;;
+    forget|remove)   cmd_forget ;;
+    -h|--help|help)  usage ;;
+    *)          usage; exit 2 ;;
+esac
