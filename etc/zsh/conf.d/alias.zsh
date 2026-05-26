@@ -40,7 +40,7 @@ function config_aliases()
     alias gpp='git pull --prune'
     alias gl='git log --graph --date=short --pretty=format:"%C(yellow)%h %C(blue)%ad %C(green)%an %C(auto)%d %n %s"'
     alias gla='git log --oneline --all --graph --decorate'
-    alias gll='gl --patch'
+    alias gll='git log --patch --stat'
 
     alias gdiff='diff --color -u'
 
@@ -203,7 +203,7 @@ halp() {
   gsh       git show
   gl        git log --graph        short decorated log
   gla       git log --oneline      one-line log, all branches
-  gll       gl --patch             log with diffs
+  gll       git log --patch --stat full log with diffs and stats
   gpp       git pull --prune       pull and prune dead remotes
   gcf       git-files-changed      files changed vs main
   ggrep     git grep -nI           search tracked files
