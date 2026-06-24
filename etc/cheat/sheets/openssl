@@ -1,0 +1,4 @@
+# Symmetric message encryption/decryption (to base64 encoded string)
+echo "möte på taket kl 14" | openssl enc -aes-256-cbc -pbkdf2 -base64 -k "enNyckel"
+echo "U2FsdGVkX1+3kQz8...Xv9mA==" | openssl enc -d -aes-256-cbc -pbkdf2 -base64 -k "enNyckel"
+
