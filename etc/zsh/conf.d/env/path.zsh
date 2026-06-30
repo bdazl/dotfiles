@@ -21,12 +21,10 @@ remove-non-existing() {
     echo $out
 }
 
-echo-path-base() {
-    # Setup path
-    # set array-output to path typeset
-
-    # Simply echo:ing this array will yield a path
-    # $HOME/bin like:this:where:this:is:$PATH
+echo-user-dirs() {
+    # User-owned bin directories, highest precedence.
+    # These must win over system/brew tools so our own scripts
+    # (e.g. ~/bin/copy, ~/bin/paste) shadow any same-named utility.
     pth=( \
         $(remove-non-existing \
             "$HOME/.local/bin" \
@@ -35,11 +33,15 @@ echo-path-base() {
             "$HOME/.cargo/bin" \
             "$HOME/.elan/bin" \
         ) \
-        ${PATH} \
     )
 
     # Join spaces with :
     echo "${(j.:.)pth}"
+}
+
+echo-path-base() {
+    # User dirs first, then the inherited PATH.
+    echo "$(echo-user-dirs):${PATH}"
 }
 
 echo-path-osx() {
@@ -61,16 +63,16 @@ echo-path-osx() {
 }
     
 echo-path() {
-    base_path="$(echo-path-base)"
-
     u_name="$(uname)"
     case $u_name in
         Darwin):
+            # User dirs first so our own scripts win, then brew (gnubin
+            # shadows BSD tools), then the inherited system PATH.
             brew_path="$(echo-path-osx)"
-            echo "$brew_path:$base_path"
+            echo "$(echo-user-dirs):$brew_path:${PATH}"
             ;;
         *)
-            echo "$base_path"
+            echo "$(echo-path-base)"
             ;;
     esac
 
