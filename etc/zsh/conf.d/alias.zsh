@@ -18,14 +18,13 @@ function config_aliases()
     alias ....='cd ../../..'
     alias .....='cd ../../../..'
 
-    alias c='clear'
-
     alias dff='df -h -x tmpfs -x devtmpfs -x efivarfs'
 
     alias eop='eval $(op signin)'
 
     alias fdh='fd --no-ignore-vcs -H'
 
+    alias g='git'
     alias ga='git add'
     alias gb='git branch --show-current'
     alias gbb='git branch'
@@ -35,6 +34,7 @@ function config_aliases()
     alias gd='git diff'
     alias gs='git status'
     alias gsv='git -c color.status=always -c color.diff=always status --verbose | less'
+    alias gsw='git switch'
     alias gsh='git show'
     alias ggrep='git grep -nI --heading --break'
     alias gpp='git pull --prune'
