@@ -26,8 +26,8 @@ function config_aliases()
 
     alias g='git'
     alias ga='git add'
-    alias gb='git branch --show-current'
-    alias gbb='git branch'
+    alias gb='git branch'
+    alias gbc='git branch --show-current'
     alias gba='git branch --all'
     alias gcf='git-files-changed'
     alias gc='git commit --verbose'
