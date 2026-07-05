@@ -33,6 +33,7 @@
     ~/.config/ghostty: etc/ghostty
     ~/.config/hypr: etc/hypr
     ~/.config/waybar: etc/waybar
+    ~/.config/lesskey: etc/less/lesskey
     ~/.config/lf/lfrc: etc/lf/lfrc
     ~/.config/nvim: etc/nvim
     ~/.config/pipewire/pipewire.conf.d: etc/pipewire/pipewire.conf.d
