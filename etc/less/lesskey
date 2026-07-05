@@ -1,0 +1,36 @@
+#command
+
+# Vim-style navigation for less.
+#
+# Most vim motions already work in less by default and need no binding:
+#   j / k         line down / up
+#   ^F / ^B       page forward / back
+#   ^D / ^U       half-page down / up   (also d / u)
+#   g / G         top / bottom          (typing gg also lands on top)
+#   / n N         search, next, prev
+#   ^E / ^Y       scroll one line down / up
+#
+# The only real gap is horizontal motion: by default h is the help screen
+# and l is unbound. Rebind them to vim-style horizontal scroll (handy since
+# we run less with -S, which chops rather than wraps long lines).
+h  left-scroll
+l  right-scroll
+
+# h used to open the help screen; keep help reachable on H.
+H  help
+
+# Mirror the Swedish-keyboard motions from the vim config (ö = line start,
+# ä = line end). A pager has no in-line cursor, so map them to the horizontal
+# extremes: ö jumps back to the first column, ä to the end of the longest line.
+ö  no-scroll
+ä  end-scroll
+
+# Clear search highlighting, mirroring the vim ,<cr> -> :noh mapping.
+# (, becomes a prefix key; Enter alone still scrolls one line forward.)
+,\r  undo-hilite
+,\n  undo-hilite
+
+# Cycle between files like vim tabs. Only relevant when several files are
+# opened at once, e.g. `less a b c`. Tab -> next, Shift-Tab -> previous.
+\t   next-file
+\kt  prev-file
