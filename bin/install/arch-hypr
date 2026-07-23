@@ -7,8 +7,10 @@
 # TODO: NO ROOT PLS
 
 yay -S --needed \
+    greetd \
     linux-headers \
     hyprland \
+    tuigreety \
     wireplumber \
     pipewire \
     wl-clipboard \
