@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+usage: logincmd <greetd|getty|status> [--force]
+
+Switch the tty1 login provider.
+
+commands:
+  greetd   install the greetd config and enable greetd on tty1
+  getty    disable greetd and restore getty on tty1
+  status   show current systemd state
+
+options:
+  --force  allow switching to greetd while running from tty1
+EOF
+}
+
+error() {
+    echo "error: $1" >&2
+    exit 1
+}
+
+require_command() {
+    command -v "$1" >/dev/null 2>&1 || error "$1 is not installed"
+}
+
+current_tty() {
+    tty 2>/dev/null || true
+}
+
+require_not_tty1() {
+    if [[ "${force}" == true ]]; then
+        return
+    fi
+
+    if [[ "$(current_tty)" == "/dev/tty1" ]]; then
+        error "switch to tty2 first with Ctrl+Alt+F2, or pass --force"
+    fi
+}
+
+require_root() {
+    if [[ "${EUID}" -eq 0 ]]; then
+        return
+    fi
+
+    exec sudo -- "$0" "$@"
+}
+
+repo_root() {
+    local script_path
+    script_path=$(readlink -f "${BASH_SOURCE[0]}")
+    dirname "$(dirname "$(dirname "${script_path}")")"
+}
+
+enable_greetd() {
+    require_not_tty1
+    require_command greetd
+    require_command tuigreet
+
+    local root config_src
+    root=$(repo_root)
+    config_src="${root}/sys/etc/greetd/config.toml"
+    [[ -f "${config_src}" ]] || error "missing ${config_src}"
+
+    install -d -m 0755 /etc/greetd
+    install -m 0644 "${config_src}" /etc/greetd/config.toml
+
+    systemctl disable getty@tty1.service
+    systemctl enable greetd.service
+    systemctl restart greetd.service
+}
+
+enable_getty() {
+    systemctl stop greetd.service || true
+    systemctl disable greetd.service
+    systemctl enable getty@tty1.service
+    systemctl restart getty@tty1.service
+}
+
+show_status() {
+    systemctl --no-pager status display-manager.service greetd.service getty@tty1.service || true
+}
+
+force=false
+action=
+original_args=("$@")
+
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        greetd|getty|status)
+            [[ -z "${action}" ]] || error "only one command can be used"
+            action="$1"
+            ;;
+        --force)
+            force=true
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            usage >&2
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+[[ -n "${action}" ]] || {
+    usage >&2
+    exit 1
+}
+
+if [[ "${action}" == status ]]; then
+    show_status
+    exit 0
+fi
+
+if [[ "${action}" == greetd ]]; then
+    require_not_tty1
+fi
+
+require_root "${original_args[@]}"
+
+case "${action}" in
+    greetd) enable_greetd ;;
+    getty) enable_getty ;;
+esac
