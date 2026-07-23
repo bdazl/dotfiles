@@ -10,11 +10,9 @@ start_tmux() {
     [[ $commands[tmux] ]] && [ "$TMUX" = "" ] && tmux
 }
 
-# TODO: double check if SESSION_TYPE == "tty"
-# If running trom tty1 start sway
-if [[ $(tty) == "/dev/tty1" ]]; then
+# If running from tty1 without an existing graphical session, start Hyprland.
+if [[ -z "$DISPLAY" && -z "$WAYLAND_DISPLAY" && $(tty 2>/dev/null) == "/dev/tty1" ]]; then
     $desktop
     start_tmux
 fi
-
 
