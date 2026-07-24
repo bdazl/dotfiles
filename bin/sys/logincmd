@@ -3,17 +3,18 @@ set -euo pipefail
 
 usage() {
     cat <<'EOF'
-usage: logincmd <greetd|getty|status> [--force]
+usage: logincmd <greetd|greetd-vts|getty|status> [--force]
 
 Switch the tty1 login provider.
 
 commands:
-  greetd   install the greetd config and enable greetd on tty1
-  getty    disable greetd and restore getty on tty1
-  status   show current systemd state
+  greetd      install the greetd config and enable greetd on tty1
+  greetd-vts  enable greetd on tty1, tty2, and tty3
+  getty       disable greetd and restore getty on tty1, tty2, and tty3
+  status      show current systemd state
 
 options:
-  --force  allow switching to greetd while running from tty1
+  --force  allow switching while running from a managed tty
 EOF
 }
 
@@ -40,12 +41,42 @@ require_not_tty1() {
     fi
 }
 
+require_not_managed_tty() {
+    if [[ "${force}" == true ]]; then
+        return
+    fi
+
+    case "$(current_tty)" in
+        /dev/tty1|/dev/tty2|/dev/tty3)
+            error "switch to tty4 first with Ctrl+Alt+F4, or pass --force"
+            ;;
+    esac
+}
+
 require_root() {
     if [[ "${EUID}" -eq 0 ]]; then
         return
     fi
 
     exec sudo -- "$0" "$@"
+}
+
+install_shared_config() {
+    require_command setvtrgb
+    require_command tuigreet
+
+    local root tuigreet_config_src vtrgb_src
+    root=$(repo_root)
+    tuigreet_config_src="${root}/sys/etc/tuigreet/config.toml"
+    vtrgb_src="${root}/sys/etc/vtrgb"
+    [[ -f "${tuigreet_config_src}" ]] || error "missing ${tuigreet_config_src}"
+    [[ -f "${vtrgb_src}" ]] || error "missing ${vtrgb_src}"
+
+    install -d -m 0755 /etc/tuigreet
+    install -m 0644 "${tuigreet_config_src}" /etc/tuigreet/config.toml
+
+    install -m 0644 "${vtrgb_src}" /etc/vtrgb
+    setvtrgb /etc/vtrgb
 }
 
 repo_root() {
@@ -57,41 +88,70 @@ repo_root() {
 enable_greetd() {
     require_not_tty1
     require_command greetd
-    require_command setvtrgb
-    require_command tuigreet
 
-    local root greetd_config_src tuigreet_config_src vtrgb_src
+    local root greetd_config_src
     root=$(repo_root)
     greetd_config_src="${root}/sys/etc/greetd/config.toml"
-    tuigreet_config_src="${root}/sys/etc/tuigreet/config.toml"
-    vtrgb_src="${root}/sys/etc/vtrgb"
     [[ -f "${greetd_config_src}" ]] || error "missing ${greetd_config_src}"
-    [[ -f "${tuigreet_config_src}" ]] || error "missing ${tuigreet_config_src}"
-    [[ -f "${vtrgb_src}" ]] || error "missing ${vtrgb_src}"
 
+    install_shared_config
     install -d -m 0755 /etc/greetd
     install -m 0644 "${greetd_config_src}" /etc/greetd/config.toml
 
-    install -d -m 0755 /etc/tuigreet
-    install -m 0644 "${tuigreet_config_src}" /etc/tuigreet/config.toml
-
-    install -m 0644 "${vtrgb_src}" /etc/vtrgb
-    setvtrgb /etc/vtrgb
-
+    systemctl stop greetd@1.service greetd@2.service greetd@3.service || true
+    systemctl disable greetd@1.service greetd@2.service greetd@3.service || true
+    systemctl unmask getty@tty2.service getty@tty3.service || true
     systemctl disable getty@tty1.service
     systemctl enable greetd.service
     systemctl restart greetd.service
 }
 
+enable_greetd_vts() {
+    require_not_managed_tty
+    require_command greetd
+
+    local root service_src tty
+    root=$(repo_root)
+    service_src="${root}/sys/etc/systemd/system/greetd@.service"
+    [[ -f "${service_src}" ]] || error "missing ${service_src}"
+
+    install_shared_config
+    install -d -m 0755 /etc/greetd
+    for tty in 1 2 3; do
+        install -m 0644 "${root}/sys/etc/greetd/tty${tty}.toml" "/etc/greetd/tty${tty}.toml"
+    done
+
+    install -d -m 0755 /etc/systemd/system
+    install -m 0644 "${service_src}" /etc/systemd/system/greetd@.service
+
+    systemctl daemon-reload
+    systemctl disable greetd.service || true
+    systemctl disable getty@tty1.service getty@tty2.service getty@tty3.service
+    systemctl mask getty@tty1.service getty@tty2.service getty@tty3.service
+    systemctl enable greetd@1.service greetd@2.service greetd@3.service
+    systemctl restart greetd@1.service greetd@2.service greetd@3.service
+}
+
 enable_getty() {
     systemctl stop greetd.service || true
+    systemctl stop greetd@1.service greetd@2.service greetd@3.service || true
     systemctl disable greetd.service
-    systemctl enable getty@tty1.service
-    systemctl restart getty@tty1.service
+    systemctl disable greetd@1.service greetd@2.service greetd@3.service || true
+    systemctl unmask getty@tty1.service getty@tty2.service getty@tty3.service
+    systemctl enable getty@tty1.service getty@tty2.service getty@tty3.service
+    systemctl restart getty@tty1.service getty@tty2.service getty@tty3.service
 }
 
 show_status() {
-    systemctl --no-pager status display-manager.service greetd.service getty@tty1.service || true
+    systemctl --no-pager status \
+        display-manager.service \
+        greetd.service \
+        greetd@1.service \
+        greetd@2.service \
+        greetd@3.service \
+        getty@tty1.service \
+        getty@tty2.service \
+        getty@tty3.service || true
 }
 
 force=false
@@ -100,7 +160,7 @@ original_args=("$@")
 
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
-        greetd|getty|status)
+        greetd|greetd-vts|getty|status)
             [[ -z "${action}" ]] || error "only one command can be used"
             action="$1"
             ;;
@@ -131,11 +191,14 @@ fi
 
 if [[ "${action}" == greetd ]]; then
     require_not_tty1
+elif [[ "${action}" == greetd-vts ]]; then
+    require_not_managed_tty
 fi
 
 require_root "${original_args[@]}"
 
 case "${action}" in
     greetd) enable_greetd ;;
+    greetd-vts) enable_greetd_vts ;;
     getty) enable_getty ;;
 esac
