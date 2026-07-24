@@ -57,15 +57,26 @@ repo_root() {
 enable_greetd() {
     require_not_tty1
     require_command greetd
+    require_command setvtrgb
     require_command tuigreet
 
-    local root config_src
+    local root greetd_config_src tuigreet_config_src vtrgb_src
     root=$(repo_root)
-    config_src="${root}/sys/etc/greetd/config.toml"
-    [[ -f "${config_src}" ]] || error "missing ${config_src}"
+    greetd_config_src="${root}/sys/etc/greetd/config.toml"
+    tuigreet_config_src="${root}/sys/etc/tuigreet/config.toml"
+    vtrgb_src="${root}/sys/etc/vtrgb"
+    [[ -f "${greetd_config_src}" ]] || error "missing ${greetd_config_src}"
+    [[ -f "${tuigreet_config_src}" ]] || error "missing ${tuigreet_config_src}"
+    [[ -f "${vtrgb_src}" ]] || error "missing ${vtrgb_src}"
 
     install -d -m 0755 /etc/greetd
-    install -m 0644 "${config_src}" /etc/greetd/config.toml
+    install -m 0644 "${greetd_config_src}" /etc/greetd/config.toml
+
+    install -d -m 0755 /etc/tuigreet
+    install -m 0644 "${tuigreet_config_src}" /etc/tuigreet/config.toml
+
+    install -m 0644 "${vtrgb_src}" /etc/vtrgb
+    setvtrgb /etc/vtrgb
 
     systemctl disable getty@tty1.service
     systemctl enable greetd.service
