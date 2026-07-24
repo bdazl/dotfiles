@@ -2,5 +2,5 @@
 vt = 1
 
 [default_session]
-command = "tuigreet --time --remember --remember-session --asterisks --sessions /usr/share/wayland-sessions --cmd start-hyprland"
+command = "tuigreet --config /etc/tuigreet/config.toml --cmd start-hyprland"
 user = "greeter"
