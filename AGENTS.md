@@ -1,7 +1,6 @@
 # AGENTS.md
 
 Guidance for automation agents working in this repository.
-See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping guidance consistent to avoid drift.
 
 ## Language
 - Conversation: Swedish preferred
@@ -38,6 +37,10 @@ See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping gui
 ## Package Management
 - Arch Linux: use `yay` (AUR helper), not `pacman` directly.
 
+## Git Identity
+- The shared Git configuration includes `local/gitconfig`.
+- `./bootstrap` creates it from `etc/git/gitconfig.local.template` when missing.
+
 ## Git Conventions
 - Default branch: `main`
 - Commit style: lowercase, no trailing period
@@ -45,7 +48,6 @@ See [CLAUDE.md](CLAUDE.md) for Claude Code instructions and keep overlapping gui
 - Use scoped prefixes that mirror existing log style (e.g., `docs:`, `cheat:`); keep messages concise and action‑oriented
 - Atomic commits (one logical change per commit)
 - Never amend unless explicitly requested
- - Keep `AGENTS.md` and `CLAUDE.md` aligned when updating shared guidance
 
 ## Shell Style (zsh/bash)
 - Aliases grouped by tool/purpose in `etc/zsh/conf.d/alias.zsh`
