@@ -1,0 +1,50 @@
+[display]
+greeting = "Peyron Industries Corp."
+issue = false
+time = true
+width = 60
+
+[layout]
+window-padding = 2
+container-padding = 1
+prompt-padding = 1
+greet-align = "center"
+
+[remember]
+username = true
+session = false
+user-session = true
+
+[users]
+menu = true
+min-uid = 1000
+max-uid = 60000
+
+[secret]
+asterisks = true
+characters = "*"
+
+[keybindings]
+command = 2
+sessions = 3
+power = 12
+
+[session]
+sessions = ["/usr/share/wayland-sessions"]
+xsessions = []
+environment = []
+
+[power]
+setsid = false
+
+[theme]
+border = "blue"
+text = "white"
+time = "cyan"
+container = "black"
+title = "white"
+greet = "white"
+prompt = "cyan"
+input = "white"
+action = "blue"
+button = "cyan"
