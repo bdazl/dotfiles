@@ -1,0 +1,7 @@
+[terminal]
+vt = 1
+switch = true
+
+[default_session]
+command = "tuigreet --config /etc/tuigreet/config.toml --greeting 'Peyron Industries Corp. - tty1 - Hyprland' --cmd start-hyprland"
+user = "greeter"

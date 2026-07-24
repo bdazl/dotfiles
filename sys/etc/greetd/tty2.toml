@@ -1,0 +1,7 @@
+[terminal]
+vt = 2
+switch = false
+
+[default_session]
+command = "tuigreet --config /etc/tuigreet/config.toml --greeting 'Peyron Industries Corp. - tty2 - shell' --cmd '/usr/bin/zsh -l'"
+user = "greeter"
