@@ -38,13 +38,13 @@ environment = []
 setsid = false
 
 [theme]
-border = "blue"
+border = "green"
 text = "white"
-time = "cyan"
+time = "green"
 container = "black"
 title = "white"
 greet = "white"
-prompt = "cyan"
+prompt = "green"
 input = "white"
-action = "blue"
+action = "green"
 button = "cyan"
