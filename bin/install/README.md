@@ -13,11 +13,19 @@ Find the SD card device with `lsblk`, then:
 sudo bin/install/pi-flash /dev/sdX --user jacob --ssh-key ~/.ssh/id_ed25519.pub --hostname mypi
 ```
 
-This downloads the Arch Linux ARM image (cached in `/tmp`), partitions the card
+The host must have the Arch Linux ARM signing keyring installed:
+
+```sh
+yay -S archlinuxarm-keyring
+```
+
+This downloads the Arch Linux ARM image over HTTPS, verifies its official GPG
+signature, caches it in `/var/cache/pi-flash`, and partitions the card
 (FAT32 boot + ext4 root), extracts the image, creates the user with passwordless
 sudo, copies this repo to `~/etc` for both root and the user, and enables sshd.
-Dotbot runs via a one-shot systemd service on first boot. Root password login is
-disabled; log in as the user (SSH key or empty password on console).
+Dotbot runs via a one-shot systemd service on first boot. Password authentication
+is disabled for both root and the named user, so at least one valid `--ssh-key`
+is required.
 
 Select the Raspberry Pi model with `--model {2,3,4,5}` (default: 5):
 
@@ -35,10 +43,14 @@ Useful flags:
   to flash but the Pi is fully provisioned on first boot. Without it, the pacman
   keyring is initialized on first boot instead, and `pi-arch` is run manually on the Pi.
 * `--fresh`: repartition and start over, ignoring resume state
-* `--tarball <path>`: use a pre-downloaded image tarball
+* `--tarball <path>`: use a pre-downloaded image tarball; its detached signature
+  must be available at `<path>.sig`
+* `--keyring <path>`: use another Arch Linux ARM GPG keyring
 
 The flash process is resumable — completed steps are tracked on the card and
-skipped when re-run after a failure.
+skipped when re-run after a failure. Resume requires the same model, user,
+hostname, shell, SSH keys, package mode, and dotfiles mode. Use `--fresh` when
+changing any of these options.
 
 For `--model 5` without `--packages`, the kernel is installed by file extraction
 outside pacman. After first boot, adopt it into pacman and regenerate the initramfs:
@@ -49,3 +61,12 @@ sudo pacman -Syu --overwrite '/boot/*' --noconfirm linux-rpi-16k
 ```
 
 (with `--packages` this is already done in the chroot.)
+
+## Tests
+
+The regression suite mocks all destructive system operations; it never mounts,
+formats, or writes to a block device:
+
+```sh
+python -m unittest discover -s tests -v
+```
