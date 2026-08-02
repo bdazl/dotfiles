@@ -3,5 +3,5 @@ vt = 3
 switch = false
 
 [default_session]
-command = "tuigreet --config /etc/tuigreet/config.toml --greeting 'Peyron Industries Corp. - tty3 - shell' --cmd '/usr/bin/zsh -l'"
+command = "tuigreet --config /etc/tuigreet/config.toml --greeting 'Peyron Industries; tty3 (shell)' --cmd '/usr/bin/zsh -l'"
 user = "greeter"
