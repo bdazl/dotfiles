@@ -113,6 +113,36 @@ class DeviceSafetyTests(unittest.TestCase):
             with expected_exit(self):
                 pi_flash.validate_device(regular_file.name, force=True)
 
+    def test_mount_check_uses_compatible_raw_output(self) -> None:
+        findmnt = subprocess.CompletedProcess(
+            ["findmnt"], 0, stdout="8:1 /boot\n", stderr=""
+        )
+        with (
+            mock.patch.object(pi_flash, "block_device_ids", return_value={"8:16"}),
+            mock.patch.object(pi_flash.subprocess, "run", return_value=findmnt) as run,
+        ):
+            pi_flash.check_device_unmounted("/dev/sdb")
+
+        run.assert_called_once_with(
+            ["findmnt", "-rn", "-o", "MAJ:MIN,TARGET"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+    def test_mount_check_rejects_mounted_child_partition(self) -> None:
+        findmnt = subprocess.CompletedProcess(
+            ["findmnt"], 0, stdout="8:18 /run/media/card\n", stderr=""
+        )
+        with (
+            mock.patch.object(
+                pi_flash, "block_device_ids", return_value={"8:16", "8:18"}
+            ),
+            mock.patch.object(pi_flash.subprocess, "run", return_value=findmnt),
+            expected_exit(self),
+        ):
+            pi_flash.check_device_unmounted("/dev/sdb")
+
     def test_stale_mount_from_another_device_is_not_unmounted(self) -> None:
         findmnt = subprocess.CompletedProcess(
             ["findmnt"], 0, stdout="8:2\n", stderr=""
