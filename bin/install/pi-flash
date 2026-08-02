@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
-"""Download and flash Arch Linux ARM (AArch64) to an SD card for Raspberry Pi.
+"""Download and flash Arch Linux ARM to an SD card for Raspberry Pi.
 
 Creates a bootable SD card with:
 - Partitioned and formatted card (boot: FAT32, root: ext4)
 - Dotfiles installed for both root and a named user
 - SSH daemon enabled with optional authorized keys
+
+Supports Raspberry Pi models 2-5 via --model (default: 5). Models 3-5 use
+the AArch64 image, model 2 the ARMv7 image. The stock AArch64 image boots
+via U-Boot and a mainline kernel, which does not support the Pi 5 — for
+model 5 the boot partition is rebuilt with the Raspberry Pi foundation
+kernel (linux-rpi-16k) instead.
 
 Supports resuming after failure — completed steps are tracked on the
 target filesystem and skipped on re-run.
@@ -21,8 +27,23 @@ import textwrap
 from pathlib import Path
 from typing import Any
 
-ALARM_URL = "http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-aarch64-latest.tar.gz"
-TARBALL_CACHE = "/tmp/alarm-aarch64-latest.tar.gz"
+ALARM_OS_URL = "http://os.archlinuxarm.org/os"
+ALARM_MIRROR_CORE = "http://mirror.archlinuxarm.org/aarch64/core"
+AARCH64_TARBALL = f"{ALARM_OS_URL}/ArchLinuxARM-rpi-aarch64-latest.tar.gz"
+ARMV7_TARBALL = f"{ALARM_OS_URL}/ArchLinuxARM-rpi-armv7-latest.tar.gz"
+
+# Per-model configuration:
+#   url        - ALARM root filesystem tarball
+#   fstab_sed  - the SD card appears as mmcblk1 (not mmcblk0) on the Pi 4
+#   rpi_kernel - replace U-Boot + mainline kernel with this foundation kernel
+MODELS = {
+    "2": {"url": ARMV7_TARBALL, "fstab_sed": False, "rpi_kernel": None},
+    "3": {"url": AARCH64_TARBALL, "fstab_sed": False, "rpi_kernel": None},
+    "4": {"url": AARCH64_TARBALL, "fstab_sed": True, "rpi_kernel": None},
+    "5": {"url": AARCH64_TARBALL, "fstab_sed": False, "rpi_kernel": "linux-rpi-16k"},
+}
+DEFAULT_MODEL = "5"
+
 STATE_FILE = ".pi-flash-state"
 MOUNT_ROOT = Path("/tmp/pi-flash-mnt")
 
@@ -197,17 +218,31 @@ def rootfs_populated(root_mp: Path) -> bool:
 
 # -- Download ------------------------------------------------------------------
 
-def download_tarball(tarball: str | None) -> str:
+def download_tarball(tarball: str | None, url: str) -> str:
     """Ensure the tarball is available locally. Returns path to tarball."""
     if tarball and Path(tarball).exists():
         print(f"  Using provided tarball: {tarball}")
         return tarball
-    if Path(TARBALL_CACHE).exists():
-        print(f"  Using cached download: {TARBALL_CACHE}")
+    cache = f"/tmp/{Path(url).name}"
+    if Path(cache).exists():
+        print(f"  Using cached download: {cache}")
     else:
         print("\n== Downloading Arch Linux ARM ==")
-        run(f"curl -L -o {TARBALL_CACHE} {ALARM_URL}")
-    return TARBALL_CACHE
+        run(f"curl -L -o {cache} {url}")
+    return cache
+
+
+def find_kernel_pkg(kernel: str) -> str:
+    """Find the latest package filename for a kernel on the ALARM mirror."""
+    result = subprocess.run(
+        ["curl", "-sL", f"{ALARM_MIRROR_CORE}/"],
+        capture_output=True, text=True, check=True,
+    )
+    pattern = re.escape(kernel) + r"-\d+\.\d+\.\d+[^\"'<>]*?-aarch64\.pkg\.tar\.xz"
+    matches = sorted(set(re.findall(pattern, result.stdout)))
+    if not matches:
+        die(f"could not find {kernel} package on {ALARM_MIRROR_CORE}")
+    return matches[-1]
 
 
 # -- Mount / unmount -----------------------------------------------------------
@@ -298,7 +333,32 @@ def step_extract(root_mp: Path, tarball_path: str) -> None:
     run(f"bsdtar -xpf {tarball_path} -C {root_mp}")
 
 
-def step_user(root_mp: Path, username: str, shell: str) -> None:
+def step_fstab(root_mp: Path) -> None:
+    """Point /boot at mmcblk1 — the SD card device name on the Pi 4."""
+    print("\n== Adjusting fstab for Pi 4 (mmcblk0 -> mmcblk1) ==")
+    fstab = root_mp / "etc/fstab"
+    fstab.write_text(fstab.read_text().replace("mmcblk0", "mmcblk1"))
+
+
+def step_rpi_kernel(root_mp: Path, kernel: str) -> None:
+    """Replace U-Boot and the mainline kernel with the foundation kernel.
+
+    The stock AArch64 image does not boot on the Pi 5. Rebuild the boot
+    partition from the linux-rpi package instead. Without a chroot the
+    initramfs cannot be generated, so it is disabled in config.txt — the
+    foundation kernel boots ext4 root filesystems without one.
+    """
+    print(f"\n== Replacing kernel with {kernel} (Pi 5) ==")
+    pkg_name = find_kernel_pkg(kernel)
+    pkg_cache = f"/tmp/{pkg_name}"
+    if not Path(pkg_cache).exists():
+        run(f"curl -L -o {pkg_cache} {ALARM_MIRROR_CORE}/{pkg_name}")
+
+    run(f"rm -rf {root_mp}/boot/* {root_mp}/usr/lib/modules/*")
+    run(f"bsdtar -xpf {pkg_cache} -C {root_mp} boot usr")
+    replace_in_file(root_mp / "boot/config.txt",
+                    "initramfs initramfs-linux.img",
+                    "#initramfs initramfs-linux.img")
     """Create a user with sudo access by editing passwd/shadow/group."""
     print(f"\n== Creating user: {username} ==")
     home = root_mp / "home" / username
@@ -382,12 +442,17 @@ def step_dotfiles(root_mp: Path, username: str) -> None:
     enable_systemd_service(root_mp, "dotfiles-install.service")
 
 
-def step_packages(root_mp: Path) -> None:
+def step_packages(root_mp: Path, rpi_kernel: str | None = None) -> None:
     """Initialize pacman keyring and run pi-arch install script via arch-chroot."""
     print("\n== Installing packages (via arch-chroot + qemu) ==")
     print("  Generating pacman keyring (this takes a while under emulation)...")
     run(f"arch-chroot {root_mp} pacman-key --init")
     run(f"arch-chroot {root_mp} pacman-key --populate archlinuxarm")
+    if rpi_kernel:
+        print(f"\n== Replacing kernel with {rpi_kernel} (Pi 5) ==")
+        run(f"arch-chroot {root_mp} pacman -R --noconfirm linux-aarch64 uboot-raspberrypi",
+            check=False)
+        run(f"arch-chroot {root_mp} pacman -Sy --noconfirm --overwrite '/boot/*' {rpi_kernel}")
     run(f"arch-chroot {root_mp} /root/etc/bin/install/pi-arch")
 
 
@@ -491,6 +556,7 @@ def run_step(name: str, root_mp: Path, completed: set[str], fn: Any) -> None:
 
 def configure(root_mp: Path, args: argparse.Namespace, tarball_path: str) -> None:
     """Run all configuration steps on the mounted filesystem."""
+    model = MODELS[args.model]
     completed = load_state(root_mp)
     if completed:
         print(f"  Resuming — already completed: {', '.join(sorted(completed))}")
@@ -503,10 +569,17 @@ def configure(root_mp: Path, args: argparse.Namespace, tarball_path: str) -> Non
         if rootfs_populated(root_mp)
         else step_extract(root_mp, tarball_path)
     ))
+    # with --packages the kernel swap is done properly via pacman in the chroot
+    do("kernel", lambda: (
+        step_rpi_kernel(root_mp, model["rpi_kernel"])
+        if model["rpi_kernel"] and not args.packages else None
+    ))
+    do("fstab", lambda: step_fstab(root_mp) if model["fstab_sed"] else None)
     do("user", lambda: step_user(root_mp, args.user, shell=args.shell))
     do("hostname", lambda: step_hostname(root_mp, args.hostname))
     do("dotfiles", lambda: step_dotfiles(root_mp, args.user) if not args.no_dotfiles else None)
-    do("packages", lambda: step_packages(root_mp) if args.packages else step_pacman_init_service(root_mp))
+    do("packages", lambda: step_packages(root_mp, rpi_kernel=model["rpi_kernel"])
+       if args.packages else step_pacman_init_service(root_mp))
     do("sudoers", lambda: step_sudoers(root_mp))
     do("ssh", lambda: step_ssh(root_mp, args.ssh_key, args.user))
     do("lock_root", lambda: step_lock_root(root_mp))
@@ -521,18 +594,21 @@ def configure(root_mp: Path, args: argparse.Namespace, tarball_path: str) -> Non
 def main() -> None:
     """Parse arguments and orchestrate the full flash process."""
     parser = argparse.ArgumentParser(
-        description="Flash Arch Linux ARM (AArch64) to an SD card for Raspberry Pi",
+        description="Flash Arch Linux ARM to an SD card for Raspberry Pi",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""\
             examples:
               sudo %(prog)s /dev/sdb --user jacob
               sudo %(prog)s /dev/mmcblk0 --user jacob --ssh-key ~/.ssh/id_ed25519.pub
               sudo %(prog)s /dev/sdb --user jacob --ssh-key ~/.ssh/id_ed25519.pub --hostname pihole
+              sudo %(prog)s /dev/sdb --user jacob --model 4
               sudo %(prog)s /dev/sdb --user jacob --tarball /tmp/alarm.tar.gz
               sudo %(prog)s /dev/sdb --user jacob --packages
         """),
     )
     parser.add_argument("device", help="SD card block device (e.g. /dev/sdb, /dev/mmcblk0)")
+    parser.add_argument("--model", "-m", choices=sorted(MODELS), default=DEFAULT_MODEL,
+                        help=f"Raspberry Pi model (default: {DEFAULT_MODEL})")
     parser.add_argument("--user", "-u", required=True, help="username to create")
     parser.add_argument("--ssh-key", "-k", action="append", default=[],
                         help="path to SSH public key file (repeatable)")
@@ -563,7 +639,7 @@ def main() -> None:
     # -- preflight --
     check_required_tools(need_packages=args.packages)
     cleanup_stale_mounts(args.device)
-    tarball_path = download_tarball(args.tarball)
+    tarball_path = download_tarball(args.tarball, MODELS[args.model]["url"])
 
     # -- partitioning --
     boot_dev, root_dev = partition_names(args.device)
@@ -585,6 +661,14 @@ def main() -> None:
         configure(root_mp, args, tarball_path)
         unmount(root_mp)
         print("\nDone! Insert the SD card into your Raspberry Pi and boot.")
+        if MODELS[args.model]["rpi_kernel"] and not args.packages:
+            kernel = MODELS[args.model]["rpi_kernel"]
+            print(textwrap.dedent(f"""\
+
+                NOTE: the kernel was installed by file extraction, outside pacman.
+                After first boot, adopt it into pacman and regenerate the initramfs:
+                  sudo pacman -R --noconfirm linux-aarch64 uboot-raspberrypi
+                  sudo pacman -Syu --overwrite '/boot/*' --noconfirm {kernel}"""))
     except Exception:
         print("\nError occurred, attempting cleanup...")
         unmount(root_mp)
