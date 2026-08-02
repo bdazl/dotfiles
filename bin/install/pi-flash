@@ -356,7 +356,7 @@ def check_device_unmounted(device: str) -> None:
     device_ids = block_device_ids(device)
 
     result = subprocess.run(
-        ["findmnt", "-rn", "-o", "MAJ:MIN,TARGET", "--list"],
+        ["findmnt", "-rn", "-o", "MAJ:MIN,TARGET"],
         capture_output=True,
         text=True,
         check=True,
