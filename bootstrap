@@ -20,4 +20,30 @@ else
     cp "$git_template" "$git_local"
 fi
 
+# Claude settings must stay a real file: it holds machine-local secrets and is
+# rewritten in place by Claude Code itself. Seed repo defaults into it instead
+# of symlinking, letting local values win on every key they define.
+claude_settings="$HOME/.claude/settings.json"
+claude_template="$REPO_ROOT/etc/claude/settings.template.json"
+if [[ ! -e "$claude_template" ]]; then
+    log_warn "bootstrap: claude template missing: $claude_template"
+elif [[ ! -e "$claude_settings" ]]; then
+    log_ok "bootstrap: creating claude settings: $claude_settings"
+    mkdir -p "$(dirname "$claude_settings")"
+    cp "$claude_template" "$claude_settings"
+elif ! command -v jq >/dev/null 2>&1; then
+    log_warn "bootstrap: jq missing, keeping claude settings as-is: $claude_settings"
+elif ! jq -e . "$claude_settings" >/dev/null 2>&1; then
+    log_warn "bootstrap: claude settings is not valid json, skipping: $claude_settings"
+else
+    merged="$(jq -s '.[0] * .[1]' "$claude_template" "$claude_settings")"
+    # Compare normalized, so that key reordering alone never rewrites the file.
+    if [[ "$(jq -S . <<<"$merged")" == "$(jq -S . "$claude_settings")" ]]; then
+        log_info "bootstrap: claude settings already up-to-date: $claude_settings"
+    else
+        log_ok "bootstrap: merging claude defaults into: $claude_settings"
+        printf '%s\n' "$merged" > "$claude_settings"
+    fi
+fi
+
 log_ok "✅ bootstrap: done"
