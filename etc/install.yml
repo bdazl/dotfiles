@@ -30,7 +30,6 @@
       glob: true
       path: etc/claude/commands/*.md
     ~/.claude/keybindings.json: etc/claude/keybindings.json
-    ~/.claude/settings.json: etc/claude/settings.json
     ~/.conan/conan.conf: etc/conan/conan.conf
     ~/.config/cheat/conf.yml: etc/cheat/conf.yml
     ~/.config/cheat/sheets/personal: etc/cheat/sheets
