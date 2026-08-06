@@ -2,11 +2,14 @@
     link:
       relink: true
 
-- clean: ['~']
+- clean:
+  - '~'
+  - ~/.claude/commands
 
 - create:
   - ~/.cache
   - ~/.claude
+  - ~/.claude/commands
   - ~/.conan
   - ~/.vim/bundle
   - ~/.config/Code/User
@@ -22,6 +25,10 @@
 # All paths are relative the repo-root (./)
 - link:
     ~/.etc: ''
+    # Individual commands, so that local commands can coexist in ~/.claude/commands
+    ~/.claude/commands/:
+      glob: true
+      path: etc/claude/commands/*.md
     ~/.claude/keybindings.json: etc/claude/keybindings.json
     ~/.claude/settings.json: etc/claude/settings.json
     ~/.conan/conan.conf: etc/conan/conan.conf
