@@ -74,7 +74,8 @@ MODELS = {
 DEFAULT_MODEL = "5"
 
 STATE_FILE = ".pi-flash-state"
-STATE_VERSION = 2
+STATE_VERSION = 3
+FIRST_BOOT_SERVICE = "pi-first-boot.service"
 MOUNT_ROOT = Path("/run/pi-flash/mnt")
 CACHE_ROOT = Path("/var/cache/pi-flash")
 FALLBACK_SHELL = "/bin/bash"
@@ -178,12 +179,21 @@ def replace_in_file(path: Path, old: str, new: str) -> None:
     )
 
 
-def enable_systemd_service(root_mp: Path, service: str, target: str = "multi-user.target") -> None:
-    """Create a systemd wants symlink on the target filesystem."""
+def enable_systemd_service(
+    root_mp: Path,
+    service: str,
+    target: str = "multi-user.target",
+    unit_dir: str = "/usr/lib/systemd/system",
+) -> None:
+    """Create a systemd wants symlink on the target filesystem.
+
+    Units this script writes itself live in /etc/systemd/system, so pass
+    unit_dir for those rather than leaving a symlink that dangles.
+    """
     link = root_mp / "etc/systemd/system" / f"{target}.wants" / service
     link.parent.mkdir(parents=True, exist_ok=True)
-    if not link.exists():
-        link.symlink_to(f"/usr/lib/systemd/system/{service}")
+    if not link.is_symlink() and not link.exists():
+        link.symlink_to(f"{unit_dir}/{service}")
 
 
 # -- State tracking -----------------------------------------------------------
@@ -783,10 +793,10 @@ def step_hostname(root_mp: Path, hostname: str) -> None:
 
 
 def step_dotfiles(root_mp: Path, username: str) -> None:
-    """Copy dotfiles repo and create a first-boot service to run Dotbot.
+    """Copy the dotfiles repo into both home directories.
 
     Running Dotbot on the host would create symlinks with absolute paths
-    pointing to the mount directory, so we defer it to first boot.
+    pointing at the mount directory, so step_first_boot defers it to the Pi.
     """
     dotfiles_src = Path(__file__).resolve().parents[2]
 
@@ -808,26 +818,62 @@ def step_dotfiles(root_mp: Path, username: str) -> None:
 
         run(["chown", "-R", f"{uid}:{gid}", str(target_home)])
 
-    # first-boot service to run dotbot for all users with ~/etc
-    service = root_mp / "etc/systemd/system/dotfiles-install.service"
-    write_file(service, textwrap.dedent(f"""\
-        [Unit]
-        Description=Install dotfiles via Dotbot on first boot
-        ConditionPathExists=/home/{username}/etc/install
-        After=local-fs.target
 
-        [Service]
-        Type=oneshot
-        RemainAfterExit=yes
-        ExecStart=/root/etc/install
-        ExecStart=/bin/su - {username} -c /home/{username}/etc/install
-        ExecStartPost=-/bin/rm /etc/systemd/system/dotfiles-install.service
-        ExecStartPost=-/bin/systemctl daemon-reload
+def step_first_boot(root_mp: Path, username: str, provision: bool, dotfiles: bool) -> None:
+    """Create the unit that finishes provisioning on the Pi itself.
 
-        [Install]
-        WantedBy=multi-user.target
-    """))
-    enable_systemd_service(root_mp, "dotfiles-install.service")
+    Ordering is the point: the pacman keyring must exist before pi-arch can
+    install anything, and pi-arch must have installed git before Dotbot can
+    run. Getting this wrong is what left an earlier card with a service that
+    died on 'git: command not found' at every boot.
+
+    The unit deletes itself only after every step has succeeded, so a run that
+    fails — no network on first boot, say — is retried instead of lost.
+    """
+    print("\n== Creating first-boot service ==")
+    unit = [
+        "[Unit]",
+        "Description=Finish Raspberry Pi provisioning on first boot",
+    ]
+    commands = []
+
+    # With --packages the keyring and pi-arch already ran in the chroot.
+    if provision:
+        commands.append("/usr/bin/pacman-key --init")
+        commands.append("/usr/bin/pacman-key --populate archlinuxarm")
+        if dotfiles:
+            commands.append("/root/etc/bin/install/pi-arch")
+
+    if dotfiles:
+        unit.append(f"ConditionPathExists=/home/{username}/etc/install")
+        commands.append("/root/etc/install")
+        commands.append(f"/bin/su - {username} -c /home/{username}/etc/install")
+
+    unit += [
+        "Wants=network-online.target",
+        "After=network-online.target",
+        "",
+        "[Service]",
+        "Type=oneshot",
+        "RemainAfterExit=yes",
+        *(f"ExecStart={command}" for command in commands),
+        f"ExecStartPost=-/bin/rm /etc/systemd/system/{FIRST_BOOT_SERVICE}",
+        "ExecStartPost=-/bin/systemctl daemon-reload",
+        "",
+        "[Install]",
+        "WantedBy=multi-user.target",
+    ]
+    unit_path = root_mp / "etc/systemd/system" / FIRST_BOOT_SERVICE
+    unit_path.parent.mkdir(parents=True, exist_ok=True)
+    write_file(unit_path, "\n".join(unit) + "\n")
+
+    enable_systemd_service(root_mp, FIRST_BOOT_SERVICE, unit_dir="/etc/systemd/system")
+    # Without this, network-online.target is never reached and the unit would
+    # run pi-arch before the Pi has an address.
+    enable_systemd_service(root_mp, "systemd-networkd-wait-online.service",
+                           target="network-online.target")
+    for command in commands:
+        print(f"  {command}")
 
 
 def step_packages(root_mp: Path, rpi_kernel: str | None = None) -> None:
@@ -847,28 +893,6 @@ def step_packages(root_mp: Path, rpi_kernel: str | None = None) -> None:
             *PACMAN_SANDBOX_FLAGS, "--overwrite", "/boot/*", rpi_kernel,
         ])
     run(["arch-chroot", str(root_mp), "/root/etc/bin/install/pi-arch"])
-
-
-def step_pacman_init_service(root_mp: Path) -> None:
-    """Create a first-boot service to initialize the pacman keyring."""
-    service_path = root_mp / "etc/systemd/system/pacman-init.service"
-    if not service_path.exists():
-        write_file(service_path, textwrap.dedent("""\
-            [Unit]
-            Description=Initialize pacman keyring
-            ConditionFirstBoot=yes
-            After=network-online.target
-
-            [Service]
-            Type=oneshot
-            RemainAfterExit=yes
-            ExecStart=/usr/bin/pacman-key --init
-            ExecStart=/usr/bin/pacman-key --populate archlinuxarm
-
-            [Install]
-            WantedBy=multi-user.target
-        """))
-    enable_systemd_service(root_mp, "pacman-init.service")
 
 
 def step_verify_shell(root_mp: Path, username: str) -> None:
@@ -1019,8 +1043,10 @@ def configure(root_mp: Path, args: argparse.Namespace, tarball_path: str) -> Non
     do("hostname", lambda: step_hostname(root_mp, args.hostname))
     if not args.no_dotfiles:
         do("dotfiles", lambda: step_dotfiles(root_mp, args.user))
-    do("packages", lambda: step_packages(root_mp, rpi_kernel=model["rpi_kernel"])
-       if args.packages else step_pacman_init_service(root_mp))
+    if args.packages:
+        do("packages", lambda: step_packages(root_mp, rpi_kernel=model["rpi_kernel"]))
+    do("first_boot", lambda: step_first_boot(
+        root_mp, args.user, provision=not args.packages, dotfiles=not args.no_dotfiles))
     # After packages, so the check sees the root filesystem in its final state.
     do("verify_shell", lambda: step_verify_shell(root_mp, args.user))
     do("sudoers", lambda: step_sudoers(root_mp))
