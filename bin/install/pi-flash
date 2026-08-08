@@ -196,14 +196,14 @@ def load_state(root_mp: Path, context: dict[str, Any]) -> set[str]:
     try:
         state = json.loads(state_path.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError) as error:
-        die(f"invalid resume state: {error}\n  Use --fresh to start over.")
+        die(f"invalid resume state: {error}\n  Drop --reuse to start over.")
 
     if not isinstance(state, dict) or state.get("version") != STATE_VERSION:
-        die("incompatible resume state. Use --fresh to start over.")
+        die("incompatible resume state. Drop --reuse to start over.")
     if state.get("context") != context:
         die(
             "flash options differ from the interrupted run.\n"
-            "  Re-run with the original options or use --fresh to start over."
+            "  Re-run with the original options, or drop --reuse to start over."
         )
     return set(state.get("completed", []))
 
@@ -659,15 +659,21 @@ def mounted_partitions(boot_dev: str, root_dev: str) -> Iterator[tuple[Path, Pat
 # -- Device operations ---------------------------------------------------------
 
 def confirm_device(device: str) -> None:
-    """Show device info and prompt for destructive confirmation."""
+    """Show device info and require the device name before destroying it.
+
+    Repartitioning is the default, so a mistyped device or a reflexive 'y'
+    would be enough to wipe the wrong disk. Demand the name itself instead.
+    """
     block_name = Path(device).name
     size_raw = read_sysfs(block_name, "size")
     size = format_size(int(size_raw) * 512) if size_raw else "unknown"
 
     print(f"\nTarget device: {device} ({size})")
     run(["lsblk", device])
-    answer = input("\nALL DATA on this device will be destroyed. Continue? [y/N] ")
-    if answer.lower() != "y":
+    print(f"\nThis will REPARTITION and FORMAT {device}.")
+    print("ALL DATA on it will be destroyed.")
+    answer = input(f"\nType the device name to confirm ({block_name}): ")
+    if answer.strip() != block_name:
         print("Aborted.")
         sys.exit(0)
 
@@ -1024,8 +1030,9 @@ def build_parser() -> argparse.ArgumentParser:
                              "(requires qemu-user-static-binfmt)")
     parser.add_argument("--force", "-f", action="store_true",
                         help="skip removable device check")
-    parser.add_argument("--fresh", action="store_true",
-                        help="ignore existing partitions and state, start from scratch")
+    parser.add_argument("--reuse", action="store_true",
+                        help="keep the existing partitions and root filesystem instead of "
+                             "repartitioning; required to resume an interrupted flash")
     return parser
 
 
@@ -1048,12 +1055,16 @@ def main() -> None:
     # -- partitioning --
     boot_dev, root_dev = partition_names(args.device)
 
-    if not args.fresh and partitions_ready(args.device):
-        print(f"\n== Partitions already exist on {args.device}, reusing ==")
+    if args.reuse:
+        # --reuse promises not to destroy anything, so refuse rather than
+        # quietly repartitioning when there is nothing to reuse.
+        if not partitions_ready(args.device):
+            die(
+                f"--reuse needs existing boot (vfat) and root (ext4) partitions "
+                f"on {args.device}\n  Drop --reuse to partition and format it."
+            )
+        print(f"\n== Reusing existing partitions on {args.device} ==")
         run(["lsblk", args.device])
-        if input("\nReuse existing partitions without repartitioning? [y/N] ").lower() != "y":
-            confirm_device(args.device)
-            boot_dev, root_dev = partition_device(args.device)
     else:
         confirm_device(args.device)
         boot_dev, root_dev = partition_device(args.device)
