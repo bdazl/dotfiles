@@ -42,15 +42,20 @@ Useful flags:
   (requires `qemu-user-static-binfmt` and `arch-install-scripts` on the host); slower
   to flash but the Pi is fully provisioned on first boot. Without it, the pacman
   keyring is initialized on first boot instead, and `pi-arch` is run manually on the Pi.
-* `--fresh`: repartition and start over, ignoring resume state
+* `--reuse`: keep the existing partitions and root filesystem instead of
+  repartitioning
 * `--tarball <path>`: use a pre-downloaded image tarball; its detached signature
   must be available at `<path>.sig`
 * `--keyring <path>`: use another Arch Linux ARM GPG keyring
 
+The card is repartitioned and formatted by default, and the confirmation prompt
+asks for the device name (`sde`) rather than a bare `y`.
+
 The flash process is resumable — completed steps are tracked on the card and
-skipped when re-run after a failure. Resume requires the same model, user,
-hostname, shell, SSH keys, package mode, and dotfiles mode. Use `--fresh` when
-changing any of these options.
+skipped when re-run after a failure. Since the default reformats the card, resume
+state only survives under `--reuse`, which is how an interrupted flash is picked
+back up. Resume requires the same model, user, hostname, shell, SSH keys, package
+mode, and dotfiles mode; drop `--reuse` when changing any of these options.
 
 For `--model 5` without `--packages`, the kernel is installed by file extraction
 outside pacman. After first boot, adopt it into pacman and regenerate the initramfs:
