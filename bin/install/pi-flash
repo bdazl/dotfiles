@@ -28,6 +28,7 @@ import subprocess
 import sys
 import tempfile
 import textwrap
+import time
 from contextlib import contextmanager
 from functools import cmp_to_key
 from pathlib import Path
@@ -416,6 +417,29 @@ def partitions_ready(device: str) -> bool:
 def rootfs_populated(root_mp: Path) -> bool:
     """Check if the root filesystem looks like an extracted ALARM image."""
     return (root_mp / "etc" / "os-release").exists()
+
+
+def warn_reused_rootfs(root_mp: Path) -> None:
+    """Say plainly that the card keeps its old image, and unstamp it.
+
+    Skipping extraction is easy to miss, and the result is a card configured
+    from the current dotfiles but running whatever image was already there.
+    The stale machine-id goes too: systemd would otherwise not treat the next
+    boot as a first boot.
+    """
+    os_release = root_mp / "etc/os-release"
+    age = (time.time() - os_release.stat().st_mtime) / 86400
+    written = time.strftime("%Y-%m-%d", time.localtime(os_release.stat().st_mtime))
+
+    print("\n== Root filesystem already populated, skipping extraction ==")
+    print("  WARNING: reusing the existing rootfs, NOT the downloaded tarball")
+    print(f"           written {written} ({int(age)} days ago)")
+    print("           drop --reuse for a clean image")
+
+    machine_id = root_mp / "etc/machine-id"
+    if machine_id.exists():
+        print("  Removing stale /etc/machine-id")
+        machine_id.unlink()
 
 
 # -- Download ------------------------------------------------------------------
@@ -1030,7 +1054,7 @@ def configure(root_mp: Path, args: argparse.Namespace, tarball_path: str) -> Non
         run_step(name, root_mp, completed, context, fn)
 
     do("extract", lambda: (
-        print("\n== Root filesystem already populated, skipping extraction ==")
+        warn_reused_rootfs(root_mp)
         if rootfs_populated(root_mp)
         else step_extract(root_mp, tarball_path)
     ))
