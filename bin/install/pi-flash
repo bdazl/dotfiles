@@ -77,6 +77,7 @@ STATE_FILE = ".pi-flash-state"
 STATE_VERSION = 2
 MOUNT_ROOT = Path("/run/pi-flash/mnt")
 CACHE_ROOT = Path("/var/cache/pi-flash")
+FALLBACK_SHELL = "/bin/bash"
 
 # pacman 7 confines itself with Landlock and drops to the 'alpm' user. Neither
 # survives qemu-user emulation inside the chroot, so every pacman call made
@@ -870,6 +871,42 @@ def step_pacman_init_service(root_mp: Path) -> None:
     enable_systemd_service(root_mp, "pacman-init.service")
 
 
+def step_verify_shell(root_mp: Path, username: str) -> None:
+    """Fall back to bash when the configured login shell is not on the card.
+
+    OpenSSH treats an account whose shell does not exist as an invalid user:
+    it skips public key authentication entirely and falls through to password
+    auth, which is disabled here. Without --packages the shell is only
+    installed on first boot, so the card would be unreachable until then.
+    """
+    print("\n== Verifying login shell ==")
+    passwd = root_mp / "etc/passwd"
+    lines = passwd.read_text(encoding="utf-8").splitlines()
+
+    for index, line in enumerate(lines):
+        if not line.startswith(f"{username}:"):
+            continue
+
+        fields = line.split(":")
+        shell = fields[-1]
+        if (root_mp / shell.lstrip("/")).exists():
+            print(f"  {shell} is present")
+            return
+
+        if not (root_mp / FALLBACK_SHELL.lstrip("/")).exists():
+            die(f"neither {shell} nor {FALLBACK_SHELL} exists in the target root filesystem")
+
+        print(f"  WARNING: {shell} not present in target rootfs")
+        print(f"  Falling back to {FALLBACK_SHELL} for user {username}")
+        print(f"  (run 'chsh -s {shell}' on the Pi once the shell is installed)")
+        fields[-1] = FALLBACK_SHELL
+        lines[index] = ":".join(fields)
+        passwd.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        return
+
+    die(f"user {username} is missing from /etc/passwd")
+
+
 def step_sudoers(root_mp: Path) -> None:
     """Enable passwordless sudo for the wheel group."""
     sudoers = root_mp / "etc/sudoers"
@@ -984,6 +1021,8 @@ def configure(root_mp: Path, args: argparse.Namespace, tarball_path: str) -> Non
         do("dotfiles", lambda: step_dotfiles(root_mp, args.user))
     do("packages", lambda: step_packages(root_mp, rpi_kernel=model["rpi_kernel"])
        if args.packages else step_pacman_init_service(root_mp))
+    # After packages, so the check sees the root filesystem in its final state.
+    do("verify_shell", lambda: step_verify_shell(root_mp, args.user))
     do("sudoers", lambda: step_sudoers(root_mp))
     do("ssh", lambda: step_ssh(root_mp, args.ssh_key, args.user))
     do("lock_root", lambda: step_lock_root(root_mp))
