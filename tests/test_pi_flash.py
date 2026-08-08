@@ -205,13 +205,47 @@ class DownloadTests(unittest.TestCase):
             stdout="[GNUPG:] VALIDSIG 0000000000000000000000000000000000000000\n",
             stderr="",
         )
-        with (
-            mock.patch.object(pi_flash.subprocess, "run", return_value=result),
-            expected_exit(self),
-        ):
-            pi_flash.verify_signature(
-                Path("artifact"), Path("artifact.sig"), Path("keyring")
+        with tempfile.TemporaryDirectory() as directory:
+            keyring = Path(directory) / "keyring.gpg"
+            keyring.write_bytes(b"\x99binary-keyring")
+            with (
+                mock.patch.object(pi_flash.subprocess, "run", return_value=result),
+                expected_exit(self),
+            ):
+                pi_flash.verify_signature(
+                    Path("artifact"), Path("artifact.sig"), keyring
+                )
+
+    def test_ascii_armored_keyring_is_decoded_for_gpgv(self) -> None:
+        dearmor = subprocess.CompletedProcess(["gpg"], 0, stdout="", stderr="")
+        verified = subprocess.CompletedProcess(
+            ["gpgv"],
+            0,
+            stdout=f"[GNUPG:] VALIDSIG {pi_flash.ALARM_SIGNING_KEY}\n",
+            stderr="",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            keyring = Path(directory) / "keyring.gpg"
+            keyring.write_text(
+                "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nkey\n"
+                "-----END PGP PUBLIC KEY BLOCK-----\n"
             )
+            with mock.patch.object(
+                pi_flash.subprocess, "run", side_effect=[dearmor, verified]
+            ) as run:
+                pi_flash.verify_signature(
+                    Path("artifact"), Path("artifact.sig"), keyring
+                )
+
+        dearmor_command = run.call_args_list[0].args[0]
+        verify_command = run.call_args_list[1].args[0]
+        self.assertEqual(
+            dearmor_command[0:4],
+            ["gpg", "--batch", "--no-options", "--dearmor"],
+        )
+        self.assertEqual(dearmor_command[-1], str(keyring))
+        self.assertEqual(verify_command[0], "gpgv")
+        self.assertNotEqual(verify_command[4], str(keyring))
 
     def test_kernel_package_selection_uses_version_order(self) -> None:
         packages = [

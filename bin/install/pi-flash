@@ -86,6 +86,7 @@ REQUIRED_TOOLS = [
     "curl",
     "findmnt",
     "fuser",
+    "gpg",
     "gpgv",
     "lsblk",
     "mkfs.ext4",
@@ -441,22 +442,57 @@ def download_file(url: str, destination: Path) -> None:
         temporary.unlink(missing_ok=True)
 
 
+@contextmanager
+def gpgv_keyring(keyring: Path) -> Iterator[Path]:
+    """Yield a binary keyring that gpgv can read."""
+    with keyring.open("rb") as keyring_file:
+        armored = keyring_file.read(64).lstrip().startswith(
+            b"-----BEGIN PGP PUBLIC KEY BLOCK-----"
+        )
+
+    if not armored:
+        yield keyring
+        return
+
+    with tempfile.TemporaryDirectory(prefix="pi-flash-keyring-") as directory:
+        binary_keyring = Path(directory) / "archlinuxarm.gpg"
+        result = subprocess.run(
+            [
+                "gpg",
+                "--batch",
+                "--no-options",
+                "--dearmor",
+                "--output",
+                str(binary_keyring),
+                str(keyring),
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode != 0:
+            detail = result.stderr.strip() or "unknown gpg error"
+            die(f"could not decode keyring {keyring}: {detail}")
+        yield binary_keyring
+
+
 def verify_signature(artifact: Path, signature: Path, keyring: Path) -> None:
     """Verify an artifact and pin the expected Arch Linux ARM signing key."""
-    result = subprocess.run(
-        [
-            "gpgv",
-            "--status-fd",
-            "1",
-            "--keyring",
-            str(keyring),
-            str(signature),
-            str(artifact),
-        ],
-        capture_output=True,
-        text=True,
-        check=False,
-    )
+    with gpgv_keyring(keyring) as binary_keyring:
+        result = subprocess.run(
+            [
+                "gpgv",
+                "--status-fd",
+                "1",
+                "--keyring",
+                str(binary_keyring),
+                str(signature),
+                str(artifact),
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
     valid_signature = f"[GNUPG:] VALIDSIG {ALARM_SIGNING_KEY}" in result.stdout
     if result.returncode != 0 or not valid_signature:
         detail = result.stderr.strip() or "unexpected signing key"
