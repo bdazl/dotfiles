@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import importlib.machinery
 import importlib.util
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -107,6 +108,25 @@ class DeviceSafetyTests(unittest.TestCase):
 
         self.assertEqual(result, "/dev/sdb")
         self.assertEqual(events, ["validate", "cleanup", "mounted"])
+
+    def test_destructive_confirmation_requires_the_device_name(self) -> None:
+        for answer in ("y", "yes", "", "sdb1", "SDB"):
+            with (
+                mock.patch.object(pi_flash, "read_sysfs", return_value="1024"),
+                mock.patch.object(pi_flash, "run"),
+                mock.patch("builtins.input", return_value=answer),
+                expected_exit(self),
+            ):
+                pi_flash.confirm_device("/dev/sdb")
+
+    def test_destructive_confirmation_accepts_the_device_name(self) -> None:
+        with (
+            mock.patch.object(pi_flash, "read_sysfs", return_value="1024"),
+            mock.patch.object(pi_flash, "run"),
+            mock.patch("builtins.input", return_value=" sdb "),
+            redirect_stdout(StringIO()),
+        ):
+            pi_flash.confirm_device("/dev/sdb")
 
     def test_regular_file_is_not_accepted_as_a_device(self) -> None:
         with tempfile.NamedTemporaryFile() as regular_file:
@@ -290,6 +310,106 @@ class ArchitectureTests(unittest.TestCase):
     def test_model_uses_matching_binfmt_handler(self) -> None:
         self.assertEqual(pi_flash.binfmt_handler("2"), "qemu-arm")
         self.assertEqual(pi_flash.binfmt_handler("5"), "qemu-aarch64")
+
+
+class ProvisioningTests(unittest.TestCase):
+    """The defects that produced a card nobody could log into."""
+
+    def test_chroot_pacman_opts_out_of_the_landlock_sandbox(self) -> None:
+        with (
+            mock.patch.object(pi_flash, "run") as run,
+            redirect_stdout(StringIO()),
+        ):
+            pi_flash.step_packages(Path("/mnt"), rpi_kernel="linux-rpi-16k")
+
+        pacman_calls = [
+            call.args[0] for call in run.call_args_list if "pacman" in call.args[0]
+        ]
+        self.assertTrue(pacman_calls)
+        for command in pacman_calls:
+            self.assertIn("--disable-sandbox", command)
+
+    def test_missing_login_shell_falls_back_to_bash(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "etc").mkdir()
+            (root / "bin").mkdir()
+            (root / "bin/bash").touch()
+            (root / "etc/passwd").write_text(
+                "root:x:0:0::/root:/bin/bash\njacob:x:1000:1000::/home/jacob:/usr/bin/zsh\n",
+                encoding="utf-8",
+            )
+
+            with redirect_stdout(StringIO()):
+                pi_flash.step_verify_shell(root, "jacob")
+
+            self.assertIn(
+                "jacob:x:1000:1000::/home/jacob:/bin/bash",
+                (root / "etc/passwd").read_text(encoding="utf-8"),
+            )
+
+    def test_present_login_shell_is_left_alone(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "etc").mkdir()
+            (root / "usr/bin").mkdir(parents=True)
+            (root / "usr/bin/zsh").touch()
+            original = "jacob:x:1000:1000::/home/jacob:/usr/bin/zsh\n"
+            (root / "etc/passwd").write_text(original, encoding="utf-8")
+
+            with redirect_stdout(StringIO()):
+                pi_flash.step_verify_shell(root, "jacob")
+
+            self.assertEqual((root / "etc/passwd").read_text(encoding="utf-8"), original)
+
+    def test_first_boot_installs_packages_before_running_dotbot(self) -> None:
+        unit = self.render_first_boot(provision=True, dotfiles=True)
+        commands = [
+            line.removeprefix("ExecStart=")
+            for line in unit.splitlines()
+            if line.startswith("ExecStart=")
+        ]
+
+        self.assertEqual(commands[0], "/usr/bin/pacman-key --init")
+        self.assertLess(
+            commands.index("/root/etc/bin/install/pi-arch"),
+            commands.index("/root/etc/install"),
+        )
+        self.assertIn("After=network-online.target", unit)
+
+    def test_first_boot_skips_provisioning_done_in_the_chroot(self) -> None:
+        unit = self.render_first_boot(provision=False, dotfiles=True)
+
+        self.assertNotIn("pi-arch", unit)
+        self.assertNotIn("pacman-key", unit)
+        self.assertIn("ExecStart=/root/etc/install", unit)
+
+    def test_reused_rootfs_is_reported_and_unstamped(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "etc").mkdir()
+            (root / "etc/os-release").write_text("ID=archarm\n", encoding="utf-8")
+            (root / "etc/machine-id").write_text("deadbeef\n", encoding="utf-8")
+
+            output = StringIO()
+            with redirect_stdout(output):
+                pi_flash.warn_reused_rootfs(root)
+
+            self.assertIn("NOT the downloaded tarball", output.getvalue())
+            self.assertFalse((root / "etc/machine-id").exists())
+
+    def render_first_boot(self, provision: bool, dotfiles: bool) -> str:
+        """Write the first-boot unit into a throwaway root and return its text."""
+        directory = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, directory)
+        root = Path(directory)
+
+        with redirect_stdout(StringIO()):
+            pi_flash.step_first_boot(root, "jacob", provision=provision, dotfiles=dotfiles)
+
+        return (root / "etc/systemd/system" / pi_flash.FIRST_BOOT_SERVICE).read_text(
+            encoding="utf-8"
+        )
 
 
 class MountLifecycleTests(unittest.TestCase):
