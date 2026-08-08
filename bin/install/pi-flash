@@ -78,6 +78,11 @@ STATE_VERSION = 2
 MOUNT_ROOT = Path("/run/pi-flash/mnt")
 CACHE_ROOT = Path("/var/cache/pi-flash")
 
+# pacman 7 confines itself with Landlock and drops to the 'alpm' user. Neither
+# survives qemu-user emulation inside the chroot, so every pacman call made
+# through arch-chroot must opt out — as bin/install/pi-arch already does.
+PACMAN_SANDBOX_FLAGS = ["--disable-sandbox"]
+
 REQUIRED_TOOLS = [
     "bash",
     "blkid",
@@ -828,11 +833,11 @@ def step_packages(root_mp: Path, rpi_kernel: str | None = None) -> None:
         print(f"\n== Replacing kernel with {rpi_kernel} (Pi 5) ==")
         run([
             "arch-chroot", str(root_mp), "pacman", "-R", "--noconfirm",
-            "linux-aarch64", "uboot-raspberrypi",
+            *PACMAN_SANDBOX_FLAGS, "linux-aarch64", "uboot-raspberrypi",
         ], check=False)
         run([
             "arch-chroot", str(root_mp), "pacman", "-Syu", "--noconfirm",
-            "--overwrite", "/boot/*", rpi_kernel,
+            *PACMAN_SANDBOX_FLAGS, "--overwrite", "/boot/*", rpi_kernel,
         ])
     run(["arch-chroot", str(root_mp), "/root/etc/bin/install/pi-arch"])
 
