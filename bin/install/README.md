@@ -40,8 +40,9 @@ Useful flags:
 
 * `--packages`: pre-install all `pi-arch` packages via `arch-chroot` + QEMU emulation
   (requires `qemu-user-static-binfmt` and `arch-install-scripts` on the host); slower
-  to flash but the Pi is fully provisioned on first boot. Without it, the pacman
-  keyring is initialized on first boot instead, and `pi-arch` is run manually on the Pi.
+  to flash, but nothing is left to do at first boot except Dotbot. Without it, the
+  card initializes the pacman keyring and runs `pi-arch` itself on first boot, which
+  needs a working network connection.
 * `--reuse`: keep the existing partitions and root filesystem instead of
   repartitioning
 * `--tarball <path>`: use a pre-downloaded image tarball; its detached signature
