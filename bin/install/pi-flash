@@ -261,10 +261,13 @@ def check_required_tools(need_packages: bool, model: str, keyring: Path) -> None
 
     missing = [t for t in tools if shutil.which(t) is None]
     if missing:
+        # Chroot installation is the default, so arch-chroot is the tool most
+        # likely to be missing on a host that has flashed cards before.
+        escape = "\n  Or flash without it: --no-packages" if "arch-chroot" in missing else ""
         die(
             f"missing required tools: {', '.join(missing)}\n"
             "  Install with: yay -S util-linux dosfstools e2fsprogs "
-            "libarchive parted curl gnupg psmisc arch-install-scripts"
+            f"libarchive parted curl gnupg psmisc arch-install-scripts{escape}"
         )
 
     if not keyring.is_file():
@@ -276,8 +279,9 @@ def check_required_tools(need_packages: bool, model: str, keyring: Path) -> None
     handler = binfmt_handler(model)
     if need_packages and not Path(f"/proc/sys/fs/binfmt_misc/{handler}").exists():
         die(
-            f"{handler} is required for model {model} with --packages\n"
-            "  Install with: yay -S qemu-user-static-binfmt"
+            f"{handler} is required to install packages for model {model}\n"
+            "  Install with: yay -S qemu-user-static-binfmt\n"
+            "  Or flash without it: --no-packages"
         )
 
     print("  All dependencies found")
@@ -924,7 +928,7 @@ def step_verify_shell(root_mp: Path, username: str) -> None:
 
     OpenSSH treats an account whose shell does not exist as an invalid user:
     it skips public key authentication entirely and falls through to password
-    auth, which is disabled here. Without --packages the shell is only
+    auth, which is disabled here. Under --no-packages the shell is only
     installed on first boot, so the card would be unreachable until then.
     """
     print("\n== Verifying login shell ==")
@@ -1095,7 +1099,7 @@ def build_parser() -> argparse.ArgumentParser:
               sudo %(prog)s /dev/sdb --user jacob --ssh-key ~/.ssh/id_ed25519.pub --hostname pihole
               sudo %(prog)s /dev/sdb --user jacob --ssh-key ~/.ssh/id_ed25519.pub --model 4
               sudo %(prog)s /dev/sdb --user jacob --ssh-key ~/.ssh/id_ed25519.pub --tarball /tmp/alarm.tar.gz
-              sudo %(prog)s /dev/sdb --user jacob --ssh-key ~/.ssh/id_ed25519.pub --packages
+              sudo %(prog)s /dev/sdb --user jacob --ssh-key ~/.ssh/id_ed25519.pub --no-packages
         """),
     )
     parser.add_argument("device", help="SD card block device (e.g. /dev/sdb, /dev/mmcblk0)")
@@ -1114,15 +1118,25 @@ def build_parser() -> argparse.ArgumentParser:
                         help="skip dotfiles installation")
     parser.add_argument("--shell", default="/usr/bin/zsh",
                         help="login shell for the new user (default: /usr/bin/zsh)")
-    parser.add_argument("--packages", "-p", action="store_true",
+    parser.add_argument("--packages", action=argparse.BooleanOptionalAction, default=True,
                         help="install packages via arch-chroot using bin/install/pi-arch "
-                             "(requires qemu-user-static-binfmt)")
+                             "(default; requires qemu-user-static-binfmt). --no-packages "
+                             "defers them to first boot on the Pi")
     parser.add_argument("--force", "-f", action="store_true",
                         help="skip removable device check")
     parser.add_argument("--reuse", action="store_true",
                         help="keep the existing partitions and root filesystem instead of "
                              "repartitioning; required to resume an interrupted flash")
     return parser
+
+
+def apply_flag_implications(args: argparse.Namespace) -> None:
+    """Resolve flag combinations that only have one sensible reading."""
+    # pi-arch lives in the dotfiles repo, so there is nothing to run without it.
+    if args.no_dotfiles and args.packages:
+        print("\n  NOTE: --no-dotfiles implies --no-packages")
+        print("        (pi-arch lives in the dotfiles repo)")
+        args.packages = False
 
 
 def main() -> None:
@@ -1132,8 +1146,7 @@ def main() -> None:
     require_root()
 
     validate_identity(args.user, args.hostname, args.shell)
-    if args.packages and args.no_dotfiles:
-        die("--packages requires dotfiles (pi-arch is in the repo). Remove --no-dotfiles.")
+    apply_flag_implications(args)
 
     # -- preflight --
     check_required_tools(args.packages, args.model, args.keyring)
