@@ -315,6 +315,24 @@ class ArchitectureTests(unittest.TestCase):
 class ProvisioningTests(unittest.TestCase):
     """The defects that produced a card nobody could log into."""
 
+    def test_packages_are_installed_unless_opted_out(self) -> None:
+        parser = pi_flash.build_parser()
+        base = ["/dev/sdb", "--user", "jacob", "--ssh-key", "key.pub"]
+
+        self.assertTrue(parser.parse_args(base).packages)
+        self.assertFalse(parser.parse_args(base + ["--no-packages"]).packages)
+
+    def test_skipping_dotfiles_also_skips_packages(self) -> None:
+        parser = pi_flash.build_parser()
+        args = parser.parse_args(
+            ["/dev/sdb", "--user", "jacob", "--ssh-key", "key.pub", "--no-dotfiles"]
+        )
+
+        with redirect_stdout(StringIO()):
+            pi_flash.apply_flag_implications(args)
+
+        self.assertFalse(args.packages)
+
     def test_chroot_pacman_opts_out_of_the_landlock_sandbox(self) -> None:
         with (
             mock.patch.object(pi_flash, "run") as run,

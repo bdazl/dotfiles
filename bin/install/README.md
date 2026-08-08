@@ -3,7 +3,7 @@
 Tools for building a bootable Arch Linux ARM SD card:
 
 * [pi-flash](pi-flash): partition and flash an SD card, install dotfiles, enable SSH
-* [pi-arch](pi-arch): install packages; runs on the Pi itself, or in a chroot via `pi-flash --packages`
+* [pi-arch](pi-arch): install packages; runs in a chroot from `pi-flash`, or on the Pi itself
 
 ## Flashing an SD card
 
@@ -22,10 +22,14 @@ yay -S archlinuxarm-keyring
 This downloads the Arch Linux ARM image over HTTPS, verifies its official GPG
 signature, caches it in `/var/cache/pi-flash`, and partitions the card
 (FAT32 boot + ext4 root), extracts the image, creates the user with passwordless
-sudo, copies this repo to `~/etc` for both root and the user, and enables sshd.
-Dotbot runs via a one-shot systemd service on first boot. Password authentication
-is disabled for both root and the named user, so at least one valid `--ssh-key`
-is required.
+sudo, installs all `pi-arch` packages via `arch-chroot`, copies this repo to
+`~/etc` for both root and the user, and enables sshd. Dotbot runs via a one-shot
+systemd service on first boot. Password authentication is disabled for both root
+and the named user, so at least one valid `--ssh-key` is required.
+
+Because packages are installed in an emulated chroot, the host needs
+`qemu-user-static-binfmt` and `arch-install-scripts`. Use `--no-packages` to skip
+that step and let the card install them itself on first boot instead.
 
 Select the Raspberry Pi model with `--model {2,3,4,5}` (default: 5):
 
@@ -38,11 +42,10 @@ Select the Raspberry Pi model with `--model {2,3,4,5}` (default: 5):
 
 Useful flags:
 
-* `--packages`: pre-install all `pi-arch` packages via `arch-chroot` + QEMU emulation
-  (requires `qemu-user-static-binfmt` and `arch-install-scripts` on the host); slower
-  to flash, but nothing is left to do at first boot except Dotbot. Without it, the
-  card initializes the pacman keyring and runs `pi-arch` itself on first boot, which
-  needs a working network connection.
+* `--no-packages`: skip the `arch-chroot` + QEMU package install, which is otherwise
+  the slowest part of a flash. The card then initializes the pacman keyring and runs
+  `pi-arch` itself on first boot, which needs a working network connection.
+  Implied by `--no-dotfiles`, since `pi-arch` lives in this repo.
 * `--reuse`: keep the existing partitions and root filesystem instead of
   repartitioning
 * `--tarball <path>`: use a pre-downloaded image tarball; its detached signature
@@ -58,7 +61,7 @@ state only survives under `--reuse`, which is how an interrupted flash is picked
 back up. Resume requires the same model, user, hostname, shell, SSH keys, package
 mode, and dotfiles mode; drop `--reuse` when changing any of these options.
 
-For `--model 5` without `--packages`, the kernel is installed by file extraction
+For `--model 5` with `--no-packages`, the kernel is installed by file extraction
 outside pacman. After first boot, adopt it into pacman and regenerate the initramfs:
 
 ```sh
@@ -66,7 +69,7 @@ sudo pacman -R --noconfirm linux-aarch64 uboot-raspberrypi
 sudo pacman -Syu --overwrite '/boot/*' --noconfirm linux-rpi-16k
 ```
 
-(with `--packages` this is already done in the chroot.)
+(by default this is already done in the chroot.)
 
 ## Tests
 
