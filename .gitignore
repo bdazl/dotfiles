@@ -9,3 +9,6 @@ __pycache__
 *.swp
 
 etc/nvim/lazy-lock.json
+
+# Hyprland may recreate the legacy entrypoint during migration to Lua.
+etc/hypr/hyprland.conf
