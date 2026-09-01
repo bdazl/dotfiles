@@ -68,6 +68,7 @@ function config_aliases()
     alias h='hyprctl'
     alias k='kubectl'
 
+    alias m='mfest'
     alias mn='mfest new'
     alias mq='mfest query'
     alias md='mfest diff'
@@ -260,6 +261,7 @@ halp() {
   recopy    paste|rmspc|copy        strip leading spaces from clipboard
 
 ── mfest ──────────────────────────────────────────────────────
+  m         mfest
   mn        mfest new
   mq        mfest query
   md        mfest diff
