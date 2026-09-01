@@ -68,6 +68,11 @@ function config_aliases()
     alias h='hyprctl'
     alias k='kubectl'
 
+    alias mn='mfest new'
+    alias mq='mfest query'
+    alias md='mfest diff'
+    alias mi='mfest info'
+
     alias lb='lsblk -o name,size,fstype,uuid,model,mountpoints'
     alias lba='lsblk -o name,label,size,fsavail,fstype,uuid,model,mountpoints'
 
@@ -253,6 +258,12 @@ halp() {
   nargs     xargs per line         run command for each stdin line
   rmspc     s/^[[:space:]]*//      filter spaces from beginning of line
   recopy    paste|rmspc|copy        strip leading spaces from clipboard
+
+── mfest ──────────────────────────────────────────────────────
+  mn        mfest new
+  mq        mfest query
+  md        mfest diff
+  mi        mfest info
 HALP
 }
 
