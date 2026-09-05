@@ -1,0 +1,3 @@
+# Keep the terminal's default dark background and replace Tig's green cursor.
+color cursor      white color236 bold
+color cursor-blur color245 color234

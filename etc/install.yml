@@ -16,6 +16,7 @@
   - ~/.config/cheat/sheets
   - ~/.config/lf
   - ~/.config/pipewire
+  - ~/.config/tig
   - ~/.local/bin
   - ~/.local/share/zsh
   - ~/.cargo/bin
@@ -45,6 +46,7 @@
     ~/.config/pipewire/pipewire.conf.d: etc/pipewire/pipewire.conf.d
     ~/.config/ranger: etc/ranger
     ~/.config/task: etc/task
+    ~/.config/tig/config: etc/tig/config
     ~/.config/systemd: etc/systemd
     ~/.config/zsh: etc/zsh/conf.d
     ~/.ctags: etc/ctags/ctags
