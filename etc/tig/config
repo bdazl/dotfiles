@@ -1,3 +1,20 @@
 # Keep the terminal's default dark background and replace Tig's green cursor.
 color cursor      white color236 bold
 color cursor-blur color245 color234
+
+# Refresh visible views every second when repository files change.
+set refresh-mode = periodic
+set refresh-interval = 1
+set start-on-head = true
+
+# Reuse Vim-style spatial navigation.
+bind generic <Ctrl-h> back
+bind generic <Ctrl-j> move-down
+bind generic <Ctrl-k> move-up
+bind generic <Ctrl-l> none
+bind generic <Ctrl-l> enter
+
+# Keep history and view navigation consistent with Vim.
+bind generic U view-reflog
+bind generic Q none
+bind generic <ShiftTab> view-next
