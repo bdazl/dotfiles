@@ -2,8 +2,6 @@
     "layer": "top",
     "position": "top",
     "height": 36,
-    "margin-top": 1,
-    "width": 1800,
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
     "modules-right": ["mpris", "bluetooth", "cpu", "memory", "network", "pulseaudio", "custom/power"],
