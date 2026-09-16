@@ -42,6 +42,13 @@ function config_aliases()
     alias gla='git log --oneline --all --graph --decorate'
     alias gll='git log --patch --stat'
 
+    alias gbg='git-branch-graph --format="%C(auto)%h %d"'
+    alias gbga='git-branch-graph --all --decorate-refs="refs/remotes/*" --format="%C(auto)%h %d"'
+
+    alias gbgl='git-branch-graph --date=short --format="%C(auto)%h %d%Creset%n    %C(green)%an%Creset %C(cyan)<%ae>%Creset %C(dim white)· %ad%Creset%n    %s%n"'
+    alias gbgla='git-branch-graph --all --decorate-refs="refs/remotes/*" --date=short --format="%C(auto)%h %d%Creset%n    %C(green)%an%Creset %C(cyan)<%ae>%Creset %C(dim white)· %ad%Creset%n    %s%n"'
+
+
     alias gdiff='diff --color -u'
 
     alias grep='grep --color=auto'
@@ -171,6 +178,24 @@ tree-pager() {
     tree -C "$p" | bat -p
 }
 
+git-branch-graph() {
+    local -a refs=(--branches HEAD)
+
+    if [[ "${1:-}" == "--all" ]]; then
+        refs+=(--remotes)
+        shift
+    fi
+
+    git --no-pager log \
+        "${refs[@]}" \
+        --graph --simplify-by-decoration \
+        --decorate=short \
+        --decorate-refs=HEAD \
+        --decorate-refs='refs/heads/*' \
+        "$@"
+}
+
+
 load-common() {
     . "$ETC/bin/common"
 }
@@ -207,6 +232,10 @@ halp() {
   gc        git commit --verbose
   gd        git diff
   gsh       git show
+  gbg       git branch graph       compact local branch graph
+  gbga      git branch graph       compact graph, including remotes
+  gbgl      git branch graph       detailed graph with author
+  gbgla     git branch graph       detailed graph, including remotes
   gl        git log --graph        short decorated log
   gla       git log --oneline      one-line log, all branches
   gll       git log --patch --stat full log with diffs and stats
