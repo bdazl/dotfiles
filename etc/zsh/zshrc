@@ -14,6 +14,7 @@
 . "$ZSH_DIR/alias.zsh"
 . "$ZSH_DIR/prompt.zsh"
 . "$ZSH_DIR/bindkey.zsh"
+. "$ZSH_DIR/atuin.zsh"
 . "$ZSH_DIR/completion.zsh"
 
 if [ "$(uname)" = "Darwin" ]; then

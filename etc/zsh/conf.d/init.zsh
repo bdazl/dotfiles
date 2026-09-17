@@ -26,8 +26,10 @@ setopt extendedglob
 
 # History
 setopt inc_append_history   # immediately append history to history file
-setopt hist_ignore_dups     # ignore duplicate commands
+setopt hist_expire_dups_first # expire duplicates before unique commands
+setopt hist_ignore_all_dups # remove older duplicate commands
 setopt hist_ignore_space    # ignore commands with leading space
+setopt hist_reduce_blanks   # remove superfluous blanks from commands
 
 # Don't make noise
 unsetopt beep

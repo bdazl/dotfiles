@@ -13,8 +13,8 @@ export PAGER="less -FRS"
 export BAT_PAGER="less -FRS"
 export LESS="-FRS"
 export SUDO_EDITOR=$EDITOR
-export HISTSIZE=10000000  # maximum history size in terminal's memory
-export SAVEHIST=10000000  # maximum size of history file
+export HISTSIZE=500000  # maximum history size in terminal's memory
+export SAVEHIST=500000  # maximum size of history file
 
 # Set other writable (drwxrwxrwx) color to blue on gray
 export LS_COLORS="ow=01;34;100"

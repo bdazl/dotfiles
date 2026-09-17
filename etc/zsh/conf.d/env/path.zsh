@@ -28,6 +28,7 @@ echo-user-dirs() {
     pth=( \
         $(remove-non-existing \
             "$HOME/.local/bin" \
+            "$HOME/.atuin/bin" \
             "$HOME/bin" \
             "$HOME/go/bin" \
             "$HOME/.cargo/bin" \
