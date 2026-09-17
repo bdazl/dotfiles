@@ -1,0 +1,11 @@
+# Keep history local unless synchronization is explicitly enabled.
+auto_sync = false
+
+search_mode = "fuzzy"
+filter_mode = "global"
+style = "compact"
+inline_height = 20
+
+# Return selected commands to the prompt for review before execution.
+enter_accept = false
+keymap_mode = "auto"
