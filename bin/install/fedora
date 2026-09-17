@@ -29,6 +29,7 @@ sudo dnf install --skip-unavailable \
     fd-find \
     bat \
     zoxide \
+    atuin \
     eza
 
 # Must be done after rpmfusion is installed

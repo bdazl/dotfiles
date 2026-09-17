@@ -46,6 +46,7 @@ PACKAGES=(
     ntp
     task
     zoxide
+    atuin
     jq
     yq
     the_silver_searcher

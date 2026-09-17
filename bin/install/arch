@@ -58,5 +58,6 @@ if [[ ! -d "$YAY" ]]; then
 fi
 
 yay -Su --needed \
+    atuin \
     1password-cli \
     steghide # steganography
