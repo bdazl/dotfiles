@@ -4,7 +4,7 @@ font-size = 13
 background = 000000
 foreground = ffffff
 fullscreen = true
-window-decoration = true
+window-decoration = false
 confirm-close-surface = false
 command = tmux
 keybind = ctrl+shift+r=reload_config
