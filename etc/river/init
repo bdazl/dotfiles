@@ -1,0 +1,89 @@
+#!/bin/sh
+# River 0.4 session managed by Weir. Keep bindings in sync with riverhalp().
+
+export XDG_CURRENT_DESKTOP=river
+export XDG_SESSION_DESKTOP=river
+export XDG_SESSION_TYPE=wayland
+export XCURSOR_SIZE=24
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export PATH="$HOME/.local/bin:$PATH"
+
+if [ "${RIVER_WM:-weir}" = ashrwm ]; then
+    dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE 2>/dev/null || true
+    kanshi -c "$HOME/.config/kanshi/config" &
+    swaybg -i "$HOME/.etc/etc/assets/abstract_colorful_art_0.jpg" -m fill &
+    waybar -c "$HOME/.config/waybar/ashrwm.jsonc" -s "$HOME/.config/waybar/style.css" &
+    dunst &
+    gammastep -l 59.3:18.1 &
+    wl-paste --watch cliphist store &
+    /usr/lib/polkit-kde-authentication-agent-1 &
+    fcitx5 -d &
+    exec ashrwm >"$HOME/.ashrwm.log" 2>&1
+fi
+
+weir &
+weirctl wait-for-socket || exit 1
+
+weirctl set border-width 3
+weirctl set border-color-focused 0x07f0eaee
+weirctl set border-color-unfocused 0x595959aa
+weirctl set border-color-urgent 0xf59538ff
+weirctl set gaps 1 3
+weirctl set smart-gaps off
+weirctl set focus-follows-cursor on
+weirctl workspace-mode independent
+weirctl keyboard-layout -model pc105 -options caps:escape se
+weirctl input '*Touchpad*' natural-scroll disabled
+
+mod=Super
+menu='rofi -theme ~/.config/rofi/catppuccin.rasi'
+weirctl bind "$mod+Return" spawn 'ghostty --fullscreen=false'
+weirctl bind "$mod+o" spawn 'ghostty --fullscreen=false'
+weirctl bind "$mod+e" spawn firefox
+weirctl bind "$mod+r" spawn "$menu -combi-modi run,drun -show run"
+weirctl bind "$mod+c" spawn "$HOME/.etc/bin/hypr/cliphist-rofi"
+weirctl bind "$mod+n" spawn "$HOME/.etc/bin/hypr/dunst-history"
+weirctl bind "$mod+g" spawn 'pkill gammastep || gammastep -l 59.3:18.1'
+weirctl bind None+Print spawn 'grim -g "$(slurp)"'
+weirctl bind "$mod+Print" spawn "$HOME/.etc/bin/river/grim-active"
+
+weirctl bind "$mod+d" close
+weirctl bind "$mod+F12" exit
+weirctl bind "$mod+v" toggle-float
+weirctl bind "$mod+f" toggle-fullscreen
+weirctl bind "$mod+space" cycle-layout monocle,left,top
+weirctl bind "$mod+j" focus next
+weirctl bind "$mod+k" focus prev
+weirctl bind "$mod+h" set main-ratio -0.05
+weirctl bind "$mod+l" set main-ratio +0.05
+weirctl bind "$mod+Shift+j" swap next
+weirctl bind "$mod+Shift+k" swap prev
+weirctl bind "$mod+Shift+h" view prev
+weirctl bind "$mod+Shift+l" view next
+weirctl bind "$mod+Alt+h" focus-output left
+weirctl bind "$mod+Alt+l" focus-output right
+weirctl bind-pointer "$mod+Left" move
+weirctl bind-pointer "$mod+Right" resize
+
+for workspace in 1 2 3 4 5 6 7 8 9; do
+    weirctl bind "$mod+$workspace" view "$workspace"
+    weirctl bind "$mod+Shift+$workspace" send "$workspace"
+done
+weirctl bind "$mod+0" view 10
+weirctl bind "$mod+Shift+0" send 10
+
+weirctl bind None+XF86AudioRaiseVolume spawn 'wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%+'
+weirctl bind None+XF86AudioLowerVolume spawn 'wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%-'
+weirctl bind None+XF86AudioMute spawn 'wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'
+
+kanshi -c "$HOME/.config/kanshi/config" &
+swaybg -i "$HOME/.etc/etc/assets/abstract_colorful_art_0.jpg" -m fill &
+waybar -c "$HOME/.config/waybar/river.jsonc" -s "$HOME/.config/waybar/style.css" &
+dunst &
+gammastep -l 59.3:18.1 &
+wl-paste --watch cliphist store &
+/usr/lib/polkit-kde-authentication-agent-1 &
+fcitx5 -d &
+
+wait

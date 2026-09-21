@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+
+geometry=$(weirctl get windows | jq -r '
+    .[] | select(.focused)
+    | "\(.x),\(.y) \(.width)x\(.height)"
+')
+
+if [ -z "$geometry" ]; then
+    printf 'No focused window to capture\n' >&2
+    exit 1
+fi
+
+grim -g "$geometry"

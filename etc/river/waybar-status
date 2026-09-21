@@ -1,0 +1,30 @@
+#!/bin/sh
+# Stream Weir state to Waybar's custom modules.
+
+case "$1" in
+    workspaces)
+        filter='def occupied($name): any(.workspaces[]; .name == $name and (.windows | length) > 0);
+            .state as $state
+            | ([$state.outputs[]? | select(.focused) | .workspace][0] // "") as $active
+            | {text: (reduce range(1; 11) as $n ("";
+                . + (if $n > 1 then "  " else "" end)
+                  + (if ($n | tostring) == $active then "[\($n)]"
+                     elif ($state | occupied($n | tostring)) then "\($n)•"
+                     else ($n | tostring) end))),
+               tooltip: "Workspaces 1–10"}'
+        ;;
+    window)
+        filter='.state as $state
+            | {text: (([$state.windows[]? | select(.focused) | .title][0] // "Desktop")),
+               tooltip: (([$state.windows[]? | select(.focused) | .title][0] // "Desktop"))}'
+        ;;
+    *)
+        printf 'Usage: %s workspaces|window\n' "$0" >&2
+        exit 2
+        ;;
+esac
+
+while :; do
+    weirctl subscribe | jq -rc --unbuffered "$filter"
+    sleep 1
+done
