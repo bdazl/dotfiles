@@ -3,18 +3,17 @@ set -euo pipefail
 
 usage() {
     cat <<'EOF'
-usage: logincmd <greetd|greetd-vts|getty|status> [--force]
+usage: systemd login <apply|status> [profile] [--allow-active-tty]
 
-Switch the tty1 login provider.
+Manage systemd-backed console login profiles.
 
-commands:
-  greetd      install the greetd config and enable greetd on tty1
-  greetd-vts  enable greetd on tty1, tty2, and tty3
-  getty       disable greetd and restore getty on tty1, tty2, and tty3
-  status      show current systemd state
+profiles:
+  greetd-single   enable greetd on tty1 (Hyprland)
+  greetd-multi    enable greetd on tty1, tty2, and tty3 (River on tty2)
+  getty           disable greetd and restore getty on tty1, tty2, and tty3
 
 options:
-  --force  allow switching while running from a managed tty
+  --allow-active-tty  allow switching while running from tty1, tty2, or tty3
 EOF
 }
 
@@ -32,23 +31,23 @@ current_tty() {
 }
 
 require_not_tty1() {
-    if [[ "${force}" == true ]]; then
+    if [[ "${allow_active_tty}" == true ]]; then
         return
     fi
 
     if [[ "$(current_tty)" == "/dev/tty1" ]]; then
-        error "switch to tty2 first with Ctrl+Alt+F2, or pass --force"
+        error "switch to tty2 first with Ctrl+Alt+F2, or pass --allow-active-tty"
     fi
 }
 
 require_not_managed_tty() {
-    if [[ "${force}" == true ]]; then
+    if [[ "${allow_active_tty}" == true ]]; then
         return
     fi
 
     case "$(current_tty)" in
         /dev/tty1|/dev/tty2|/dev/tty3)
-            error "switch to tty4 first with Ctrl+Alt+F4, or pass --force"
+            error "switch to tty4 first with Ctrl+Alt+F4, or pass --allow-active-tty"
             ;;
     esac
 }
@@ -79,13 +78,23 @@ install_shared_config() {
     setvtrgb /etc/vtrgb
 }
 
+install_river_launcher() {
+    local root launcher_src
+    root=$(repo_root)
+    launcher_src="${root}/bin/river/start"
+    [[ -x "${launcher_src}" ]] || error "missing executable ${launcher_src}"
+
+    install -d -m 0755 /usr/local/bin
+    install -m 0755 "${launcher_src}" /usr/local/bin/start-river
+}
+
 repo_root() {
     local script_path
     script_path=$(readlink -f "${BASH_SOURCE[0]}")
     dirname "$(dirname "$(dirname "${script_path}")")"
 }
 
-enable_greetd() {
+apply_greetd_single() {
     require_not_tty1
     require_command greetd
 
@@ -106,7 +115,7 @@ enable_greetd() {
     systemctl restart greetd.service
 }
 
-enable_greetd_vts() {
+apply_greetd_multi() {
     require_not_managed_tty
     require_command greetd
 
@@ -116,6 +125,7 @@ enable_greetd_vts() {
     [[ -f "${service_src}" ]] || error "missing ${service_src}"
 
     install_shared_config
+    install_river_launcher
     install -d -m 0755 /etc/greetd
     for tty in 1 2 3; do
         install -m 0644 "${root}/sys/etc/greetd/tty${tty}.toml" "/etc/greetd/tty${tty}.toml"
@@ -132,7 +142,7 @@ enable_greetd_vts() {
     systemctl restart greetd@1.service greetd@2.service greetd@3.service
 }
 
-enable_getty() {
+apply_getty() {
     systemctl stop greetd.service || true
     systemctl stop greetd@1.service greetd@2.service greetd@3.service || true
     systemctl disable greetd.service
@@ -154,18 +164,28 @@ show_status() {
         getty@tty3.service || true
 }
 
-force=false
-action=
+allow_active_tty=false
+domain=
+command=
+profile=
 original_args=("$@")
 
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
-        greetd|greetd-vts|getty|status)
-            [[ -z "${action}" ]] || error "only one command can be used"
-            action="$1"
+        login)
+            [[ -z "${domain}" ]] || error "only one domain can be used"
+            domain="$1"
             ;;
-        --force)
-            force=true
+        apply|status)
+            [[ -z "${command}" ]] || error "only one command can be used"
+            command="$1"
+            ;;
+        greetd-single|greetd-multi|getty)
+            [[ -z "${profile}" ]] || error "only one profile can be used"
+            profile="$1"
+            ;;
+        --allow-active-tty)
+            allow_active_tty=true
             ;;
         -h|--help)
             usage
@@ -179,26 +199,30 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-[[ -n "${action}" ]] || {
+[[ "${domain}" == login ]] || error "a domain is required (currently supported: login)"
+[[ -n "${command}" ]] || {
     usage >&2
     exit 1
 }
 
-if [[ "${action}" == status ]]; then
+if [[ "${command}" == status ]]; then
+    [[ -z "${profile}" ]] || error "status does not take a profile"
     show_status
     exit 0
 fi
 
-if [[ "${action}" == greetd ]]; then
+[[ -n "${profile}" ]] || error "apply requires a profile"
+
+if [[ "${profile}" == greetd-single ]]; then
     require_not_tty1
-elif [[ "${action}" == greetd-vts ]]; then
+elif [[ "${profile}" == greetd-multi ]]; then
     require_not_managed_tty
 fi
 
 require_root "${original_args[@]}"
 
-case "${action}" in
-    greetd) enable_greetd ;;
-    greetd-vts) enable_greetd_vts ;;
-    getty) enable_getty ;;
+case "${profile}" in
+    greetd-single) apply_greetd_single ;;
+    greetd-multi) apply_greetd_multi ;;
+    getty) apply_getty ;;
 esac
