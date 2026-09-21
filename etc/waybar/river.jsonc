@@ -1,0 +1,111 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 36,
+    "modules-left": ["custom/weir-workspaces", "custom/weir-window"],
+    "modules-center": ["clock"],
+    "modules-right": ["mpris", "bluetooth", "cpu", "memory", "network", "pulseaudio", "custom/power"],
+    "custom/weir-workspaces": {
+        "exec": "~/.config/river/waybar-status workspaces",
+        "return-type": "json",
+        "format": "{}",
+        "escape": true,
+        "tail": true
+    },
+    "custom/weir-window": {
+        "exec": "~/.config/river/waybar-status window",
+        "return-type": "json",
+        "format": "{}",
+        "escape": true,
+        "tail": true,
+        "max-length": 200,
+        "tooltip": true
+    },
+    "clock": {
+        "timezone": "Europe/Stockholm",
+        "format": "{:%H:%M}",
+        "format-alt": " {:%Y-%m-%d}",
+        "tooltip": true,
+        "tooltip-format": "<span font_size='15pt'><b>{:%Y %B %d %A}</b></span>\n<tt>{calendar}</tt>",
+        "calendar": {
+            "mode": "month",
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "on-click-right": "mode",
+            "format": {
+                "months": "<span font_size='13pt' color='#ffead3'><b>{}</b></span>",
+                "days": "<span font_size='13pt' color='#ecc6d9'><b>{}</b></span>",
+                "weeks": "<span font_size='13pt' color='#99ffdd'><b>W{}</b></span>",
+                "weekdays": "<span font_size='13pt' color='#ffcc66'><b>{}</b></span>",
+                "today": "<span font_size='13pt' color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+    "cpu": {
+        "format": "󰻠 {usage}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+    "memory": {
+        "format": "󰍛 {percentage}%",
+        "tooltip-format": "{used:0.1f}G / {total:0.1f}G",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+    "network": {
+        "format-wifi": "󰖩 {essid}",
+        "format-ethernet": "󰈀 {ipaddr}",
+        "format-disconnected": "󰖪 ",
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟 muted",
+        "format-bluetooth": "󰂯 {volume}%",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "pavucontrol",
+        "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%"
+    },
+    "mpris": {
+        "format": "{player_icon} {artist} - {title}",
+        "format-paused": "{player_icon} 󰏤 {artist} - {title}",
+        "max-length": 40,
+        "player-icons": {
+            "default": "󰎈",
+            "spotify": "",
+            "firefox": "󰈹"
+        },
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous"
+    },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    },
+    "bluetooth": {
+        "format": "󰂯",
+        "format-connected": "󰂱 {device_alias}",
+        "format-connected-battery": "󰂱 {device_alias} {device_battery_percentage}%",
+        "format-disabled": "󰂲",
+        "format-off": "󰂲",
+        "tooltip-format": "{controller_alias}\n{num_connections} connected",
+        "tooltip-format-connected": "{controller_alias}\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}",
+        "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_battery_percentage}%",
+        "on-click": "blueman-manager"
+    },
+    "custom/power": {
+        "format": "⏻",
+        "tooltip": false,
+        "on-click": "~/.config/river/power-menu.sh"
+    }
+}

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-yay -Syu --needed river kanshi swaybg swaylock xdg-desktop-portal-wlr ashrwm
+yay -Syu --needed river kanshi swaybg swaylock xdg-desktop-portal-wlr
 
 # Pin Weir to the revision used by this session configuration.
 GOBIN="$HOME/.local/bin" go install github.com/psanford/weir/cmd/weir@0d112a8b8c41f02babc35a595ed476f15fc7ebf6

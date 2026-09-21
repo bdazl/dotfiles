@@ -13,21 +13,14 @@ bin/install/arch-river
 ```
 
 The package installer uses `yay -Syu` so Arch's package databases and installed
-packages are updated together. It installs the River session dependencies and
-Ashrwm, pins Weir to the revision used to develop this configuration, and
-installs Weir's two binaries in `~/.local/bin`.
+packages are updated together. It installs the River session dependencies,
+pins Weir to the revision used to develop this configuration, and installs
+Weir's two binaries in `~/.local/bin`.
 `./install` creates the Dotbot links for `~/.config/river`,
-`~/.config/kanshi`, `start-river`, and `start-ashrwm`. Check `riverhalp` for
+`~/.config/kanshi`, and `start-river`. Check `riverhalp` for
 the shortcuts. `Super+F12` ends the session and returns to the tty2 greeter.
 For a quick nested test inside an existing Wayland session, run
 `start-river` from a terminal there instead.
-
-Ashrwm is an alternative window manager using the same River compositor and
-the same background services. Start it from a shell with `start-ashrwm` after
-installing the AUR package. Its layouts are selected with `Super+Space` (tile),
-`Super+G` (grid), `Super+S` (scroller), `Super+C` (monocle), and
-`Super+F` (floating). `Super+V` toggles the focused window between tiled and
-floating.
 
 The DP-1 output profile uses the display's EDID mode at 164.958 Hz. If the
 display rejects that mode, inspect its modes in the river session and adjust

@@ -413,5 +413,41 @@ hyprhalp() {
 HYPRHALP
 }
 
+riverhalp() {
+    cat <<'RIVERHALP'
+── river + weir ───────────────────────────────────────────────
+  tty2 default       start-river (greetd starts this automatically)
+  manual start       start-river
+  leave session      SUPER + F12
+  config             ~/.config/river/init
+  outputs            ~/.config/kanshi/config
+  bar                ~/.config/waybar/river.jsonc
+
+── keybinds ───────────────────────────────────────────────────
+  SUPER + RETURN/o   ghostty
+  SUPER + e          firefox
+  SUPER + r          rofi launcher
+  SUPER + c/n/g      clipboard / notifications / night light
+  SUPER + d/v/f      close / float / fullscreen
+  SUPER + j/k        focus next / previous window
+  SUPER + h/l        shrink / grow main area
+  SUPER SHIFT + j/k  swap windows
+  SUPER SHIFT + h/l  previous / next workspace
+  SUPER + 1..0       workspaces 1..10
+  SUPER SHIFT + 1..0 move window to workspace 1..10
+  SUPER + SPACE      cycle tile layouts
+  SUPER + ALT + h/l  focus left / right output
+  PRINT              screenshot region
+  SUPER + PRINT      screenshot focused window
+  SUPER + mouse drag move / resize window
+
+── commands ───────────────────────────────────────────────────
+  weirctl get state  show complete window-manager state
+  weirctl get outputs show active outputs
+  weirctl list-bindings show active shortcuts
+  weirctl exit       end river session
+RIVERHALP
+}
+
 # Init aliases
 config_aliases

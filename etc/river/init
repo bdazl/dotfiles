@@ -9,19 +9,6 @@ export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 export PATH="$HOME/.local/bin:$PATH"
 
-if [ "${RIVER_WM:-weir}" = ashrwm ]; then
-    dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE 2>/dev/null || true
-    kanshi -c "$HOME/.config/kanshi/config" &
-    swaybg -i "$HOME/.etc/etc/assets/abstract_colorful_art_0.jpg" -m fill &
-    waybar -c "$HOME/.config/waybar/ashrwm.jsonc" -s "$HOME/.config/waybar/style.css" &
-    dunst &
-    gammastep -l 59.3:18.1 &
-    wl-paste --watch cliphist store &
-    /usr/lib/polkit-kde-authentication-agent-1 &
-    fcitx5 -d &
-    exec ashrwm >"$HOME/.ashrwm.log" 2>&1
-fi
-
 weir &
 weirctl wait-for-socket || exit 1
 
