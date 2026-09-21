@@ -1,0 +1,7 @@
+profile desktop {
+    output DP-1 mode 2560x1440@164.958Hz position 0,0 scale 1
+}
+
+profile fallback {
+    output '*' mode preferred
+}
