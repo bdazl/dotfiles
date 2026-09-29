@@ -17,9 +17,6 @@ read-only inspection and verification. Never modify code, create commits,
 touch branches, post PR/MR comments, approve or reject reviews, modify
 issues, or change any remote state. There is no commenting mode.
 
-Instruction-file compliance (`CLAUDE.md`, `AGENTS.md`, `.claude/rules`,
-etc.) is **out of scope**. This command is about defects in the change.
-
 ## Target vs. depth
 
 Keep two concepts distinct:
