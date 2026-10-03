@@ -1,0 +1,67 @@
+#!/bin/sh
+
+set -eu
+
+: "${XDG_RUNTIME_DIR:?XDG_RUNTIME_DIR is not set}"
+: "${HYPRLAND_INSTANCE_SIGNATURE:?Not running inside Hyprland}"
+
+state_file="$XDG_RUNTIME_DIR/hyprsunset-${HYPRLAND_INSTANCE_SIGNATURE}.mode"
+
+if ! hyprctl hyprsunset profile >/dev/null 2>&1; then
+    hyprsunset >/dev/null 2>&1 &
+fi
+
+ready=false
+for _ in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
+    if hyprctl hyprsunset profile >/dev/null 2>&1; then
+        ready=true
+        break
+    fi
+    sleep 0.1
+done
+
+if [ "$ready" != true ]; then
+    notify-send "Night light" "hyprsunset did not start; try launching it from a terminal"
+    exit 1
+fi
+
+mode=neutral
+if [ -f "$state_file" ]; then
+    mode=$(cat "$state_file")
+fi
+
+case "$mode" in
+    neutral)
+        next_mode=dark
+        temperature=3500
+        message='Warm (3500 K)'
+        ;;
+    dark)
+        next_mode=soft
+        temperature=5000
+        message='Slightly warm (5000 K)'
+        ;;
+    soft)
+        next_mode=neutral
+        message='Neutral'
+        ;;
+    *)
+        notify-send "Night light" "Invalid saved mode: $mode"
+        exit 1
+        ;;
+esac
+
+if [ "$next_mode" = neutral ]; then
+    output=$(hyprctl hyprsunset identity 2>&1) || {
+        notify-send "Night light" "Could not switch mode: $output"
+        exit 1
+    }
+else
+    output=$(hyprctl hyprsunset temperature "$temperature" 2>&1) || {
+        notify-send "Night light" "Could not switch mode: $output"
+        exit 1
+    }
+fi
+
+printf '%s\n' "$next_mode" > "$state_file"
+notify-send "Night light" "$message"

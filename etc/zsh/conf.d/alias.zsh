@@ -326,7 +326,7 @@ hyprhalp() {
   SUPER + w            rofi window switcher
   SUPER + c            cliphist clipboard picker (rofi)
   SUPER + n            dunst notification history (rofi)
-  SUPER + g            toggle gammastep (night light)
+  SUPER + g            cycle hyprsunset modes
   PRINT                grim + slurp (region screenshot)
   SUPER + PRINT        grim-active (active window screenshot)
 
@@ -398,7 +398,7 @@ hyprhalp() {
   waybar           bar
   hyprpaper        wallpaper daemon
   dunst            notification daemon
-  gammastep        night light (lat 59.3, lon 18.1 — Stockholm)
+  hyprsunset       night light
   cliphist store   clipboard history watcher
   polkit agent     /usr/lib/polkit-kde-authentication-agent-1
   fcitx5 -d        input method (QT_IM_MODULE=fcitx)

@@ -8,7 +8,7 @@ local menu = "rofi -theme ~/.config/rofi/catppuccin.rasi"
 local commands = {
     browser = "firefox",
     clipboard_history = "~/.etc/bin/hypr/cliphist-rofi",
-    gamma_toggle = "pkill gammastep || gammastep -l 59.3:18.1",
+    gamma_toggle = "~/.etc/bin/hypr/hyprsunset-toggle",
     notification_history = "~/.etc/bin/hypr/dunst-history",
     run_menu = menu .. " -combi-modi run,drun -show run",
     screenshot_active = "~/.etc/bin/hypr/grim-active",
@@ -45,7 +45,7 @@ local function configure_autostart()
         "waybar",
         "hyprpaper",
         "dunst",
-        "gammastep -l 59.3:18.1",
+        "hyprsunset",
         "wl-paste --watch cliphist store",
         "/usr/lib/polkit-kde-authentication-agent-1",
         "fcitx5 -d",

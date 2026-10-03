@@ -41,6 +41,7 @@ yay -S --needed \
     jq \
     dunst \
     gammastep \
+    hyprsunset \
     cliphist \
     hyprpaper \
     vlc \
