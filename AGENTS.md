@@ -53,3 +53,7 @@ Guidance for automation agents working in this repository.
 - Aliases grouped by tool/purpose in `etc/zsh/conf.d/alias.zsh`
 - Prefer shell aliases over git config aliases
 - Use functions when parameters are needed
+
+## Agent Configuration
+- Keep Codex and Claude instructions, workflows, and keybindings in sync; when changing one, check whether its counterpart needs the same update.
+- Shared agent workflows live under `etc/claude/commands/` and `etc/codex/skills/`.

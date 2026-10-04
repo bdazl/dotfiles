@@ -8,6 +8,8 @@
 
 - create:
   - ~/.cache
+  - ~/.codex
+  - ~/.codex/skills
   - ~/.claude
   - ~/.claude/commands
   - ~/.conan
@@ -32,6 +34,11 @@
       glob: true
       path: etc/claude/commands/*.md
     ~/.claude/keybindings.json: etc/claude/keybindings.json
+    ~/.codex/AGENTS.md: etc/codex/AGENTS.md
+    ~/.codex/commit-policy.md: etc/codex/commit-policy.md
+    ~/.codex/implementation-policy.md: etc/codex/implementation-policy.md
+    ~/.codex/skills/work: etc/codex/skills/work
+    ~/.codex/skills/defect-review: etc/codex/skills/defect-review
     ~/.conan/conan.conf: etc/conan/conan.conf
     ~/.config/atuin/config.toml: etc/atuin/config.toml
     ~/.config/cheat/conf.yml: etc/cheat/conf.yml
