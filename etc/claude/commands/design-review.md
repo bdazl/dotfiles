@@ -287,6 +287,7 @@ Evidence:
 Consequence:
 <what becomes coupled, duplicated, exposed, coordinated, or difficult to
 change, stated concretely>
+```
 
 Point the location at the changed code that introduces or materially worsens
 the structure where possible.
@@ -296,8 +297,8 @@ corrective direction is acceptable only when necessary to make the diagnosis
 clear.
 
 If no validated design findings remain, output exactly:
-No design findings.
+
+`No design findings.`
 
 Optionally append a terse note of the reviewed target/depth when it helps the
 user understand what was checked. Do not produce a ceremonial summary.
-```
