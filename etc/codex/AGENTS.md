@@ -22,5 +22,6 @@ Add or remove entries here to compose the global policy set. Keep environment-sp
 
 - `$work` — guided exploration and alignment before planning or implementation.
 - `$defect-review` — read-only, precision-first defect review.
+- `$design-review` — read-only architecture and code-design review.
 
 Keep each Codex skill aligned with the corresponding command in `etc/claude/commands/`.

@@ -41,6 +41,7 @@
     ~/.codex/review-scope.md: etc/agents/review-scope.md
     ~/.codex/skills/work: etc/codex/skills/work
     ~/.codex/skills/defect-review: etc/codex/skills/defect-review
+    ~/.codex/skills/design-review: etc/codex/skills/design-review
     ~/.conan/conan.conf: etc/conan/conan.conf
     ~/.config/atuin/config.toml: etc/atuin/config.toml
     ~/.config/cheat/conf.yml: etc/cheat/conf.yml
