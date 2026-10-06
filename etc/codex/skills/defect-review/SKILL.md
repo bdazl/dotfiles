@@ -7,31 +7,7 @@ description: Read-only, precision-first review for concrete defects in a selecte
 
 Search for concrete defects introduced or exposed by the selected change. Prioritize precision over coverage. Report only findings with a plausible, evidence-backed failure scenario. Zero findings is a successful review.
 
-This is read-only. Do not modify the repository, create commits, switch branches, post review comments, approve or reject reviews, change issues, or modify remote state.
-
-## Target and depth
-
-Keep the review target separate from the context inspected. Only the target may produce findings; inspect surrounding code as needed to validate a candidate.
-
-Parse the target from the user's arguments:
-
-- Default: current branch relative to its base, including staged and unstaged changes. Determine the base from the upstream tracking ref, then the remote default branch. Compare against the merge base.
-- `--working`: uncommitted working-tree changes only.
-- `--staged`: staged changes only.
-- `--commit <rev>`: one commit.
-- `--range <a>..<b>`: an explicit revision range.
-- `--base <ref>`: compare the current branch with this base using the default target behavior.
-
-Reject conflicting target selectors instead of guessing. If there is no meaningful change to review, say so briefly and stop.
-
-Depth is selected with `--depth=<local|context|history|deep>`; default to `context`:
-
-- `local`: the diff and minimum nearby code needed to understand it.
-- `context`: relevant definitions, callers, callees, interfaces, tests, state and data flow, and directly involved configuration or schema.
-- `history`: context plus targeted Git history when it helps establish intent or whether a suspected regression is real.
-- `deep`: broader investigation, focused builds, tests, static analysis, or small reproductions when they answer a concrete review question.
-
-Expand inspection only to answer a specific question. Do not browse arbitrarily.
+Read `../../review-scope.md` before selecting the target. It defines the read-only constraints, target selectors, base resolution, and depth levels. Relevant context for defects: contracts, callers, callees, state, and tests.
 
 ## Review process
 

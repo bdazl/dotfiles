@@ -10,60 +10,9 @@ This is a **read-only** analysis. A review that finds zero defects is fully
 successful — finding count is not a success metric. This is a defect hunt,
 not a general code review.
 
-## Hard constraints
+@~/.claude/review-scope.md
 
-Have **zero side effects** on the reviewed repository beyond ordinary
-read-only inspection and verification. Never modify code, create commits,
-touch branches, post PR/MR comments, approve or reject reviews, modify
-issues, or change any remote state. There is no commenting mode.
-
-## Target vs. depth
-
-Keep two concepts distinct:
-
-- **Target** — which change is reviewed. Only the target may generate
-  findings.
-- **Depth** — how far outside the target you may inspect to understand and
-  verify it.
-
-Invariant: **reason globally, report locally.** Inspect surrounding code —
-contracts, callers, callees, state, tests — freely, but never report
-unrelated pre-existing defects.
-
-### Selecting the target
-
-Parse intent from `$ARGUMENTS`. Determine the base branch sensibly from
-local Git (upstream tracking ref, then the remote default branch); do not
-assume `main`. Always use the **merge base**, not tip-to-tip.
-
-- default (no target flag): current branch vs `git merge-base HEAD <base>`,
-  **including staged and unstaged working-tree changes** — "review what I am
-  building relative to the branch it came from"
-- `--working`: only uncommitted working-tree changes
-- `--staged`: only staged changes
-- `--commit <rev>`: a single commit
-- `--range <a>..<b>`: an explicit revision range
-- `--base <ref>`: default target, but with `<ref>` as the base
-
-Reject genuinely conflicting target selectors rather than guessing. If there
-is no meaningful change to review, say so succinctly and stop.
-
-### Selecting the depth
-
-`--depth=<local|context|history|deep>`, default `context`.
-
-- `local` — the diff plus the minimum nearby code needed to read it.
-- `context` (default) — whatever current code is relevant: containing files,
-  definitions, types, callers/callees, interfaces, related tests, relevant
-  state/data flow, directly involved config or schema. Expand only because a
-  concrete review question requires it; do not browse arbitrarily.
-- `history` — everything in `context`, plus targeted Git history when it
-  explains intent or establishes whether a suspected regression is real
-  (`git log`, blame, prior versions, `git log -S`/`-G`). History is evidence,
-  not ritual.
-- `deep` — a broader investigation when warranted: wider repository
-  interactions, focused builds/tests/static analysis, small reproductions.
-  Still optimize for signal; `deep` is not "inspect everything."
+Relevant context for defects: contracts, callers, callees, state, and tests.
 
 ## Process
 

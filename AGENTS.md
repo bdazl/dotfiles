@@ -57,3 +57,4 @@ Guidance for automation agents working in this repository.
 ## Agent Configuration
 - Keep Codex and Claude instructions, workflows, and keybindings in sync; when changing one, check whether its counterpart needs the same update.
 - Shared agent workflows live under `etc/claude/commands/` and `etc/codex/skills/`.
+- Agent-neutral content shared by both lives in `etc/agents/` and is linked into `~/.claude/` and `~/.codex/`.
