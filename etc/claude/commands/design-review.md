@@ -13,66 +13,13 @@ This is a **read-only** analysis. A review that finds zero design problems is
 fully successful. This is a design review, not a defect hunt, style review,
 or invitation to rewrite code according to personal taste.
 
-## Hard constraints
+@~/.claude/review-scope.md
 
-Have **zero side effects** on the reviewed repository beyond ordinary
-read-only inspection and verification. Never modify code, create commits,
-touch branches, post PR/MR comments, approve or reject reviews, modify
-issues, or change remote state.
+Relevant context for design: module and subsystem boundaries, domain
+concepts, ownership of state and behavior, dependency direction, consumers,
+and existing abstractions. Never report unrelated pre-existing design debt.
 
 Do not redesign the system. Diagnose the design of the selected change.
-
-## Target vs. depth
-
-Keep two concepts distinct:
-
-- **Target** — which change is reviewed. Only the target may generate
-  findings.
-- **Depth** — how far outside the target you may inspect to understand its
-  architectural and design consequences.
-
-Invariant: **reason globally, report locally.**
-
-Inspect surrounding architecture, domain concepts, dependency structure,
-callers, consumers, adjacent abstractions, and historical patterns freely,
-but never report unrelated pre-existing design debt.
-
-### Selecting the target
-
-Parse intent from `$ARGUMENTS`. Determine the base branch sensibly from
-local Git (upstream tracking ref, then the remote default branch); do not
-assume `main`. Always use the **merge base**, not tip-to-tip.
-
-- default (no target flag): current branch vs `git merge-base HEAD <base>`,
-  **including staged and unstaged working-tree changes**
-- `--working`: only uncommitted working-tree changes
-- `--staged`: only staged changes
-- `--commit <rev>`: a single commit
-- `--range <a>..<b>`: an explicit revision range
-- `--base <ref>`: default target, but with `<ref>` as the base
-
-Reject genuinely conflicting target selectors rather than guessing. If there
-is no meaningful change to review, say so succinctly and stop.
-
-### Selecting the depth
-
-`--depth=<local|context|history|deep>`, default `context`.
-
-- `local` — the diff plus the minimum nearby definitions needed to
-  understand the design.
-- `context` (default) — relevant modules, interfaces, callers/callees,
-  domain types, ownership boundaries, state/data flow, tests, configuration,
-  and existing abstractions. Expand only because a concrete design question
-  requires it.
-- `history` — everything in `context`, plus targeted Git history when it
-  helps establish architectural intent, prior abstractions, or whether a
-  pattern is deliberate.
-- `deep` — broader repository-level investigation when warranted:
-  dependency direction, subsystem boundaries, repeated concepts, wider
-  consumers, or architecture that the target interacts with.
-
-`deep` does not mean "review the whole repository". The selected change
-remains the only source of findings.
 
 ## Core standard
 
