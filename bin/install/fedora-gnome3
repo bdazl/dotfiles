@@ -102,5 +102,5 @@ add_or_update_keybinding "Open Browser $browser" "$browser" "<Super>e" "custom1"
 # wlr-layer-shell, so force the X11 backend via XWayland. Mutter denies
 # XWayland keyboard grabs, so run rofi as a normal window to receive focus.
 add_or_update_keybinding "Rofi run menu" \
-    "env -u WAYLAND_DISPLAY rofi -normal-window -theme $HOME/.config/rofi/catppuccin.rasi -combi-modi run,drun -show run" \
+    "env -u WAYLAND_DISPLAY rofi -normal-window -theme $HOME/.config/rofi/catppuccin.rasi -combi-modi run,drun -show combi" \
     "<Super>r" "custom2"

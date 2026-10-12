@@ -10,7 +10,7 @@ local commands = {
     clipboard_history = "~/.etc/bin/hypr/cliphist-rofi",
     gamma_toggle = "~/.etc/bin/hypr/hyprsunset-toggle",
     notification_history = "~/.etc/bin/hypr/dunst-history",
-    run_menu = menu .. " -combi-modi run,drun -show run",
+    run_menu = menu .. " -combi-modi run,drun -show combi",
     screenshot_active = "~/.etc/bin/hypr/grim-active",
     screenshot_region = [[grim -g "$(slurp)"]],
     terminal = "ghostty --fullscreen=false",
