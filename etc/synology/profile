@@ -13,6 +13,9 @@ export PATH
 case $- in
     *i*)
         if [ ! -e "$HOME/.nozsh" ] && command -v zsh >/dev/null 2>&1; then
+            # /etc/profile exports the DSM terminfo database, which makes the
+            # conda-forge ncurses in zsh, tmux, less and nvim segfault.
+            unset TERMINFO
             SHELL="$(command -v zsh)"
             export SHELL
             exec zsh -l
