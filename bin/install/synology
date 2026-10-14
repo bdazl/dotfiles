@@ -40,6 +40,10 @@ fi
 log_info "synology: installing ${PACKAGES[*]}"
 "$PIXI_BIN" global install "${PACKAGES[@]}"
 
+# Home directories inherit a world-writable DSM ACL, which makes compinit
+# reject the zsh functions. chmod drops the ACL, also for future children.
+chmod -R go-w "$PIXI_HOME"
+
 # Dotbot refuses to replace a regular file with a link.
 if [[ -f "$HOME/.gitconfig" && ! -L "$HOME/.gitconfig" ]]; then
     log_warn "synology: moving ~/.gitconfig to ~/.gitconfig.pre-dotfiles"
