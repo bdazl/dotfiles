@@ -41,9 +41,9 @@ fi
 
 log_info "install: linking bin scripts"
 "$REPO_ROOT/bin/ln-bin" "$REPO_ROOT/bin/ln-bin"
-ln-bin "$REPO_ROOT/bin/copy"
-ln-bin "$REPO_ROOT/bin/paste"
-ln-bin "$REPO_ROOT/bin/fs-org"
-ln-bin "$REPO_ROOT/bin/toggle-stretch"
+"$REPO_ROOT/bin/ln-bin" "$REPO_ROOT/bin/copy"
+"$REPO_ROOT/bin/ln-bin" "$REPO_ROOT/bin/paste"
+"$REPO_ROOT/bin/ln-bin" "$REPO_ROOT/bin/fs-org"
+"$REPO_ROOT/bin/ln-bin" "$REPO_ROOT/bin/toggle-stretch"
 
 log_ok "✅ install: done"
