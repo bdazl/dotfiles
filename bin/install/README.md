@@ -85,7 +85,8 @@ python -m unittest discover -s tests -v
 [synology](synology) prepares a DSM host without root: it installs `zsh`, `tmux`,
 `less`, `fzf` and `nvim` from conda-forge via `pixi global` into `~/.pixi`, moves a
 pre-existing `~/.gitconfig` aside, and seeds `local/tmux.conf` (remote overrides) and
-`local/zsh.zsh` (`NVIM_LITE=1`, as there is no compiler for treesitter or mason).
+`local/zsh.zsh` (`NVIM_LITE=1`, as there is no compiler for treesitter or mason, and
+`CONDA_OVERRIDE_GLIBC`, since pixi cannot detect glibc on DSM).
 
 ```sh
 git clone https://github.com/bdazl/dotfiles.git ~/etc

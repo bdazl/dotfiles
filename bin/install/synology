@@ -21,6 +21,12 @@ if [[ ! -e /etc.defaults/VERSION ]]; then
     error "synology: /etc.defaults/VERSION missing, not a DSM host"
 fi
 
+# pixi cannot detect glibc on DSM (no ldd or getconf), which hides every
+# package that requires __glibc. Read the version from libc itself instead.
+glibc="$(/lib/libc.so.6 2>/dev/null | sed -n 's/.*release version \([0-9][0-9.]*[0-9]\).*/\1/p')"
+[[ -n "$glibc" ]] || error "synology: unable to determine glibc version"
+export CONDA_OVERRIDE_GLIBC="$glibc"
+
 # Download the static binary instead of running pixi.sh/install.sh, which
 # would edit shell rc files that are managed by this repo.
 if [[ -x "$PIXI_BIN" ]]; then
@@ -50,13 +56,14 @@ else
     cp "$REPO_ROOT/etc/tmux/tmux.remote.conf" "$tmux_local"
 fi
 
-# No compiler is available for treesitter parsers or mason packages.
+# No compiler is available for treesitter parsers or mason packages, and
+# later `pixi global update` runs need the same glibc override.
 zsh_local="$REPO_ROOT/local/zsh.zsh"
 if [[ -e "$zsh_local" ]]; then
     log_info "synology: zsh local config already present: $zsh_local"
 else
     log_ok "synology: creating zsh local config: $zsh_local"
-    printf '%s\n' 'export NVIM_LITE=1' > "$zsh_local"
+    printf '%s\n' 'export NVIM_LITE=1' "export CONDA_OVERRIDE_GLIBC=$glibc" > "$zsh_local"
 fi
 
 log_ok "✅ synology: done, now run: $REPO_ROOT/install"
