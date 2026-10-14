@@ -27,6 +27,12 @@ if [ "$(uname)" = "Darwin" ]; then
     "${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${REPO_ROOT}" -c "${CONFIG_MAC}" "${@}"
 fi
 
+if [ -e /etc.defaults/VERSION ]; then
+    CONFIG_SYNOLOGY="$REPO_ROOT/etc/install.synology.extra.yml"
+    log_info "install: applying $CONFIG_SYNOLOGY"
+    "${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${REPO_ROOT}" -c "${CONFIG_SYNOLOGY}" "${@}"
+fi
+
 LOCAL_CONFIG="$REPO_ROOT/local/install.yml"
 if [ -f "$LOCAL_CONFIG" ]; then
     log_info "install: applying $LOCAL_CONFIG"

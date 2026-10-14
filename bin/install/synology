@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Prepare a Synology DSM host for the dotfiles, without root.
+#
+# DSM ships neither zsh, tmux, less nor fzf, and its login shell cannot be
+# changed without root. Userland tools are installed from conda-forge through
+# pixi global into ~/.pixi, and ~/.profile (see etc/synology/profile) then
+# replaces the login shell with zsh.
+set -e
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "${REPO_ROOT}" || exit 1
+
+. "bin/common"
+
+PIXI_HOME="${PIXI_HOME:-$HOME/.pixi}"
+PIXI_BIN="$PIXI_HOME/bin/pixi"
+PIXI_URL="https://github.com/prefix-dev/pixi/releases/latest/download/pixi-$(uname -m)-unknown-linux-musl.tar.gz"
+PACKAGES=(zsh tmux less fzf nvim)
+
+if [[ ! -e /etc.defaults/VERSION ]]; then
+    error "synology: /etc.defaults/VERSION missing, not a DSM host"
+fi
+
+# Download the static binary instead of running pixi.sh/install.sh, which
+# would edit shell rc files that are managed by this repo.
+if [[ -x "$PIXI_BIN" ]]; then
+    log_info "synology: pixi already present: $PIXI_BIN"
+else
+    log_ok "synology: downloading pixi: $PIXI_URL"
+    mkdir -p "$(dirname "$PIXI_BIN")"
+    curl -fsSL "$PIXI_URL" | tar -xz -C "$(dirname "$PIXI_BIN")" pixi
+fi
+
+log_info "synology: installing ${PACKAGES[*]}"
+"$PIXI_BIN" global install "${PACKAGES[@]}"
+
+# Dotbot refuses to replace a regular file with a link.
+if [[ -f "$HOME/.gitconfig" && ! -L "$HOME/.gitconfig" ]]; then
+    log_warn "synology: moving ~/.gitconfig to ~/.gitconfig.pre-dotfiles"
+    mv "$HOME/.gitconfig" "$HOME/.gitconfig.pre-dotfiles"
+fi
+
+mkdir -p "$REPO_ROOT/local"
+
+tmux_local="$REPO_ROOT/local/tmux.conf"
+if [[ -e "$tmux_local" ]]; then
+    log_info "synology: tmux local config already present: $tmux_local"
+else
+    log_ok "synology: creating tmux local config: $tmux_local"
+    cp "$REPO_ROOT/etc/tmux/tmux.remote.conf" "$tmux_local"
+fi
+
+# No compiler is available for treesitter parsers or mason packages.
+zsh_local="$REPO_ROOT/local/zsh.zsh"
+if [[ -e "$zsh_local" ]]; then
+    log_info "synology: zsh local config already present: $zsh_local"
+else
+    log_ok "synology: creating zsh local config: $zsh_local"
+    printf '%s\n' 'export NVIM_LITE=1' > "$zsh_local"
+fi
+
+log_ok "✅ synology: done, now run: $REPO_ROOT/install"

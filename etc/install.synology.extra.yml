@@ -1,0 +1,9 @@
+# Synology DSM specific links, applied after install.yml.
+# See bin/install/synology for the userland setup that precedes it.
+- defaults:
+    link:
+      relink: true
+
+# All paths are relative the repo-root (./)
+- link:
+    ~/.profile: etc/synology/profile

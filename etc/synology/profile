@@ -1,0 +1,21 @@
+# ~/.profile on Synology DSM
+#
+# The login shell is /bin/sh and cannot be changed without root, so an
+# interactive login replaces itself with zsh from pixi (bin/install/synology).
+#
+# Escape hatches:
+#   touch ~/.nozsh                  stay in sh on the next login
+#   ssh <host> -t bash --noprofile  remote commands never read this file
+
+PATH="$HOME/.pixi/bin:$HOME/.local/bin:$PATH"
+export PATH
+
+case $- in
+    *i*)
+        if [ ! -e "$HOME/.nozsh" ] && command -v zsh >/dev/null 2>&1; then
+            SHELL="$(command -v zsh)"
+            export SHELL
+            exec zsh -l
+        fi
+        ;;
+esac
