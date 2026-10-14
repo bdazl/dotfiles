@@ -79,3 +79,23 @@ formats, or writes to a block device:
 ```sh
 python -m unittest discover -s tests -v
 ```
+
+# Synology DSM
+
+[synology](synology) prepares a DSM host without root: it installs `zsh`, `tmux`,
+`less`, `fzf` and `nvim` from conda-forge via `pixi global` into `~/.pixi`, moves a
+pre-existing `~/.gitconfig` aside, and seeds `local/tmux.conf` (remote overrides) and
+`local/zsh.zsh` (`NVIM_LITE=1`, as there is no compiler for treesitter or mason).
+
+```sh
+git clone https://github.com/bdazl/dotfiles.git ~/etc
+~/etc/bin/install/synology
+~/etc/install
+```
+
+`./install` links `etc/synology/profile` as `~/.profile` on DSM. The login shell stays
+`/bin/sh`, and interactive logins replace themselves with zsh. To skip that, run
+`touch ~/.nozsh`; if zsh is broken, `ssh <host> -t bash --noprofile` still gets a shell,
+since remote commands never read `~/.profile`.
+
+Update the tools with `~/.pixi/bin/pixi global update`.

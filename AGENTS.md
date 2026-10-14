@@ -33,6 +33,7 @@ Guidance for automation agents working in this repository.
 - Linux: `install.yml`
 - macOS: `install.mac.extra.yml` (auto‑loaded on Darwin)
 - Windows: `install.win.yml`
+- Synology DSM: `install.synology.extra.yml` (auto‑loaded when `/etc.defaults/VERSION` exists); run `bin/install/synology` first
 
 ## Package Management
 - Arch Linux: use `yay` (AUR helper), not `pacman` directly.
