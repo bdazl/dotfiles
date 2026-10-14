@@ -32,7 +32,9 @@ for dir in /var/lib/flatpak/exports/share $XDG_DATA_HOME/flatpak/exports/share; 
 done
 unset dir
 export XDG_CONFIG_DIRS=/etc/xdg
-if [ -z "$XDG_RUNTIME_DIR" ]; then
+# Hosts without logind (e.g. Synology DSM) have no /run/user, and pointing
+# XDG_RUNTIME_DIR there breaks tools that use it, such as the op daemon.
+if [ -z "$XDG_RUNTIME_DIR" ] && [ -d "/run/user/$(id -u)" ]; then
     export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 fi
 
