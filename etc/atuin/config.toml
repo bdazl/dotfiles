@@ -9,3 +9,18 @@ inline_height = 20
 # Return selected commands to the prompt for review before execution.
 enter_accept = false
 keymap_mode = "auto"
+
+# Move through the result list with ctrl-j/ctrl-k in every search mode.
+# Recent releases bind these in emacs and vim-insert by default, but not in
+# vim-normal, which is entered when ctrl-r is pressed from zsh's vicmd mode.
+[keymap.emacs]
+"ctrl-j" = "select-next"
+"ctrl-k" = "select-previous"
+
+[keymap.vim-insert]
+"ctrl-j" = "select-next"
+"ctrl-k" = "select-previous"
+
+[keymap.vim-normal]
+"ctrl-j" = "select-next"
+"ctrl-k" = "select-previous"
