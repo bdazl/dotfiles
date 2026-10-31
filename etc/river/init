@@ -65,7 +65,7 @@ weirctl bind None+XF86AudioLowerVolume spawn 'wpctl set-volume -l 1.4 @DEFAULT_A
 weirctl bind None+XF86AudioMute spawn 'wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'
 
 kanshi -c "$HOME/.config/kanshi/config" &
-swaybg -i "$HOME/.etc/etc/assets/abstract_colorful_art_0.jpg" -m fill &
+swaybg -i "$HOME/Pictures/wallpapers/abstract_colorful_art_0.jpg" -m fill &
 waybar -c "$HOME/.config/waybar/river.jsonc" -s "$HOME/.config/waybar/style.css" &
 dunst &
 gammastep -l 59.3:18.1 &

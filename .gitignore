@@ -2,8 +2,6 @@
 
 local/
 
-etc/assets
-
 __pycache__
 
 *.swp
