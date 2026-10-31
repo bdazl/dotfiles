@@ -10,6 +10,10 @@ cp ~/.etc/etc/tmux/tmux.remote.conf ~/.etc/local/tmux.conf
 
 # Prefix: C-f (local), C-a (remote with override)
 
+# Copy mode: prefix y, select with Space, then
+#   y  copy to system clipboard
+#   Y  save to /tmp/tmux-yank.txt
+
 # Attach to existing session (or create)
 tmux new-session -As main
 
