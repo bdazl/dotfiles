@@ -10,3 +10,7 @@ etc/nvim/lazy-lock.json
 
 # Hyprland may recreate the legacy entrypoint during migration to Lua.
 etc/hypr/hyprland.conf
+
+# o writes its agent units per machine with `o agent install`.
+etc/systemd/user/o-agent.*
+etc/systemd/user/*.target.wants/o-agent.*
