@@ -2,6 +2,13 @@
 
 # my tools
 go install github.com/bdazl/tmpl@latest
+if [ "$(uname)" = Linux ]; then
+    go install github.com/bdazl/o/cmd/o@latest
+    # Refresh the agent only where it was opted in with `o agent install`.
+    if systemctl --user is-enabled --quiet o-agent.socket 2>/dev/null; then
+        "$(go env GOPATH)/bin/o" agent install
+    fi
+fi
 
 # x/tools
 go install golang.org/x/tools/cmd/gopls@latest
