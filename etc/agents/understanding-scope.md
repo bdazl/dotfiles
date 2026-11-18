@@ -12,9 +12,11 @@ files, create commits, stage, stash, check out, switch or reset branches,
 or post anything remotely. Inspect other revisions with `git show
 <rev>:<path>`, `git diff`, and `git log`, never by checking them out.
 
-Running code is allowed only when it answers a concrete question and leaves
-the working tree unchanged (e.g. a focused existing test whose outputs are
-already ignored). When in doubt, read instead of run.
+Prefer reading to running. Run code only when it answers a concrete
+question that reading cannot, and only in a way that writes no files —
+including ignored caches and build outputs (e.g. `python -B`). Compare
+`git status --porcelain --ignored` before and after; if anything appeared,
+tell the user rather than deleting it.
 
 ## Selecting the target
 
