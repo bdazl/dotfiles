@@ -21,6 +21,7 @@
   - ~/.config/pipewire
   - ~/.config/tig
   - ~/.local/bin
+  - ~/.local/share/applications
   - ~/.local/share/zsh
   - ~/.cargo/bin
   - ~/.vim/backup
@@ -70,6 +71,8 @@
     ~/.ideavimrc: etc/vim/vimrc
     ~/.inputrc: etc/readline/inputrc
     ~/.local/bin/notify.sh: etc/crontab/notify.sh
+    ~/.local/bin/zoom-launch: bin/zoom/launch
+    ~/.local/share/applications/Zoom.desktop: etc/zoom/Zoom.desktop
     ~/.tmux.conf: etc/tmux/tmux.conf
     ~/.vim/ycm_extra_conf.py: etc/vim/ycm_extra_conf.py
     ~/.vimrc: etc/vim/vimrc

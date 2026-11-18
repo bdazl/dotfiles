@@ -1,0 +1,9 @@
+#!/bin/sh
+# Zoom runs under Xwayland and aborts without X authorization. Processes
+# started before GNOME spawned Xwayland (e.g. Firefox opening zoommtg:// links)
+# lack XAUTHORITY, so take it from the systemd user environment.
+if [ -z "$XAUTHORITY" ] || [ ! -r "$XAUTHORITY" ]; then
+    xauth=$(systemctl --user show-environment 2>/dev/null | sed -n 's/^XAUTHORITY=//p')
+    [ -n "$xauth" ] && export XAUTHORITY="$xauth"
+fi
+exec /usr/bin/zoom "$@"
