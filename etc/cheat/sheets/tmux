@@ -22,3 +22,11 @@ tmux ls
 
 # Detach other clients from a session
 tmux attach -dt main
+
+# Windows (prefix C-f)
+# C-f ,  previous window
+# C-f .  next window
+
+# Paste (prefix C-f)
+# C-f p  paste tmux buffer
+# C-f P  paste from Wayland clipboard
