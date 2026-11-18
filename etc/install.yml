@@ -46,6 +46,7 @@
     ~/.codex/skills/defect-review: etc/codex/skills/defect-review
     ~/.codex/skills/design-review: etc/codex/skills/design-review
     ~/.codex/skills/explain: etc/codex/skills/explain
+    ~/.codex/skills/quiz: etc/codex/skills/quiz
     ~/.conan/conan.conf: etc/conan/conan.conf
     ~/.config/atuin/config.toml: etc/atuin/config.toml
     ~/.config/cheat/conf.yml: etc/cheat/conf.yml
