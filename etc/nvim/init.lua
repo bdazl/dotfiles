@@ -25,3 +25,14 @@ if not vim.g.lite then
     require('config.lsp')
     require('config.keymap')
 end
+
+-- Detect filetype for new files once they are first written with a name
+vim.api.nvim_create_autocmd('BufWritePost', {
+    callback = function(args)
+        if vim.bo[args.buf].filetype == '' then
+            vim.api.nvim_buf_call(args.buf, function()
+                vim.cmd('filetype detect')
+            end)
+        end
+    end,
+})
