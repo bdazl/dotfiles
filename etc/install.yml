@@ -36,10 +36,12 @@
       path: etc/claude/commands/*.md
     ~/.claude/keybindings.json: etc/claude/keybindings.json
     ~/.claude/review-scope.md: etc/agents/review-scope.md
+    ~/.claude/understanding-scope.md: etc/agents/understanding-scope.md
     ~/.codex/AGENTS.md: etc/codex/AGENTS.md
     ~/.codex/commit-policy.md: etc/codex/commit-policy.md
     ~/.codex/implementation-policy.md: etc/codex/implementation-policy.md
     ~/.codex/review-scope.md: etc/agents/review-scope.md
+    ~/.codex/understanding-scope.md: etc/agents/understanding-scope.md
     ~/.codex/skills/work: etc/codex/skills/work
     ~/.codex/skills/defect-review: etc/codex/skills/defect-review
     ~/.codex/skills/design-review: etc/codex/skills/design-review
