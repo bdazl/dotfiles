@@ -14,7 +14,6 @@
 Codex discovers this `AGENTS.md` automatically. It does not document Claude-style `@file` imports, so treat the entries below as task-scoped references: read a listed file before doing related work.
 
 - `@commit-policy.md` — read before planning work that will be committed, and before creating, amending, or publishing commits.
-- `@implementation-policy.md` — read before planning or implementing code changes.
 
 Add or remove entries here to compose the global policy set. Keep environment-specific policies in their own files and add them to this list when they should apply globally. Repository instructions are layered after global guidance and may add more specific rules.
 

@@ -59,5 +59,5 @@ Guidance for automation agents working in this repository.
 - Keep Codex and Claude instructions, workflows, and keybindings in sync; when changing one, check whether its counterpart needs the same update.
 - Shared agent workflows live under `etc/claude/commands/` and `etc/codex/skills/`.
 - Agent-neutral content shared by both lives in `etc/agents/` and is linked into `~/.claude/` and `~/.codex/`.
-  This includes the global policies (`commit-policy.md`, `implementation-policy.md`); keep agent-specific wording out of them.
+  This includes the global commit policy (`commit-policy.md`); keep agent-specific wording out of them.
 - `etc/agents/review-scope.md` (review workflows) and `etc/agents/understanding-scope.md` (`explain`, `quiz`) define the same Git target selectors; keep them in sync.

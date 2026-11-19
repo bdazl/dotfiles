@@ -15,7 +15,7 @@ Ask one short question about what the user wants to work on. Wait for the answer
 
 Read enough of the repository to ask informed questions. Skip exploration for trivial tasks. For non-trivial tasks, inspect the relevant `AGENTS.md`, `README`, existing patterns, and nearby code. Stop as soon as the important decisions are clear.
 
-Read `../../implementation-policy.md` and `../../commit-policy.md` before planning or implementation.
+Read `../../commit-policy.md` before planning or implementation.
 
 ## 3. Ask only load-bearing questions
 
