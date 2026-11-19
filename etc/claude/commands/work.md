@@ -57,6 +57,11 @@ user can override via Other.
 
 Don't pad. A question that wouldn't change what you build is noise.
 
+The commit mode (`auto`, `checkpoint`, `manual`; see
+`~/.claude/commit-policy.md`) is load-bearing: if neither the user nor
+the repository's instructions have set it, include it in the batch with
+`auto` recommended.
+
 ## 3. Decide whether plan mode is worth it
 
 Once the open questions are answered, judge whether the work actually
@@ -75,6 +80,13 @@ needs a plan:
 
 If you hand off but `EnterPlanMode` isn't accessible for any reason, say
 one sentence: "Enough context — flip to plan mode when ready."
+
+Every plan ends with a **Commits** section: the commit mode and the
+ordered list of atomic commit titles, each tied to the step that
+completes it. During implementation, act on each unit as soon as it is
+done — commit it (`auto`) or stop and propose its title (`checkpoint`).
+Never batch the units into commits at the end. Without a plan, the same
+rule applies to the work you proceed with directly.
 
 ## Don'ts
 
